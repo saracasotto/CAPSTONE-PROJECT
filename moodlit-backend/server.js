@@ -4,6 +4,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import bookRoutes from './routes/bookRoutes.js';
+import quoteRoutes from './routes/quoteRoutes.js';
+import noteRoutes from './routes/noteRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 
 dotenv.config();
 
@@ -16,6 +20,10 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/books', bookRoutes);
+app.use('/api/notes', noteRoutes);
+app.use('/api/quotes', quoteRoutes);
+app.use('/api/categories', categoryRoutes);
 
 
 const username = encodeURIComponent(process.env.MONGO_USERNAME);

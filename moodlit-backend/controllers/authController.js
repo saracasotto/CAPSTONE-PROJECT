@@ -2,7 +2,7 @@ import User from '../models/userModel.js'
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/jwt.js'
 
-// REGISTRAZIONE
+
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -24,7 +24,6 @@ export const register = async (req, res) => {
   }
 };
 
-// LOGIN
 export const login = async (req, res) => {
   const { email, password } = req.body;
 

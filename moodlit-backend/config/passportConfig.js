@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config()
 
-// Configurazione Google OAuth
+
 const googleStrategy = new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID,

@@ -8,10 +8,8 @@ const router = express.Router();
 router.post('/register', register);
 router.post('/login', login);
 
-// Rotta per avviare l'autenticazione con Google
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// Callback dopo il login con Google
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
   const { jwtToken } = req.user;
   res.redirect(`/dashboard?token=${jwtToken}`);
