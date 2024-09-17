@@ -1,0 +1,27 @@
+# node_modules: esclude i moduli di Node.js
+node_modules/
+
+# dist o build folders (se usi compilatori o bundlers)
+dist/
+build/
+
+# Environment variables
+.env
+
+# Cache directories
+.npm
+.cache
+
+# VS Code specific files
+.vscode/
+
+# MacOS specific
+.DS_Store
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# Output files
+*.out
+*.log
