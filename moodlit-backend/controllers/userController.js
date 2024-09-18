@@ -1,6 +1,5 @@
 import User from "../models/userModel.js";
 
-//OTTENERE DATI
 export const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.loggedUser.id).select("-password");
@@ -13,7 +12,6 @@ export const getUser = async (req, res) => {
   }
 };
 
-//AGGIORNARE DATI UTENTE
 export const updateUser = async (req, res) => {
   try {
     const { name, birthDate, avatar } = req.body;
@@ -28,7 +26,6 @@ export const updateUser = async (req, res) => {
   }
 };
 
-//CANCELLARE DATI UTENTE
 export const deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.loggedUser.id);
@@ -37,3 +34,48 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ message: "Errore nella cancellazione dell'account" });
   }
 };
+
+
+
+//SENZA AUTH
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password"); // Seleziona tutti tranne le password
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Errore nel recupero degli utenti" });
+  }
+};
+
+// Aggiornare un utente specifico
+export const updateUserById = async (req, res) => {
+  try {
+    const { name, birthDate, avatar } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id, // Usa l'id passato nell'URL
+      { name, birthDate, avatar },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Utente non trovato" });
+    }
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: "Errore nell'aggiornamento dei dati utente" });
+  }
+};
+
+
+// Cancellare un utente specifico
+export const deleteUserById = async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "Utente non trovato" });
+    }
+    res.status(200).json({ message: "Utente cancellato con successo" });
+  } catch (error) {
+    res.status(500).json({ message: "Errore nella cancellazione dell'utente" });
+  }
+};
+

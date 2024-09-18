@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       //default: LINK IMMAGINE DEFAULT
     }, // Campo opzionale per immagine profilo
-    birthDate: { type: String }, // Campo opzionale per data di nascita
     books: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }], // Referenziando i libri
     notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Note" }], // Referenziando le note
   },
