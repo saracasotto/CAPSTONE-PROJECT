@@ -1,38 +1,86 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+/* Light Mode (default) */
+:root {
+  --background-primary: #FFFFFF;
+  --text-primary: #333333;
+  --text-secondary: #555555;
+  --accent-color: #4A90E2;
+  --interactive-elements: #50E3C2;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Dark Mode */
+[data-theme="dark"] {
+  --background-primary: #121212;
+  --text-primary: #E0E0E0;
+  --text-secondary: #B0B0B0;
+  --accent-color: #4A90E2;
+  --interactive-elements: #50E3C2;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/*Moods*/
+.mood-nostalgic {
+  --mood-color-1: #F7CAC9; /* Rosa Pallido */
+  --mood-color-2: #92A8D1; /* Blu Polvere */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.mood-cosy {
+  --mood-color-1: #D2691E; /* Cioccolato */
+  --mood-color-2: #FFB6C1; /* Rosa Chiaro */
 }
 
-.App-link {
-  color: #61dafb;
+
+.mood-focused {
+  --mood-color-1: #2F4F4F; /* Grigio Scuro */
+  --mood-color-2: #4682B4; /* Acciaio Blu */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+/*Stagioni*/
+.season-spring {
+  --season-color-1: #77DD77; /* Verde Menta */
+  --season-color-2: #FF6961; /* Rosso Corallo */
 }
+
+.season-summer {
+  --season-color-1: #FFD700; /* Giallo Oro */
+  --season-color-2: #87CEEB; /* Azzurro Cielo */
+}
+
+.season-autumn {
+  --season-color-1: #FF8C00; /* Arancione Scuro */
+  --season-color-2: #8B4513; /* Marrone */
+}
+
+.season-winter {
+  --season-color-1: #ADD8E6; /* Azzurro Chiaro */
+  --season-color-2: #708090; /* Grigio Ardesia */
+}
+
+
+/* Momento */
+.time-morning {
+  --time-color-1: #FFFAF0;
+  --time-color-2: #FFDAB9; 
+}
+
+.time-afternoon {
+  --time-color-1: #87CEFA;
+  --time-color-2: #FFA07A;
+}
+
+
+.time-night {
+  --time-color-1: #2C3E50; 
+  --time-color-2: #34495E; 
+}
+
+
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
