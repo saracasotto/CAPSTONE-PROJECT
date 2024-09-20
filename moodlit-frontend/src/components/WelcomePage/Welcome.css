@@ -1,0 +1,26 @@
+.welcome-container {
+    height: 100%;
+    background-image: url(../../assets/welcome-background.jpg);
+    background-position: center;
+    background-size: cover;
+    color: white;
+}
+
+.welcome-container .row {
+    height: 100%;
+}
+
+#welcome-column, #form-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#welcome-column p{
+    font-size: 2em;
+}
+
+#welcome-column h1 {
+    font-size: 4em;
+}

@@ -19,24 +19,6 @@
   --interactive-elements: #50E3C2;
 }
 
-/*Moods*/
-.mood-nostalgic {
-  --mood-color-1: #F7CAC9; 
-  --mood-color-2: #92A8D1; 
-}
-
-.mood-cosy {
-  --mood-color-1: #D2691E;
-  --mood-color-2: #FFB6C1; 
-}
-
-
-.mood-focused {
-  --mood-color-1: #2F4F4F; 
-  --mood-color-2: #4682B4; 
-}
-
-
 /*Stagioni*/
 .season-spring {
   --season-color-1: #77DD77; /* Verde Menta */
@@ -59,28 +41,10 @@
 }
 
 
-/* Momento */
-.time-morning {
-  --time-color-1: #FFFAF0;
-  --time-color-2: #FFDAB9; 
-}
-
-.time-afternoon {
-  --time-color-1: #87CEFA;
-  --time-color-2: #FFA07A;
-}
-
-
-.time-night {
-  --time-color-1: #2C3E50; 
-  --time-color-2: #34495E; 
-}
-
-
-
-body {
+#app {
+  font-family: "Lato", sans-serif;
+  height: 100vh;
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
