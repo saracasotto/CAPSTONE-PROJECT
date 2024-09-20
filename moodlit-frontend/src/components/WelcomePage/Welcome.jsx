@@ -3,6 +3,7 @@ import { Typewriter } from 'react-simple-typewriter';
 import { motion } from 'framer-motion';
 import { Row, Col, Container } from 'react-bootstrap'; // Se usi react-bootstrap
 import './Welcome.css';
+import AuthForm from '../Auth/AuthForm/AuthForm';
 
 const Welcome = () => {
     const [showForm, setShowForm] = useState(false);
@@ -28,7 +29,7 @@ const Welcome = () => {
                     className={`${showForm ? 'd-none d-lg-flex' : ''}`}
                     id='welcome-column' // Nasconde la colonna su mobile quando il form è visibile
                 >
-                    <p>Hello
+                    <p>Hello,
                         <Typewriter
                             words={[' reader', ' student', ' learner']}
                             loop={1}
@@ -51,6 +52,7 @@ const Welcome = () => {
 
                     {/* Motion per "MoodLit" */}
                     <motion.h1
+                        className='title-font'
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 7.5, duration: 1 }}
@@ -64,13 +66,10 @@ const Welcome = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 50 }} // Form inizialmente invisibile
                         animate={{ opacity: 1, y: 0 }} // Appare quando MoodLit finisce di caricare
-                        transition={{ delay: 12, duration: 1 }} // Appare dopo MoodLit
+                        transition={{ delay: 12, duration: 2 }} // Appare dopo MoodLit
                     >
                         {showForm && (
-                            <div>
-                                <h2>Login / Register Form</h2>
-                                {/* qui vado a mettere il form di login registrazione*/}
-                            </div>
+                                <AuthForm />
                         )}
                     </motion.div>
                 </Col>

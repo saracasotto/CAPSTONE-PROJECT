@@ -3,20 +3,12 @@
 
 /* Light Mode (default) */
 :root {
-  --background-primary: #FFFFFF;
-  --text-primary: #333333;
-  --text-secondary: #555555;
-  --accent-color: #4A90E2;
-  --interactive-elements: #50E3C2;
-}
-
-/* Dark Mode */
-[data-theme="dark"] {
-  --background-primary: #121212;
-  --text-primary: #E0E0E0;
-  --text-secondary: #B0B0B0;
-  --accent-color: #4A90E2;
-  --interactive-elements: #50E3C2;
+  --background-light: #FFFFFF;
+  --text-primary-light: #333333;
+  --accent-color: #3871B3;
+  --interactive-elements: #FF5D00;
+  --background-dark: #121212;
+  --text-primary-dark: #E0E0E0;
 }
 
 /*Stagioni*/
@@ -48,3 +40,43 @@
   padding: 0;
 }
 
+.btn{
+  font-size: 0.8em;
+}
+
+.light {
+  background-color: var(--background-light) !important;
+  color: var(--text-primary-light) !important;
+}
+
+.dark{
+  background-color: var(--background-dark) !important;
+  color: var(--text-primary-dark) !important;
+}
+
+.interactive-bg {
+  background-color: var(--interactive-elements) !important;
+  color: white !important;
+}
+
+.interactive-txt {
+  color: var(--interactive-elements) !important;
+}
+
+.accent-bg {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.accent-txt {
+  color: var(--accent-color) !important;
+}
+
+.title-font {
+  font-family: "Playfair Display", serif;
+}
+
+a {
+  color: var(--accent-color) !important;
+  font-weight: bold !important;
+}

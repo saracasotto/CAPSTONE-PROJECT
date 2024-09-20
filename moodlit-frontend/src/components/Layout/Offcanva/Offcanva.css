@@ -1,0 +1,27 @@
+.offcanvas-header {
+    display: flex;
+    align-items: start;
+}
+
+.btn-offcanva,
+.btn-offcanva:hover{
+    background-color: transparent  !important;
+    border: none;
+    font-size: 2em;
+    box-shadow: none;
+}
+
+.btn-close {
+    background-image: url(../../../assets/btn-close.svg);
+    font-size: 2em;
+    box-shadow: none;
+}
+
+.btn-close:focus {
+    box-shadow: none;
+}
+
+.logo {
+    height: 100px;
+    margin-right: 1em;
+}

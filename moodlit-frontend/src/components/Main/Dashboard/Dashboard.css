@@ -1,0 +1,7 @@
+.dashboard-container {
+    height: 100%;
+}
+
+.dashboard-container .content {
+    padding-top: 100px;
+}

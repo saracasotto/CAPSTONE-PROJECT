@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 
 // creo contesto per condividere stato e altre info tra i vari componenti senza dover passare props
 export const AuthContext = createContext();
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   //Verifico stato di autenticazione utente e recupero il tema dal backend o dal localStorage.
   useEffect(() => {
     verifyToken();
-  }, []);
+  });
 
   if (loading) {
     return <div>Loading...</div>;
@@ -111,4 +111,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-s;
+

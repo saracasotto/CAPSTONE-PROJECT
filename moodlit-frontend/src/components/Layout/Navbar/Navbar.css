@@ -1,0 +1,18 @@
+.navbar-toggler,
+.navbar-toggler:focus {
+    box-shadow: none;
+    border: none;
+}
+
+nav.fixed-top{
+    padding: 0.5em 2em !important;
+}
+
+nav.fixed-bottom i{
+    font-size: 1.5em;
+}
+
+.logo {
+    height: 50px;
+    margin-right: 1em;
+}

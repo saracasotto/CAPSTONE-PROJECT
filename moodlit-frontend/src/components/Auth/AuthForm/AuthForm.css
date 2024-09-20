@@ -1,0 +1,44 @@
+.auth-form-container {
+  background: rgba(51, 51, 51, 0.28);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  padding: 1em 8vw;
+  text-align: center;
+}
+
+.input-field {
+  max-width: 100%;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1em 0;
+}
+
+input {
+  width: 100%;
+  border-radius: 15px;
+  border: 1px solid transparent;
+  margin: 0em 0.3em;
+  text-align: center;
+}
+
+.auth-form-container button {
+  border-radius: 8px;
+  border: 1px solid black;
+  margin: 0.5em;
+}
+
+.auth-form-container button:hover {
+  border: 1px solid black;
+}
+
+.btn-toggle {
+  border: none !important;
+  background-color: transparent;
+  color: white;
+  text-decoration: underline;
+}
