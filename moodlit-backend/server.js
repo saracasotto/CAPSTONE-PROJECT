@@ -8,6 +8,7 @@ import bookRoutes from './routes/bookRoutes.js';
 import quoteRoutes from './routes/quoteRoutes.js';
 import noteRoutes from './routes/noteRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import phrasesRoutes from './routes/phrasesRoutes.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api/books', bookRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('api/phrases', phrasesRoutes)
 
 
 const username = encodeURIComponent(process.env.MONGO_USERNAME);

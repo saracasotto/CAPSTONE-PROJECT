@@ -1,0 +1,160 @@
+{
+    "phrases": {
+      "nostalgic": [
+        {
+          "text": "The past beats inside me like a second heart.",
+          "author": "John Banville"
+        },
+        {
+          "text": "Nostalgia is a dirty liar that insists things were better than they seemed.",
+          "author": "Michelle K."
+        },
+        {
+          "text": "Sometimes you will never know the true value of a moment until it becomes a memory.",
+          "author": "Dr. Seuss"
+        },
+        {
+          "text": "Memories warm you up from the inside. But they also tear you apart.",
+          "author": "Haruki Murakami"
+        },
+        {
+          "text": "To reminisce is to recall with joy and tenderness what we have known and loved.",
+          "author": "Unknown"
+        }
+      ],
+      "cosy": [
+        {
+          "text": "There is nothing cozier than a home filled with love.",
+          "author": "Anonymous"
+        },
+        {
+          "text": "Home is the nicest word there is.",
+          "author": "Laura Ingalls Wilder"
+        },
+        {
+          "text": "There is nothing like staying at home for real comfort.",
+          "author": "Jane Austen"
+        },
+        {
+          "text": "A house is made of walls and beams; a home is built with love and dreams.",
+          "author": "Ralph Waldo Emerson"
+        },
+        {
+          "text": "There's nothing like a good cup of tea to make a day cosy.",
+          "author": "Unknown"
+        }
+      ],
+      "focus": [
+        {
+          "text": "The successful warrior is the average man, with laser-like focus.",
+          "author": "Bruce Lee"
+        },
+        {
+          "text": "Concentrate all your thoughts upon the work at hand. The sun's rays do not burn until brought to a focus.",
+          "author": "Alexander Graham Bell"
+        },
+        {
+          "text": "Focus on the journey, not the destination.",
+          "author": "Greg Anderson"
+        },
+        {
+          "text": "Your focus determines your reality.",
+          "author": "Qui-Gon Jinn (Star Wars)"
+        },
+        {
+          "text": "Focus on being productive instead of busy.",
+          "author": "Tim Ferriss"
+        }
+      ],
+      "energetic": [
+        {
+          "text": "Energy and persistence conquer all things.",
+          "author": "Benjamin Franklin"
+        },
+        {
+          "text": "Energy flows where attention goes.",
+          "author": "Tony Robbins"
+        },
+        {
+          "text": "The energy you give, the energy you receive.",
+          "author": "Anonymous"
+        },
+        {
+          "text": "Stay positive, work hard, make it happen.",
+          "author": "Anonymous"
+        },
+        {
+          "text": "High energy is contagious; surround yourself with it.",
+          "author": "Anonymous"
+        }
+      ],
+      "inspirational": [
+        {
+          "text": "The only way to do great work is to love what you do.",
+          "author": "Steve Jobs"
+        },
+        {
+          "text": "The best way to predict the future is to create it.",
+          "author": "Peter Drucker"
+        },
+        {
+          "text": "Believe you can and you're halfway there.",
+          "author": "Theodore Roosevelt"
+        },
+        {
+          "text": "Your time is limited, don't waste it living someone else's life.",
+          "author": "Steve Jobs"
+        },
+        {
+          "text": "The purpose of our lives is to be happy.",
+          "author": "Dalai Lama"
+        }
+      ],
+      "relaxed": [
+        {
+          "text": "Sometimes the most productive thing you can do is relax.",
+          "author": "Mark Black"
+        },
+        {
+          "text": "Calm mind brings inner strength and self-confidence.",
+          "author": "Dalai Lama"
+        },
+        {
+          "text": "Relaxation means releasing all concern and tension and letting the natural order of life flow through one's being.",
+          "author": "Donald Curtis"
+        },
+        {
+          "text": "In the midst of movement and chaos, keep stillness inside of you.",
+          "author": "Deepak Chopra"
+        },
+        {
+          "text": "The time to relax is when you don't have time for it.",
+          "author": "Sydney J. Harris"
+        }
+      ],
+      "grateful": [
+        {
+          "text": "Gratitude turns what we have into enough.",
+          "author": "Aesop"
+        },
+        {
+          "text": "Gratitude is not only the greatest of virtues, but the parent of all others.",
+          "author": "Cicero"
+        },
+        {
+          "text": "Feeling gratitude and not expressing it is like wrapping a present and not giving it.",
+          "author": "William Arthur Ward"
+        },
+        {
+          "text": "Gratitude can transform common days into thanksgivings, turn routine jobs into joy, and change ordinary opportunities into blessings.",
+          "author": "William Arthur Ward"
+        },
+        {
+          "text": "Gratitude bestows reverence, allowing us to encounter everyday epiphanies.",
+          "author": "John Milton"
+        }
+      ]
+    }
+  }
+  
+

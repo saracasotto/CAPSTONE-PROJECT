@@ -25,3 +25,6 @@ yarn.lock
 # Output files
 *.out
 *.log
+
+
+./scripts/phrasesData.json

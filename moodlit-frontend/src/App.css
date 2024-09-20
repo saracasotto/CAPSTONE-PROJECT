@@ -21,19 +21,19 @@
 
 /*Moods*/
 .mood-nostalgic {
-  --mood-color-1: #F7CAC9; /* Rosa Pallido */
-  --mood-color-2: #92A8D1; /* Blu Polvere */
+  --mood-color-1: #F7CAC9; 
+  --mood-color-2: #92A8D1; 
 }
 
 .mood-cosy {
-  --mood-color-1: #D2691E; /* Cioccolato */
-  --mood-color-2: #FFB6C1; /* Rosa Chiaro */
+  --mood-color-1: #D2691E;
+  --mood-color-2: #FFB6C1; 
 }
 
 
 .mood-focused {
-  --mood-color-1: #2F4F4F; /* Grigio Scuro */
-  --mood-color-2: #4682B4; /* Acciaio Blu */
+  --mood-color-1: #2F4F4F; 
+  --mood-color-2: #4682B4; 
 }
 
 
