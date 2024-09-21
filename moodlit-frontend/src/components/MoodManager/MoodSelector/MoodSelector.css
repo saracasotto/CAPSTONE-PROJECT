@@ -1,0 +1,51 @@
+.mood-selector-container,
+.season-selector-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
+.mood-selector-container {
+  background-image: url(../../../assets/mood-background.jpg);
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.season-selector-container {
+  background-image: url(../../../assets/season-background.jpg);
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.mood-selector-container h1,
+.season-selector-container h1 {
+  margin-bottom: 2em;
+  font-size: 3em;
+}
+
+.moods,
+.seasons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 4vw;
+}
+
+.moods button,
+.seasons button {
+  font-size: 1.5em;
+  padding: 0.5em 0.8em;
+  border: solid 1px black;
+}
+
+@media (max-width: 576px) {
+  .moods button,
+  .seasons button {
+    font-size: 1.3em;
+  }
+}
