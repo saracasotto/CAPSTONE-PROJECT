@@ -17,6 +17,10 @@ const bookSchema = new mongoose.Schema({
     enum: ['to_read', 'reading', 'completed'], 
     default: 'to_read' 
   }, // Stato del libro
+  sessions: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Session' 
+  }],
 }, { timestamps: true }); // Per tenere traccia di creazione e aggiornamento
 
 const Book = mongoose.model('Book', bookSchema, 'books');
