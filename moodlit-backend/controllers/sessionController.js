@@ -1,5 +1,5 @@
-import Session from '../models/Session.js';
-import Book from '../models/Book.js';
+import Session from '../models/sessionModel.js';
+import Book from '../models/bookModel.js';
 
 export const addSession = async (req, res) => {
   try {

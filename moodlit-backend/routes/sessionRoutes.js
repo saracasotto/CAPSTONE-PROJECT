@@ -1,6 +1,6 @@
 import express from 'express';
 import { addSession, getSessionsByUser, getSessionsByBook, updateSession, deleteSession } from '../controllers/sessionController.js';
-import { authentication } from '../middleware/authentication.js'; 
+import authentication from '../middleware/authentication.js'; 
 
 const router = express.Router();
 

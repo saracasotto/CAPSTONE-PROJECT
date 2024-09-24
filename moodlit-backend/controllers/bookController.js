@@ -76,3 +76,77 @@ export const updateProgress = async (req, res) => {
     res.status(500).json({ message: "Errore nell'aggiornamento del progresso di lettura" });
   }
 };
+
+
+//DA BACKEND SENZA AUTORIZZAZIONE
+
+// Aggiungere un libro (POST)
+export const addBookWithoutAuth = async (req, res) => {
+  try {
+    const { cover, title, author, category, barcode, publisher, description, status, user } = req.body;
+
+    const newBook = new Book({
+      cover,
+      title,
+      author,
+      category,
+      barcode,
+      publisher,
+      description,
+      user,
+      status,
+    });
+
+    await newBook.save();
+    res.status(201).json(newBook);
+  } catch (error) {
+    res.status(500).json({ message: "Errore nell'aggiunta del libro", error: error.message });
+  }
+};
+
+// Ottenere tutti i libri (GET)
+export const getAllBooksWithoutAuth = async (req, res) => {
+  try {
+    // Recupera tutti i libri dal database e popola i riferimenti a "User" e "Category"
+    const books = await Book.find().populate('user', 'name email').populate('category', 'name');
+    
+    // Invia i dati dei libri
+    res.status(200).json(books);
+  } catch (error) {
+    // Gestione degli errori
+    res.status(500).json({ message: "Errore nel recupero dei libri", error: error.message });
+  }
+};
+
+// Aggiornare un libro esistente (PUT)
+export const updateBookWithoutAuth = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedBook = await Book.findByIdAndUpdate(id, req.body, { new: true }); // Aggiorna il libro con i nuovi dati
+
+    if (!updatedBook) {
+      return res.status(404).json({ message: "Libro non trovato" });
+    }
+
+    res.status(200).json(updatedBook);
+  } catch (error) {
+    res.status(500).json({ message: "Errore nell'aggiornamento del libro", error: error.message });
+  }
+};
+
+// Eliminare un libro esistente (DELETE)
+export const deleteBookWithoutAuth = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedBook = await Book.findByIdAndDelete(id); // Elimina il libro dal database
+
+    if (!deletedBook) {
+      return res.status(404).json({ message: "Libro non trovato" });
+    }
+
+    res.status(200).json({ message: "Libro eliminato con successo" });
+  } catch (error) {
+    res.status(500).json({ message: "Errore nell'eliminazione del libro", error: error.message });
+  }
+};
+

@@ -9,7 +9,7 @@ export const register = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already in use" });
+      return res.status(400).json({ message: "Email already in use" });  //togliere
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -33,7 +33,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" }); //TOGLIERE IN PRODUZIONE
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = bcrypt.compare(password, user.password);  //check password esistente
     if (!isPasswordValid) {
       return res.status(400).json({ message: "invalid credentials" }); //TOGLIERE IN PRODUZIONE
     }

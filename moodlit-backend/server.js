@@ -26,7 +26,7 @@ app.use('/api/books', bookRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('api/phrases', phrasesRoutes)
+app.use('/api/phrases', phrasesRoutes)
 app.use('/api/sessions', sessionRoutes);
 
 

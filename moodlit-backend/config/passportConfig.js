@@ -16,10 +16,10 @@ const googleStrategy = new GoogleStrategy(
     try {
       const { given_name: name, family_name: surname, email, sub: googleId, picture: avatar } = profile._json;
 
-      let user = await User.findOne({ googleId });
-      if (!user) {
+      let user = await User.findOne({ googleId });  //check nel database
+      if (!user) {  //se non c'è, creo
         const newUser = new User({ googleId, name, surname, email, avatar });
-        user = await newUser.save();
+        user = await newUser.save(); //salvo nel database
       }
 
       const jwtToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
