@@ -20,8 +20,10 @@ const MoodProvider = ({ children }) => {
     if (selectedMood) sessionStorage.setItem('selectedMood', selectedMood);
   }, [selectedMood]);
 
-  useEffect(() => {
+  useEffect(() => {  // cambio di tema a nseconda della stagione
     if (selectedSeason) sessionStorage.setItem('selectedSeason', selectedSeason);
+    document.body.classList.remove('spring-theme', 'summer-theme', 'autumn-theme', 'winter-theme');
+    document.body.classList.add(`${selectedSeason.toLowerCase()}-theme`);
   }, [selectedSeason]);
 
   return (
@@ -32,4 +34,3 @@ const MoodProvider = ({ children }) => {
 };
 
 export { MoodContext, MoodProvider };
-

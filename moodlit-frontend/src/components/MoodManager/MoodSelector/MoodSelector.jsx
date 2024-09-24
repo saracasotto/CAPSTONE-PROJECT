@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MoodContext } from '../../../context/MoodContext.js';
 import { Container } from 'react-bootstrap';
-import './MoodSelector.css'
+import './MoodSelector.css';
 
 const MoodSelector = () => {
   const { setSelectedMood } = useContext(MoodContext);

@@ -2,28 +2,35 @@ import Phrase from "../models/phrasesModel.js";
 
 
 export const getRandomPhrase = async (req, res) => {
-  const { mood } = req.query;
+  const { mood } = req.query;  // Verifica che il mood sia passato correttamente
 
   if (!mood) {
-    return res.status(400).json({ message: '"mood" is required' }); //check se mi passa mood
+    return res.status(400).json({ message: '"mood" is required' });
   }
 
   try {
-    const count = await Phrase.countDocuments({ mood });
+    // Trova il documento che contiene le frasi
+    const phrasesDocument = await Phrase.findOne();  // Trova il documento con tutti i mood
 
-    if (count === 0) {
-      return res.status(404).json({ message: 'No phrases found' }); //check se c'è frase
+    // Verifica se il documento contiene il campo 'phrases'
+    if (!phrasesDocument || !phrasesDocument.phrases || !phrasesDocument.phrases[mood]) {
+      return res.status(404).json({ message: `No phrases found for mood: ${mood}` });
     }
 
-    const random = Math.floor(Math.random() * count);
-    const phrase = await Phrase.findOne({ mood }).skip(random);
+    // Estrai l'array di frasi per il mood selezionato
+    const moodPhrases = phrasesDocument.phrases[mood];
 
-    return res.status(200).json({ text: phrase.text, author: phrase.author });
+    // Seleziona una frase casuale dall'array
+    const randomIndex = Math.floor(Math.random() * moodPhrases.length);
+    const randomPhrase = moodPhrases[randomIndex];
+
+    return res.status(200).json({ text: randomPhrase.text, author: randomPhrase.author });
   } catch (error) {
     console.error('Errore nel recupero della frase:', error);
     return res.status(500).json({ message: 'Errore del server.' });
   }
 };
+
 
 export const addPhrase = async (req, res) => {
   const { mood, text, author } = req.body;
