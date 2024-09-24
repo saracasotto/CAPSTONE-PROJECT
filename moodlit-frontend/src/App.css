@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
-/* Light Mode (default) */
 :root {
   --background-light: #FFFFFF;
   --text-primary-light: #333333;
@@ -9,27 +8,18 @@
   --interactive-elements: #e05200;
   --background-dark: #121212;
   --text-primary-dark: #E0E0E0;
-}
 
-/*Stagioni*/
-.season-spring {
-  --season-color-1: #77DD77; /* Verde Menta */
-  --season-color-2: #FF6961; /* Rosso Corallo */
-}
+  --spring-color-1: #e0f2e9; /* Verde Menta */
+  --spring-color-2: #d16c7f; /* Rosso Corallo */
 
-.season-summer {
-  --season-color-1: #FFD700; /* Giallo Oro */
-  --season-color-2: #87CEEB; /* Azzurro Cielo */
-}
+  --summer-color-1: #f7f1c7; /* Giallo Oro */
+  --summer-color-2: #4c8bb7; /* Azzurro Cielo */
 
-.season-autumn {
-  --season-color-1: #FF8C00; /* Arancione Scuro */
-  --season-color-2: #8B4513; /* Marrone */
-}
+  --autumn-color-1: #d4b090; 
+  --autumn-color-2: #5e3b1f; /* Marrone */
 
-.season-winter {
-  --season-color-1: #ADD8E6; /* Azzurro Chiaro */
-  --season-color-2: #708090; /* Grigio Ardesia */
+  --winter-color-1: #e3f0f8; /* Azzurro Chiaro */
+  --winter-color-2: #606f7b; /* Grigio Ardesia */
 }
 
 
@@ -42,16 +32,6 @@
 
 .btn{
   font-size: 0.8em;
-}
-
-.light {
-  background-color: var(--background-light) !important;
-  color: var(--text-primary-light) !important;
-}
-
-.dark{
-  background-color: var(--background-dark) !important;
-  color: var(--text-primary-dark) !important;
 }
 
 .interactive-bg {
@@ -77,6 +57,24 @@
 }
 
 a {
-  color: var(--accent-color) !important;
+
   font-weight: bold !important;
+  color: var(--accent-color) !important;
+}
+
+.spring-theme {
+  background-color: var(--spring-color-1) !important;
+  color: var(--spring-color-2) !important;
+}
+.summer-theme {
+  background-color: var(--summer-color-1) !important;
+  color: var(--summer-color-2) !important;
+}
+.autumn-theme {
+  background-color: var(--autumn-color-1) !important;
+  color: var(--autumn-color-2) !important;
+}
+.winter-theme {
+  background-color: var(--winter-color-1) !important;
+  color: var(--winter-color-2) !important;
 }

@@ -20,10 +20,19 @@ const MoodProvider = ({ children }) => {
     if (selectedMood) sessionStorage.setItem('selectedMood', selectedMood);
   }, [selectedMood]);
 
-  useEffect(() => {  // cambio di tema a nseconda della stagione
+  useEffect(() => {  
     if (selectedSeason) sessionStorage.setItem('selectedSeason', selectedSeason);
-    document.body.classList.remove('spring-theme', 'summer-theme', 'autumn-theme', 'winter-theme');
-    document.body.classList.add(`${selectedSeason.toLowerCase()}-theme`);
+    
+    // Seleziona l'elemento con la classe "dashboard-container"
+    const dashboardElement = document.querySelector('.dashboard-container');
+    
+    if (dashboardElement) {
+      // Rimuovi le classi tema precedenti
+      dashboardElement.classList.remove('spring-theme', 'summer-theme', 'autumn-theme', 'winter-theme');
+      
+      // Aggiungi la nuova classe in base alla stagione selezionata
+      dashboardElement.classList.add(`${selectedSeason.toLowerCase()}-theme`);
+    }
   }, [selectedSeason]);
 
   return (
