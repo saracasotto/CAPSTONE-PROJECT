@@ -10,7 +10,7 @@
   --text-primary-dark: #E0E0E0;
 
   --spring-color-1: #e0f2e9; /* Verde Menta */
-  --spring-color-2: #d16c7f; /* Rosso Corallo */
+  --spring-color-2: #d34e67; /* Rosso Corallo */
 
   --summer-color-1: #f7f1c7; /* Giallo Oro */
   --summer-color-2: #4c8bb7; /* Azzurro Cielo */
@@ -28,6 +28,7 @@
   height: 100vh;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 .btn{
@@ -63,18 +64,27 @@ a {
 }
 
 .spring-theme {
-  background-color: var(--spring-color-1) !important;
-  color: var(--spring-color-2) !important;
+  background-image: url(assets/spring-bg.jpg);
+  background-position: center;
+  background-size: cover;
+  color: white;
 }
 .summer-theme {
-  background-color: var(--summer-color-1) !important;
-  color: var(--summer-color-2) !important;
+  background-image: url(assets/summer-bg.jpg);
+  background-position: center;
+  background-size: cover;
+  color: white;
 }
 .autumn-theme {
-  background-color: var(--autumn-color-1) !important;
-  color: var(--autumn-color-2) !important;
+  background-image: url(assets/autumn-bg.jpg);
+  background-position: center;
+  background-size: cover;
+  color: white;
+
 }
 .winter-theme {
-  background-color: var(--winter-color-1) !important;
-  color: var(--winter-color-2) !important;
+  background-image: url(assets/winte3-4.jpg);
+  background-position: center;
+  background-size: cover;
+  color: white;
 }

@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const bookSchema = new mongoose.Schema({
-  cover: { type: String }, // URL immagine copertina via Cloudinary
+  cover: { 
+    type: String,
+    default: 'https://res.cloudinary.com/dg3ztnyg9/image/upload/v1727198157/default/aaiyvs5jrwkz4pau30hi.png' 
+  }, 
   title: { type: String, required: true },
   author: { type: String, required: true },
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" }, // Collegato alle categorie

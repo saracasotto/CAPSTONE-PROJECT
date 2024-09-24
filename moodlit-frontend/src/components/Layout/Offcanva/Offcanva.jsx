@@ -11,11 +11,11 @@ function SidebarOffcanvas() {
   const handleShow = () => setShow(true);
 
   return (
-    <div className='d-none d-md-block'>
+    <div className='d-none d-md-block fixed'>
       <Col>
         <Button
           onClick={handleShow}
-          className="btn-offcanva interactive-txt">
+          className="btn-offcanva accent-txt">
           <i className="bi bi-list"></i>
         </Button>
       </Col>

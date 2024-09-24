@@ -1,27 +1,46 @@
-import Book from "../models/bookModel.js";
-
+import cloudinary from '../config/cloudinaryConfig.js'; 
+import Book from '../models/bookModel.js';
 
 export const addBook = async (req, res) => {
   try {
-    const { cover, title, author, category, barcode, publisher, description, status } = req.body;
+    let coverUrl = '';
+
+    // Controlla se è presente un file immagine da caricare su Cloudinary
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.v2.uploader.upload_stream({ folder: 'books' }, (error, result) => {
+          if (error) reject(error);
+          resolve(result);
+        });
+        stream.end(req.file.buffer); // Carica il buffer del file immagine su Cloudinary
+      });
+
+      coverUrl = result.secure_url; // Salva l'URL della copertina caricata
+    }
+
+    const { title, author, category, barcode, publisher, description, status } = req.body;
+    
+    // Crea un nuovo libro, usando l'URL della copertina caricata (se presente) o l'URL di default gestito dallo schema
     const newBook = new Book({
-      cover,
+      cover: coverUrl || undefined,  // Solo se c'è una copertina caricata, altrimenti usa il default dallo schema
       title,
       author,
       category,
       barcode,
       publisher,
       description,
-      user: req.loggedUser._id,
+      user: req.loggedUser._id, // Recupera l'ID dell'utente loggato
       status,
     });
-    await newBook.save();
+
+    await newBook.save(); // Salva il libro nel database
     res.status(201).json(newBook);
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'aggiunta del libro" });
+    res.status(500).json({ message: "Errore nell'aggiunta del libro", error: error.message });
   }
 };
 
+// Funzione per ottenere i libri dell'utente loggato
 export const getBooks = async (req, res) => {
   try {
     const books = await Book.find({ user: req.loggedUser._id }).populate("category").lean();
@@ -31,6 +50,7 @@ export const getBooks = async (req, res) => {
   }
 };
 
+// Funzione per aggiornare un libro esistente
 export const updateBook = async (req, res) => {
   try {
     const { title, author, category, progress, barcode, publisher, description, status } = req.body;
@@ -47,6 +67,7 @@ export const updateBook = async (req, res) => {
     res.status(500).json({ message: "Errore nell'aggiornamento del libro" });
   }
 };
+
 
 export const deleteBook = async (req, res) => {
   try {

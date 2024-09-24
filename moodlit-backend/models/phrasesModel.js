@@ -14,7 +14,7 @@ const PhrasesSchema = new mongoose.Schema({
         author: { type: String, required: true }
       }
     ],
-    focus: [
+    focused: [
       {
         text: { type: String, required: true },
         author: { type: String, required: true }
