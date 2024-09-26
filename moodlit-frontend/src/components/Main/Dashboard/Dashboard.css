@@ -1,7 +1,15 @@
 .dashboard-container {
-    height: 100%
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .dashboard-container .content {
     padding-top: 100px;
+}
+
+@media (min-width: 768px) {
+    .dashboard-container .content {
+        padding-top: 30px;
+    }
 }

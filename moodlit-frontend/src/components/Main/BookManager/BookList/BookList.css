@@ -2,7 +2,10 @@
   display: flex;
   flex-direction: column;
   color: white;
-  background-color: var(--accent-color)
+  background-color: var(--accent-color);
+  cursor: pointer;
+  width: 90%;
+  margin: 0 auto;
 }
 
 

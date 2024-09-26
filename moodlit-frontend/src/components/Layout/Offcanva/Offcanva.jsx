@@ -32,20 +32,13 @@ function SidebarOffcanvas() {
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body >
-          {/* Sezione Profile */}
           <div className="mb-4">
-            <h5>Profile</h5>
             <Nav className="flex-column">
-              <Nav.Link href="#">Configurazione</Nav.Link>
-              <Nav.Link href="#">Dark/Light Mode</Nav.Link>
-              <Nav.Link href="#">Privacy Policy</Nav.Link>
-              <Nav.Link href="#">Avviso Legale</Nav.Link>
+              <Nav.Link href="#">Profile Settings</Nav.Link>
             </Nav>
           </div>
 
-          {/* Link Sezioni */}
           <div>
-            <h5>Sezioni</h5>
             <Nav className="flex-column">
               <Nav.Link href="#">Books</Nav.Link>
               <Nav.Link href="#">Categories</Nav.Link>

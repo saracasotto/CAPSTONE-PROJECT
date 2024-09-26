@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 
 const noteSchema = new mongoose.Schema({
-    content: { type: String, required: true },
-    book: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
-  });
-
+  title: { type: String, required: true }, // Titolo della nota
+  content: { type: String, required: true }, // Contenuto della nota
+  chapter: { type: String }, // Capitolo della nota
+  book: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' }, // Riferimento al libro
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Riferimento all'utente
+  createdAt: { type: Date, default: Date.now }, // Data di creazione
+  updatedAt: { type: Date, default: Date.now }  // Data di aggiornamento
+});
 
 
 // Middleware pre('save') viene eseguito prima di ogni operazione di salvataggio (save)

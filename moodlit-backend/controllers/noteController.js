@@ -4,7 +4,7 @@ import Book from "../models/bookModel.js";
 
 export const addNote = async (req, res) => {
   try {
-    const { content, bookId } = req.body;
+    const { title, content, chapter, bookId } = req.body;
 
     // Verifica se il libro esiste e appartiene all'utente
     const book = await Book.findOne({ _id: bookId, user: req.loggedUser._id });
@@ -13,7 +13,9 @@ export const addNote = async (req, res) => {
     }
 
     const newNote = new Note({
+      title, // Aggiungi il titolo
       content,
+      chapter, // Aggiungi il capitolo
       book: bookId,
       user: req.loggedUser._id,
     });
@@ -23,6 +25,7 @@ export const addNote = async (req, res) => {
     res.status(500).json({ message: "Errore nell'aggiunta della nota" });
   }
 };
+
 
 export const getNotesByBook = async (req, res) => {
   try {
@@ -35,10 +38,10 @@ export const getNotesByBook = async (req, res) => {
 
 export const updateNote = async (req, res) => {
   try {
-    const { content } = req.body;
+    const { title, content, chapter } = req.body;
     const updatedNote = await Note.findOneAndUpdate(
       { _id: req.params.noteId, user: req.loggedUser._id }, 
-      { content },
+      { title, content, chapter }, // Aggiorna anche titolo e capitolo
       { new: true }
     );
     if (!updatedNote) {
@@ -50,6 +53,7 @@ export const updateNote = async (req, res) => {
   }
 };
 
+
 export const deleteNote = async (req, res) => {
   try {
     const deletedNote = await Note.findOneAndDelete({ _id: req.params.noteId, user: req.loggedUser._id });
@@ -59,5 +63,14 @@ export const deleteNote = async (req, res) => {
     res.status(200).json({ message: "Nota eliminata con successo" });
   } catch (error) {
     res.status(500).json({ message: "Errore nell'eliminazione della nota" });
+  }
+};
+
+export const getAllNotesByUser = async (req, res) => {
+  try {
+    const notes = await Note.find({ user: req.loggedUser._id }).populate('book', 'title'); // Popola il titolo del libro
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: "Errore nel recupero delle note" });
   }
 };

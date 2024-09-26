@@ -5,6 +5,7 @@ import {
     updateBook, 
     deleteBook, 
     updateProgress,
+    getBookByIdWithoutAuth,
     addBookWithoutAuth, 
     getAllBooksWithoutAuth, 
     updateBookWithoutAuth, 
@@ -27,6 +28,7 @@ router.put('/:id/progress', authentication, updateProgress);
 
 
 //NO AUTENTICAZIONE
+router.get('/getWithoutAuth/:id', getBookByIdWithoutAuth);
 router.post('/addWithoutAuth', addBookWithoutAuth);
 router.get('/getWithoutAuth', getAllBooksWithoutAuth);
 router.put('/updateWithoutAuth/:id', updateBookWithoutAuth);

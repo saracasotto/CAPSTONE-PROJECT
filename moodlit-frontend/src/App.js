@@ -17,7 +17,7 @@ function App() {
             <Route path="/" element={<Welcome />} />
             <Route path="/mood-selection" element={<MoodSelector />} />
             <Route path="/season-selection" element={<SeasonSelector />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </Router>
       </MoodProvider>

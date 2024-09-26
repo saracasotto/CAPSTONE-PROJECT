@@ -13,10 +13,7 @@ function TopNavbar() {
         <Navbar.Toggle aria-controls="profile-navbar" />
         <Navbar.Collapse id="profile-navbar">
           <Nav className="ml-auto">
-            <Nav.Link href="#">Configurazione</Nav.Link>
-            <Nav.Link href="#">Dark/Light Mode</Nav.Link>
-            <Nav.Link href="#">Privacy Policy</Nav.Link>
-            <Nav.Link href="#">Avviso Legale</Nav.Link>
+            <Nav.Link href="#">Profile Settings</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

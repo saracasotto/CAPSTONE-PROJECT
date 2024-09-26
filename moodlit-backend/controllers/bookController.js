@@ -101,6 +101,21 @@ export const updateProgress = async (req, res) => {
 
 //DA BACKEND SENZA AUTORIZZAZIONE
 
+export const getBookByIdWithoutAuth = async (req, res) => {
+  try {
+    console.log("ID ricevuto nel backend:", req.params.id); // Log per debug
+
+    const book = await Book.findById(req.params.id);
+    if (!book) {
+      return res.status(404).json({ message: 'Libro non trovato' });
+    }
+    res.json(book);
+  } catch (error) {
+    res.status(500).json({ message: 'Errore nel server' });
+  }
+};
+
+
 // Aggiungere un libro (POST)
 export const addBookWithoutAuth = async (req, res) => {
   try {
