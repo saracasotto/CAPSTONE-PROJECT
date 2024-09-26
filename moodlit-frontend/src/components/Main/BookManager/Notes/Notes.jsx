@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, ListGroup} from 'react-bootstrap';
-import './Notes.css'
+import { Button, Form, ListGroup } from 'react-bootstrap';
+import './Notes.css';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const Notes = () => {
     const [notes, setNotes] = useState([]);
@@ -19,7 +21,7 @@ const Notes = () => {
         fetchNotes();
     }, []);
 
-    // Funzione per creare una nuova nota
+    // Funzione per creare o modificare una nota
     const handleCreateNote = async () => {
         const method = isEditing ? 'PUT' : 'POST';
         const url = isEditing ? `/api/notes/${noteId}` : '/api/notes';
@@ -49,6 +51,11 @@ const Notes = () => {
         });
         setNoteId(note._id);
         setIsEditing(true);
+    };
+
+    // Funzione per aggiornare il contenuto del Quill
+    const handleChange = (content) => {
+        setCurrentNote({ ...currentNote, content });
     };
 
     // Funzione per resettare il form
@@ -83,6 +90,7 @@ const Notes = () => {
                 <Form.Group controlId="formNoteTitle">
                     <Form.Control
                         type="text"
+                        className='note-title'
                         placeholder="Title"
                         value={currentNote.title}
                         onChange={(e) => setCurrentNote({ ...currentNote, title: e.target.value })}
@@ -92,6 +100,7 @@ const Notes = () => {
                 <Form.Group controlId="formNoteChapter">
                     <Form.Control
                         type="text"
+                        className='note-chapter'
                         placeholder="Chapter name or number"
                         value={currentNote.chapter}
                         onChange={(e) => setCurrentNote({ ...currentNote, chapter: e.target.value })}
@@ -99,12 +108,11 @@ const Notes = () => {
                 </Form.Group>
 
                 <Form.Group controlId="formNoteContent">
-                    <Form.Control
-                        as="textarea"
-                        rows={5}
-                        placeholder="Write your thoughts"
+                    <ReactQuill
+                        className="note-content"
                         value={currentNote.content}
-                        onChange={(e) => setCurrentNote({ ...currentNote, content: e.target.value })}
+                        onChange={handleChange}
+                        placeholder="Write your thoughts..."
                     />
                 </Form.Group>
 

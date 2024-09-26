@@ -6,10 +6,12 @@
 
 .dashboard-container .content {
     padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 @media (min-width: 768px) {
     .dashboard-container .content {
         padding-top: 30px;
+        padding-bottom: 30px;
     }
 }

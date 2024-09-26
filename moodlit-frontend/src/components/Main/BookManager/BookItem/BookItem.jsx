@@ -64,12 +64,11 @@ const BookItem = () => {
               </Card>
             </Col>
             <Col xs={12}>
-              <Card>
+              <Card className='quotes-container'>
                 <Card.Body>
                   <Card.Title>
                     QUI CI VADO A METTERE LE CITAZIONI
                   </Card.Title>
-
                 </Card.Body>
               </Card>
             </Col>

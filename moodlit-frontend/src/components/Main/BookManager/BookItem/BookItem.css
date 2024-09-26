@@ -35,7 +35,7 @@
     }
   
   
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       .book-item .card {
         flex-direction: row;
         height: 200px;
@@ -53,4 +53,9 @@
 
 .notes-container {
  flex-direction: column;
+}
+
+.notes-container.card,
+.quotes-container.card {
+  height: auto;
 }
