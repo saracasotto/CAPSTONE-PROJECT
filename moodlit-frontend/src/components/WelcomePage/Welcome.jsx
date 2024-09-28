@@ -20,7 +20,7 @@ const Welcome = () => {
     }, []);
 
     return (
-        <Container fluid className='welcome-container'>
+        <Container fluid className='welcome-container text-main'>
             <Row>
                 {/* Colonna di benvenuto, rimane visibile su desktop e tablet, nascosta su mobile quando appare il form */}
                 <Col

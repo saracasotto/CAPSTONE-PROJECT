@@ -8,14 +8,6 @@
   text-align: center;
 }
 
-.mood-selector-container,
-.season-selector-container {
-  background-image: url(../../../assets/mood-background.jpg);
-  background-size: cover;
-  background-position: center;
-  color: white;
-}
-
 .mood-selector-container h1,
 .season-selector-container h1 {
   margin-bottom: 2em;
@@ -34,7 +26,8 @@
 .seasons button {
   font-size: 1.5em;
   padding: 0.5em 0.8em;
-  border: solid 1px black;
+  border: transparent;
+  border-radius: 15px;
 }
 
 @media (max-width: 576px) {

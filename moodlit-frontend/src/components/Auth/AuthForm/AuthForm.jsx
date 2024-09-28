@@ -44,12 +44,12 @@ const AuthForm = () => {
               <input type="password" id="confirm-password" required />
             </div>
           )}
-          <button type="submit" className="btn interactive-bg">
+          <button type="submit" className="btn accent-bg">
             {isSignUp ? 'Sign Up' : 'Sign In'}
           </button>
         </form>
 
-        <button onClick={handleGoogleLogin} className="btn btn-google accent-bg">
+        <button onClick={handleGoogleLogin} className="btn btn-google bg-main">
           {isSignUp ? 'Sign Up with Google' : 'Sign In with Google'}
         </button>
 

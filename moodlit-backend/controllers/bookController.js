@@ -119,26 +119,28 @@ export const getBookByIdWithoutAuth = async (req, res) => {
 // Aggiungere un libro (POST)
 export const addBookWithoutAuth = async (req, res) => {
   try {
-    const { cover, title, author, category, barcode, publisher, description, status, user } = req.body;
+    const { cover, title, author, category, barcode, publisher, description, status } = req.body;
 
+    // Crea un nuovo libro con l'URL della copertina già caricato su Cloudinary
     const newBook = new Book({
-      cover,
+      cover: cover || undefined,  // Se non c'è un'immagine, sarà undefined
       title,
       author,
       category,
       barcode,
       publisher,
       description,
-      user,
       status,
     });
 
-    await newBook.save();
-    res.status(201).json(newBook);
+    await newBook.save();  // Salva il libro nel database
+    res.status(201).json(newBook);  // Restituisce il nuovo libro come risposta
   } catch (error) {
+    console.error("Errore nell'aggiunta del libro:", error.message);
     res.status(500).json({ message: "Errore nell'aggiunta del libro", error: error.message });
   }
 };
+
 
 // Ottenere tutti i libri (GET)
 export const getAllBooksWithoutAuth = async (req, res) => {
@@ -158,7 +160,14 @@ export const getAllBooksWithoutAuth = async (req, res) => {
 export const updateBookWithoutAuth = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedBook = await Book.findByIdAndUpdate(id, req.body, { new: true }); // Aggiorna il libro con i nuovi dati
+    const { cover, title, author, category, barcode, publisher, description, status } = req.body;
+
+    // Aggiorna il libro con i nuovi dati e la nuova copertina (se presente)
+    const updatedBook = await Book.findByIdAndUpdate(
+      id,
+      { title, author, category, barcode, publisher, description, status, cover },
+      { new: true }
+    );
 
     if (!updatedBook) {
       return res.status(404).json({ message: "Libro non trovato" });
@@ -169,6 +178,7 @@ export const updateBookWithoutAuth = async (req, res) => {
     res.status(500).json({ message: "Errore nell'aggiornamento del libro", error: error.message });
   }
 };
+
 
 // Eliminare un libro esistente (DELETE)
 export const deleteBookWithoutAuth = async (req, res) => {

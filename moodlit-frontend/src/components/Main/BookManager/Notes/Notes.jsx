@@ -116,7 +116,7 @@ const Notes = () => {
                     />
                 </Form.Group>
 
-                <Button variant="primary" onClick={handleCreateNote}>
+                <Button className='accent-bg' onClick={handleCreateNote}>
                     {isEditing ? 'Save' : 'Add'}
                 </Button>
                 {isEditing && <Button variant="secondary" className="ml-2" onClick={resetForm}>Cancel</Button>}

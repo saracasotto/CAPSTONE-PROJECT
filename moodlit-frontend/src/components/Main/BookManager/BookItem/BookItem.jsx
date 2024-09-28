@@ -48,23 +48,23 @@ const BookItem = () => {
     <Container className="book-item mt-5">
       <Row>
         
-        <Col xs={12} md={4}>
+        <Col xs={12} md={3} className='left-side mb-3'>
           <BookCard book={book} />
-          <Button variant="primary">Start session</Button>
+          <Button className='accent-bg start-button mt-3'>Start session</Button>
         </Col>
 
 
-        <Col xs={12} md={8}>
+        <Col xs={12} md={9} className='right-side'>
           <Row>
             <Col xs={12} className="mb-3">
-              <Card className='notes-container'>
+              <Card className='notes-container glass-bg'>
                 <Card.Body>
                   <Notes />
                 </Card.Body>
               </Card>
             </Col>
             <Col xs={12}>
-              <Card className='quotes-container'>
+              <Card className='quotes-container glass-bg'>
                 <Card.Body>
                   <Card.Title>
                     QUI CI VADO A METTERE LE CITAZIONI

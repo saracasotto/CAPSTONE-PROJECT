@@ -1,3 +1,18 @@
-input {
-    margin: 0;
+input{
+    margin: 1em 0;
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
+    text-align: start;
+    font-size: 1.2em !important;
+}
+
+input:focus {
+    border: 1px solid var(--accent-color)  !important;
+}
+
+.ql-container.ql-snow {
+    margin-bottom: 1em;
+}
+.ql-toolbar.ql-snow {
+    background-color: white;
 }

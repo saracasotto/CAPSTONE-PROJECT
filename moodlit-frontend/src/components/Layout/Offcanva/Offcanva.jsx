@@ -21,7 +21,7 @@ function SidebarOffcanvas() {
       </Col>
 
 
-      <Offcanvas show={show} onHide={handleClose} placement="start">
+      <Offcanvas show={show} onHide={handleClose} placement="start" className="bg-main">
         <Offcanvas.Header closeButton >
           <Offcanvas.Title>
             {/* Navbar Brand */}

@@ -1,61 +1,81 @@
 .book-item .card {
-    display: flex;
-    flex-direction: column;
-    color: white;
-    background-color: var(--accent-color);
-    cursor: pointer;
-    width: 90%;
-    margin: 0 auto;
-  }
-  
-  
-  .book-item .card-img-container {
-      width: 100%;
-      padding-top: 133.33%; 
-      position: relative;
-    }
-    
-  .book-item .card-img-top {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-  
-  
-  .book-item .card-title {
-      font-size: 1em; 
-    }
-    
-  .book-item .card-text {
-      font-size: 0.9em; 
-    }
-  
-  
-    @media (max-width: 767px) {
-      .book-item .card {
-        flex-direction: row;
-        height: 200px;
-      }
-    
-      .book-item .card-img-container {
-        max-width: 120px;
-      }
-    
-      .book-item .card-img {
-        width: 100%;
-        height: 200px;
-      }
-    }
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.book-item .book-card {
+  width: 80%;
+}
+
+
+.book-item .card-img-container {
+  width: 100%;
+  padding-top: 133.33%;
+  position: relative;
+}
+
+.book-item .card-img-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.book-item .card-title {
+  font-size: 1em;
+}
+
+.book-item .card-text {
+  font-size: 0.9em;
+}
 
 .notes-container {
- flex-direction: column;
+  flex-direction: column;
 }
 
 .notes-container.card,
 .quotes-container.card {
   height: auto;
 }
+
+
+.start-button {
+  font-size: 1em;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+
+}
+
+.left-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  .book-item .book-card {
+    flex-direction: row;
+    height: 200px;
+  }
+
+  .book-item .book-card {
+    width: 100%;
+  }
+
+  .book-item .card-img-container {
+    max-width: 120px;
+  }
+
+  .book-item .card-img {
+    width: 100%;
+    height: 200px;
+  }
+}
+

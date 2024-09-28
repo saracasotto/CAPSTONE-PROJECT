@@ -14,12 +14,12 @@ const SeasonSelector = () => {
   };
 
   return (
-    <Container fluid className="season-selector-container">
+    <Container fluid className="season-selector-container bg-main">
       <h1 className='title-font'>Select your season</h1>
       <div className="seasons title-font">
         {['Spring', 'Summer', 'Autumn', 'Winter'].map((season) => (
           <button key={season} onClick={() => handleSeasonClick(season)}
-          className='interactive-bg'>
+          className='accent-bg'>
             {season}
           </button>
         ))}

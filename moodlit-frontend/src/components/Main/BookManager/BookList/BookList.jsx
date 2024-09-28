@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import BookCard from '../BookCard.jsx/BookCard';
-import './BookList.css'
+import './BookList.css';
+import AddBook from '../../../../assets/add-book.png'
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -44,20 +45,39 @@ const BookList = () => {
 
   return (
     <>
-      {books.length > 0 ? (
-        <Row className="book-list mt-5">
-          {books.map((book) => (
-            <Col key={book._id} xs={12} md={6} lg={4} xl={3} className="mb-4">
+      <Row className="book-list mt-5">
+        
+        <Col xs={12} md={3} className="mb-4">
+          <Card
+            className="book-card cursor-pointer glass-bg"
+            onClick={() => navigate('./books/add-book')}
+          >
+            <div className="card-img-container">
+              <Card.Img 
+              src={AddBook}
+              variant='top'
+              className='card-img add-image'
+              alt='add-image' />
+            </div>
+            <Card.Body>
+              <Card.Title>Add New Book</Card.Title>
+            </Card.Body>
+          </Card>
+        </Col>
+
+        {books.length > 0 ? (
+          books.map((book) => (
+            <Col key={book._id} xs={12} md={3} className="mb-4">
               <BookCard
                 book={book}
-                onClick={() => navigate(`./books/${book._id}`)} 
+                onClick={() => navigate(`./books/${book._id}`)}
               />
             </Col>
-          ))}
-        </Row>
-      ) : (
-        <p>No books available. Please add one!</p>
-      )}
+          ))
+        ) : (
+          <p>No books available. Please add one!</p>
+        )}
+      </Row>
     </>
   );
 };

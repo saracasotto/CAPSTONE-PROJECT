@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { MoodContext } from '../../../context/MoodContext.js';
 import { Container } from 'react-bootstrap';
+import './MoodPhrases.css'
 
 
 const MoodPhrases = () => {
@@ -27,7 +28,7 @@ const MoodPhrases = () => {
     <Container fluid className="phrase-display title-font mt-5 mb-5">
       {phrase ? (
         <>
-          <h4><i>{phrase.text}</i></h4>
+          <p><i>{phrase.text}</i></p>
           <p>- {phrase.author}</p>
         </>
       ) : (

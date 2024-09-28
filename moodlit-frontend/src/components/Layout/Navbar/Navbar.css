@@ -5,17 +5,14 @@
     border: none;
 }
 
+.navbar-toggler-icon {
+    color: var(--accent-color);
+}
+
 nav.fixed-top{
     padding: 0.5em 2em !important;
-    background-color: #ECEFF1;
-    border-bottom: 1px solid var(--accent-color);
 }
 
-nav.fixed-bottom {
-    background-color: #ECEFF1;
-    border-top: 1px solid var(--accent-color);
-
-}
 
 nav.fixed-bottom i{
     font-size: 1.5em;

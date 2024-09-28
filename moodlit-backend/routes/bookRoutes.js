@@ -22,7 +22,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 router.post('/add', upload.single('cover'), authentication, addBook);
 router.get('/', authentication, getBooks);
-router.put('/:id', upload.single('cover'), authentication, updateBook);
+router.put('/:id', authentication, updateBook);
 router.delete('/:id', authentication, deleteBook);
 router.put('/:id/progress', authentication, updateProgress);
 
