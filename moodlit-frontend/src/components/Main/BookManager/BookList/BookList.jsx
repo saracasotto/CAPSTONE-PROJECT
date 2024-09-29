@@ -46,28 +46,30 @@ const BookList = () => {
   return (
     <>
       <Row className="book-list mt-5">
-        
-        <Col xs={12} md={3} className="mb-4">
+
+        <Col xs={12} md={4} lg={3} xl={2} className="mb-4">
           <Card
-            className="book-card cursor-pointer glass-bg"
+            className="book-card glass-bg"
             onClick={() => navigate('./books/add-book')}
           >
-            <div className="card-img-container">
-              <Card.Img 
-              src={AddBook}
-              variant='top'
-              className='card-img add-image'
-              alt='add-image' />
+            <div className="card-img-container position-relative">
+              <Card.Img
+                src={AddBook}
+                variant='top'
+                className='card-img add-image'
+                alt='add-image'
+              />
+              <div className="overlay"></div>
             </div>
             <Card.Body>
-              <Card.Title>Add New Book</Card.Title>
+              <Card.Title className='text-center'>Add a new Book</Card.Title>
             </Card.Body>
           </Card>
         </Col>
 
         {books.length > 0 ? (
           books.map((book) => (
-            <Col key={book._id} xs={12} md={3} className="mb-4">
+            <Col key={book._id} xs={12} md={4} lg={3} xl={2} className="mb-4">
               <BookCard
                 book={book}
                 onClick={() => navigate(`./books/${book._id}`)}

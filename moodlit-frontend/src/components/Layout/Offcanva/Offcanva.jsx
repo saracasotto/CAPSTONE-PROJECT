@@ -4,7 +4,7 @@ import './Offcanva.css'
 import logo from '../../../assets/logo-small.png';
 
 
-function SidebarOffcanvas() {
+const SidebarOffcanvas =()=>{
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);

@@ -9,12 +9,12 @@ import BookList from "../BookManager/BookList/BookList";
 import BookItem from "../BookManager/BookItem/BookItem";
 import BookDetails from "../BookManager/BookDetails.jsx/BookDetails";
 
-function Dashboard() {
+const Dashboard = ()=>{
   return (
     <Container fluid className="dashboard-container d-block d-md-flex p-0">
       <SidebarOffcanvas />
       <TopNavbar />
-      <Container className="content">
+      <Container fluid="md" className="content">
         <MoodPhrases />  {/* MoodPhrases visibile in ogni pagina */}
         <Routes>
           <Route path="/" element={<BookList />} />

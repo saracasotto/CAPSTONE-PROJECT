@@ -50,13 +50,13 @@ const BookItem = () => {
         
         <Col xs={12} md={3} className='left-side mb-3'>
           <BookCard book={book} />
-          <Button className='accent-bg start-button mt-3'>Start session</Button>
         </Col>
 
 
         <Col xs={12} md={9} className='right-side'>
           <Row>
             <Col xs={12} className="mb-3">
+            <Button className='accent-bg start-button mb-3'>Start session</Button>
               <Card className='notes-container glass-bg'>
                 <Card.Body>
                   <Notes />

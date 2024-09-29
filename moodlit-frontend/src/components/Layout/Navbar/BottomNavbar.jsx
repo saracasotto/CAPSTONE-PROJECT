@@ -1,6 +1,6 @@
 import { Navbar, Nav } from 'react-bootstrap';
 
-function BottomNavbar() {
+const BottomNavbar = ()=>{
   return (
     <>
       <Navbar className="d-md-none fixed-bottom bg-main">

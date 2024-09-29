@@ -27,6 +27,7 @@
   padding: 0;
   overflow: auto;
   color: var(--text-primary);
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .btn{
@@ -44,7 +45,8 @@
 
 .accent-bg {
   background-color: var(--accent-color) !important;
-  color: white !important;
+  color: var(--background) !important;
+  font-weight: bold;
   border: transparent;
 }
 
@@ -68,7 +70,6 @@ a {
   backdrop-filter: blur(4.6px);
   -webkit-backdrop-filter: blur(4.6px);
   color: var(--text-primary);
-  border: 1px solid var(--accent-color);
 }
 
 .spring-theme {
