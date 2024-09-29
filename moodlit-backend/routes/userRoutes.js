@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUser, updateUser, deleteUser, getAllUsers, updateUserById, deleteUserById } from '../controllers/userController.js';
+import { getUser, updateUser, deleteUser, getAllUsers, updateUserById, deleteUserById, uploadUserProfilePicture } from '../controllers/userController.js';
 import authentication from '../middleware/authentication.js'; 
 
 const router = express.Router();
@@ -13,5 +13,6 @@ router.delete('/profile', authentication, deleteUser);
 router.get('/', getAllUsers);
 router.put('/:id', updateUserById); 
 router.delete('/:id', deleteUserById); 
+router.post('/uploadAvatar', uploadUserProfilePicture)
 
 export default router;

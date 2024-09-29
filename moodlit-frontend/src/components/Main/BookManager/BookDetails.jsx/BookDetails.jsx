@@ -43,7 +43,7 @@ const BookDetails = () => {
 
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/categories`);
+        const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/getWithoutAuth`);
         if (!response.ok) {
           throw new Error('Errore nel recupero delle categorie');
         }
@@ -58,79 +58,84 @@ const BookDetails = () => {
       fetchBookDetails();
     }
     fetchCategories();
-  }, [id, API_HOST, API_PORT]);  
+  }, [id, API_HOST, API_PORT]);
 
-  // Funzione per caricare l'immagine
-  const uploadImage = async () => {
-    if (!selectedFile) return null;  // Se non c'è immagine, ritorna null
-
+  // Funzione per caricare l'immagine del libro
+  const uploadCover = async () => {
+    if (!selectedFile) return null;
+  
     const formData = new FormData();
     formData.append('cover', selectedFile);
-
+  
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/upload-cover`, {  // URL per l'upload dell'immagine
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/books/upload-cover`, {
         method: 'POST',
         body: formData,
       });
-
+  
       if (!response.ok) {
-        throw new Error('Errore nel caricamento dell\'immagine');
+        throw new Error('Errore nel caricamento della copertina');
       }
-
+  
       const data = await response.json();
-      return data.imageUrl;  // Restituisce l'URL dell'immagine caricata
+      console.log('Cover URL from backend:', data.coverUrl);  // Log per debug
+      return data.coverUrl;
     } catch (error) {
-      console.error('Errore durante il caricamento dell\'immagine:', error);
+      console.error('Errore durante il caricamento della copertina:', error);
       return null;
     }
   };
+  
 
   // Funzione per gestire il salvataggio del libro
   const handleSave = async () => {
     try {
       let categoryId = bookData.category;
-
-      // Se stiamo creando una nuova categoria, la creiamo e otteniamo il suo ID
+  
+      // Se stiamo creando una nuova categoria, otteniamo il suo ID
       if (isCreatingCategory && newCategory) {
         categoryId = await createCategory(newCategory);
       }
-
-      // Carica prima l'immagine se è stata selezionata
-      const coverUrl = await uploadImage();
-
+  
+      // Carica l'immagine se è stata selezionata
+      const coverUrl = await uploadCover();
+  
+      // Crea i dettagli del libro, inclusa la copertina
       const bookDetails = {
         ...bookData,
-        cover: coverUrl || bookData.cover,  // Usa l'URL dell'immagine appena caricata o quello esistente
-        category: categoryId, // Usa l'ID della categoria selezionata o creata
+        cover: coverUrl || bookData.cover,  // Qui viene usata la copertina caricata o quella esistente
+        category: categoryId,
       };
-
-      const method = id ? 'PUT' : 'POST';  // PUT per modifica, POST per aggiunta
+  
+      const method = id ? 'PUT' : 'POST';  // PUT per modifica, POST per nuovo
       const url = id 
         ? `${API_HOST}:${API_PORT}/api/books/updateWithoutAuth/${id}` 
         : `${API_HOST}:${API_PORT}/api/books/addWithoutAuth`;
-
+  
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bookDetails),  // Invia i dati del libro come JSON
+        body: JSON.stringify(bookDetails),  // Passiamo i dettagli del libro al backend
       });
-
+  
       if (!response.ok) {
         throw new Error('Errore durante il salvataggio del libro');
       }
-
-      navigate('/books');  
+  
+      navigate('/dashboard');  // Reindirizza l'utente al dashboard dopo il salvataggio
     } catch (error) {
       console.error('Errore durante il salvataggio del libro:', error);
     }
   };
+  
+  
 
   // Funzione per creare una nuova categoria
   const createCategory = async (name) => {
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/categories`, {
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/addWithoutAuth`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -152,8 +157,10 @@ const BookDetails = () => {
 
   // Funzione per gestire l'input del file
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]); // Prendiamo il file selezionato
+    setSelectedFile(e.target.files[0]);  // Aggiorna lo stato con il file selezionato
+    console.log('Selected file:', e.target.files[0]);  // Debug per verificare il file
   };
+  
 
   // Funzione per gestire l'eliminazione del libro
   const handleDelete = async () => {

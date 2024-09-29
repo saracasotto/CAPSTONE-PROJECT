@@ -79,3 +79,23 @@ export const deleteUserById = async (req, res) => {
   }
 };
 
+export const uploadUserProfilePicture = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Nessuna immagine fornita' });
+    }
+
+    // Carica l'immagine su Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.v2.uploader.upload_stream({ folder: 'users' }, (error, result) => {
+        if (error) reject(error);
+        resolve(result);
+      });
+      stream.end(req.file.buffer);
+    });
+
+    res.status(200).json({ avatarUrl: result.secure_url });
+  } catch (error) {
+    res.status(500).json({ message: 'Errore nel caricamento dell\'immagine del profilo', error: error.message });
+  }
+};

@@ -1,12 +1,15 @@
-import cloudinary from '../config/cloudinaryConfig.js'; 
+import { cloudinary, upload } from '../config/cloudinaryConfig.js'; 
 import Book from '../models/bookModel.js';
+
 
 export const addBook = async (req, res) => {
   try {
     let coverUrl = '';
 
-    // Controlla se è presente un file immagine da caricare su Cloudinary
+    //se c'è immagine, salvo su cloudinary
     if (req.file) {
+
+      //PATTERN RICHIEDE PROMISE MANUALE
       const result = await new Promise((resolve, reject) => {
         const stream = cloudinary.v2.uploader.upload_stream({ folder: 'books' }, (error, result) => {
           if (error) reject(error);
@@ -15,6 +18,7 @@ export const addBook = async (req, res) => {
         stream.end(req.file.buffer); // Carica il buffer del file immagine su Cloudinary
       });
 
+      
       coverUrl = result.secure_url; // Salva l'URL della copertina caricata
     }
 
@@ -36,7 +40,7 @@ export const addBook = async (req, res) => {
     await newBook.save(); // Salva il libro nel database
     res.status(201).json(newBook);
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'aggiunta del libro", error: error.message });
+    res.status(500).json({ message: "Error ", error: error.message });
   }
 };
 
@@ -121,9 +125,9 @@ export const addBookWithoutAuth = async (req, res) => {
   try {
     const { cover, title, author, category, barcode, publisher, description, status } = req.body;
 
-    // Crea un nuovo libro con l'URL della copertina già caricato su Cloudinary
+    // Crea un nuovo libro, usando l'URL della copertina fornito dal frontend
     const newBook = new Book({
-      cover: cover || undefined,  // Se non c'è un'immagine, sarà undefined
+      cover: cover || 'https://res.cloudinary.com/dg3ztnyg9/image/upload/v1727198157/default/aaiyvs5jrwkz4pau30hi.png',  // Usa l'URL della copertina o un valore di default
       title,
       author,
       category,
@@ -133,7 +137,7 @@ export const addBookWithoutAuth = async (req, res) => {
       status,
     });
 
-    await newBook.save();  // Salva il libro nel database
+    await newBook.save();  // Salva il nuovo libro nel database
     res.status(201).json(newBook);  // Restituisce il nuovo libro come risposta
   } catch (error) {
     console.error("Errore nell'aggiunta del libro:", error.message);
@@ -195,4 +199,18 @@ export const deleteBookWithoutAuth = async (req, res) => {
     res.status(500).json({ message: "Errore nell'eliminazione del libro", error: error.message });
   }
 };
+
+export const uploadBookCover = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Nessuna immagine fornita' });
+    }
+
+    // Poiché il file è già caricato su Cloudinary, possiamo semplicemente restituire il percorso
+    res.status(200).json({ coverUrl: req.file.path });
+  } catch (error) {
+    res.status(500).json({ message: 'Errore nel caricamento della copertina', error: error.message });
+  }
+};
+
 

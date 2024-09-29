@@ -9,18 +9,18 @@ import {
     addBookWithoutAuth, 
     getAllBooksWithoutAuth, 
     updateBookWithoutAuth, 
-    deleteBookWithoutAuth  } from '../controllers/bookController.js';
+    deleteBookWithoutAuth,  
+    uploadBookCover} from '../controllers/bookController.js';
+    
 import authentication from '../middleware/authentication.js';
 
-import multer from 'multer';
+import  { upload } from  '../config/cloudinaryConfig.js'
 
 const router = express.Router();
 
-const upload = multer({ storage: multer.memoryStorage() });
 
 
-
-router.post('/add', upload.single('cover'), authentication, addBook);
+router.post('/add', authentication, addBook);
 router.get('/', authentication, getBooks);
 router.put('/:id', authentication, updateBook);
 router.delete('/:id', authentication, deleteBook);
@@ -28,10 +28,11 @@ router.put('/:id/progress', authentication, updateProgress);
 
 
 //NO AUTENTICAZIONE
-router.get('/getWithoutAuth/:id', getBookByIdWithoutAuth);
+router.get('/getWithoutAuth/:id', upload.single('cover'), getBookByIdWithoutAuth);
 router.post('/addWithoutAuth', addBookWithoutAuth);
 router.get('/getWithoutAuth', getAllBooksWithoutAuth);
 router.put('/updateWithoutAuth/:id', updateBookWithoutAuth);
 router.delete('/deleteWithoutAuth/:id', deleteBookWithoutAuth);
+router.post('/upload-cover', upload.single('cover'), uploadBookCover)
 
 export default router;

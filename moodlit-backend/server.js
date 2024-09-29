@@ -10,7 +10,7 @@ import noteRoutes from './routes/noteRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import phrasesRoutes from './routes/phrasesRoutes.js';
 import sessionRoutes from './routes/sessionRoutes.js';
-import uploadRoutes from './routes/uploadRoutes.js'
+
 
 dotenv.config();
 
@@ -29,7 +29,6 @@ app.use('/api/quotes', quoteRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/phrases', phrasesRoutes)
 app.use('/api/sessions', sessionRoutes);
-app.use('/api', uploadRoutes);
 
 
 
