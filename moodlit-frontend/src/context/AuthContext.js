@@ -7,13 +7,16 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [theme, setTheme] = useState("auto"); //Imposto tema default
 
+  const API_HOST = process.env.REACT_APP_API_HOST;
+  const API_PORT = process.env.REACT_APP_API_PORT;
+
   // Mostra caricamento mentre l'app controlla se l'utente è autenticato o meno
   // Evito che l'utente veda componenti non corretti mentre il contesto non ha ancora terminato il controllo dell'auth
   const [loading, setLoading] = useState(true);
 
   const login = async (email, password) => {
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(`${API_HOST}:${API_PORT}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,53 +52,52 @@ export const AuthProvider = ({ children }) => {
     -Token non valido, utente disconnesso con logout.
     -Non c'è Token, recupero solo il tema dal localStorage anche se non auth.
  */
-  const verifyToken = async () => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      try {
-        const res = await fetch("/api/users/me", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          setUser(data);
-          setTheme(data.themePreference);
-          localStorage.setItem("theme", data.themePreference);
+    useEffect(() => {
+      const verifyToken = async () => {
+        const token = localStorage.getItem("token");
+    
+        if (token) {
+          try {
+            const res = await fetch(`${API_HOST}:${API_PORT}/api/users/profile`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+    
+            const data = await res.json();
+    
+            if (res.ok) {
+              setUser(data);
+              setTheme(data.themePreference);
+              localStorage.setItem("theme", data.themePreference);
+            } else {
+              logout();
+            }
+          } catch (error) {
+            console.error("Errore durante la verifica del token:", error);
+            logout();
+          }
         } else {
-          logout();
+          const savedTheme = localStorage.getItem("theme");
+          if (savedTheme) {
+            setTheme(savedTheme);
+          }
+          setUser(null);
         }
-      } catch (error) {
-        console.error("Errore durante la verifica del token:", error);
-        logout();
-      }
-    } else {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme) {
-        setTheme(savedTheme);
-      }
-      setUser(null);
-    }
-
-    setLoading(false);
-  };
+    
+        setLoading(false);
+      };
+    
+      verifyToken(); // Chiama verifyToken una sola volta quando il componente viene montato
+    }, [API_HOST, API_PORT]); // L'array di dipendenze vuoto garantisce che venga eseguito solo una volta
+    
 
   const handleThemeChange = (newTheme) => {
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
   };
 
-
-  //eseguo la funzione verifyToken una sola volta, quando il componente viene montato
-  //Verifico stato di autenticazione utente e recupero il tema dal backend o dal localStorage.
-  useEffect(() => {
-    verifyToken();
-  });
 
   if (loading) {
     return <div>Loading...</div>;

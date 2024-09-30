@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import BookCard from '../BookCard.jsx/BookCard';
-import './BookItem.css'
+import './BookReading.css'
 import Notes from '../Notes/Notes';
 
 const BookItem = () => {
@@ -48,12 +48,12 @@ const BookItem = () => {
     <Container className="book-item mt-5">
       <Row>
         
-        <Col xs={12} md={3} className='left-side mb-3'>
+        <Col xs={12} lg={4} className='left-side mb-3'>
           <BookCard book={book} />
         </Col>
 
 
-        <Col xs={12} md={9} className='right-side'>
+        <Col xs={12} lg={8} className='right-side'>
           <Row>
             <Col xs={12} className="mb-3">
             <Button className='accent-bg start-button mb-3'>Start session</Button>

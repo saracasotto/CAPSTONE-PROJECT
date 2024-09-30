@@ -5,7 +5,7 @@ import { generateToken } from '../utils/jwt.js'
 
 export const register = async (req, res) => {
   //prendo dati necessari dalla richiesta http
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     //cerco se esiste
@@ -17,7 +17,7 @@ export const register = async (req, res) => {
 
     //inizializzo variabili password e utente
     const hashedPassword = await bcrypt.hash(password, 12);
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ email, password: hashedPassword });
 
     //salvo utente nel database e lo passo come parametro alla funzione
     await newUser.save();

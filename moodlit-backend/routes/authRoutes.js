@@ -10,10 +10,22 @@ router.post('/login', login);
 
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
-  const { jwtToken } = req.user;
-  res.redirect(`/dashboard?token=${jwtToken}`);
-});
+
+router.get(
+  '/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/' }), 
+  (req, res) => {
+    // Genera un token JWT
+    const token = jwt.sign(
+      { id: req.user._id, email: req.user.email }, // payload
+      process.env.JWT_SECRET, // chiave segreta
+      { expiresIn: '1h' } // durata del token
+    );
+
+    // Reindirizza alla dashboard con il token nel query string
+    res.redirect(`/mood-selection?token=${token}`);
+  }
+);
 
 
 export default router; 

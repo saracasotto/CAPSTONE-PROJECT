@@ -1,23 +1,26 @@
 .dashboard-container {
-    min-height: 100%;
-    margin: 0;
-    padding: 0;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
 }
 
 .dashboard-container .content {
+    height: auto;
+}
+
+@media (max-width: 767px) {
+  .dashboard-container .content {
     padding-top: 100px;
     padding-bottom: 100px;
+  }
 }
 
-@media (max-width: 767px){
-    .dashboard-container {
-        height: fit-content;
-    }
-}
 
 @media (min-width: 768px) {
-    .dashboard-container .content {
-        padding-top: 30px;
-        padding-bottom: 30px;
-    }
+  .dashboard-container .content {
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
 }

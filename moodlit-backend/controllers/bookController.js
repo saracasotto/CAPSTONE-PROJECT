@@ -123,7 +123,7 @@ export const getBookByIdWithoutAuth = async (req, res) => {
 // Aggiungere un libro (POST)
 export const addBookWithoutAuth = async (req, res) => {
   try {
-    const { cover, title, author, category, barcode, publisher, description, status } = req.body;
+    const { cover, title, author, category, barcode, publisher, description, status, progress } = req.body;
 
     // Crea un nuovo libro, usando l'URL della copertina fornito dal frontend
     const newBook = new Book({
@@ -135,6 +135,7 @@ export const addBookWithoutAuth = async (req, res) => {
       publisher,
       description,
       status,
+      progress
     });
 
     await newBook.save();  // Salva il nuovo libro nel database

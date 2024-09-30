@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import './BookDetails.css'
 
 const BookDetails = ()=>{
   const { id } = useParams();  
   const navigate = useNavigate();
 
-  // Stato per i dati del libro
   const [bookData, setBookData] = useState({
-    cover: '',  // URL dell'immagine
+    cover: '',  
     title: '',
     author: '',
     category: '',
@@ -18,10 +18,10 @@ const BookDetails = ()=>{
     status: 'to_read', 
   });
 
-  const [selectedFile, setSelectedFile] = useState(null); // Stato per l'immagine selezionata
-  const [categories, setCategories] = useState([]);  // Stato per le categorie esistenti
-  const [newCategory, setNewCategory] = useState('');  // Stato per una nuova categoria
-  const [isCreatingCategory, setIsCreatingCategory] = useState(false); // Per mostrare il campo per la nuova categoria
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [categories, setCategories] = useState([]);  
+  const [newCategory, setNewCategory] = useState('');  
+  const [isCreatingCategory, setIsCreatingCategory] = useState(false);
 
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
@@ -48,7 +48,7 @@ const BookDetails = ()=>{
           throw new Error('Errore nel recupero delle categorie');
         }
         const data = await response.json();
-        setCategories(data);
+        setCategories(data);  //salvo dati nel componente
       } catch (error) {
         console.error('Errore nel recupero delle categorie:', error);
       }
@@ -107,7 +107,7 @@ const BookDetails = ()=>{
         category: categoryId,
       };
   
-      const method = id ? 'PUT' : 'POST';  // PUT per modifica, POST per nuovo
+      const method = id ? 'PUT' : 'POST';  
       const url = id 
         ? `${API_HOST}:${API_PORT}/api/books/updateWithoutAuth/${id}` 
         : `${API_HOST}:${API_PORT}/api/books/addWithoutAuth`;
@@ -180,11 +180,11 @@ const BookDetails = ()=>{
   };
 
   return (
-    <div className="container mt-5">
-      <h2>{id ? 'Edit Book' : 'Add New Book'}</h2>
+    <div className="container mt-5 book-import-container">
+      <h2>{id ? 'Edit book' : 'Add a new book'}</h2>
       <form>
         {/* Campo per il caricamento dell'immagine */}
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="cover" className="form-label">Upload Cover Image</label>
           <input
             id="cover"
@@ -195,7 +195,7 @@ const BookDetails = ()=>{
         </div>
 
         {/* Campo per il titolo */}
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="title" className="form-label">Title</label>
           <input
             id="title"
@@ -208,7 +208,7 @@ const BookDetails = ()=>{
         </div>
 
         {/* Campo per l'autore */}
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="author" className="form-label">Author</label>
           <input
             id="author"
@@ -221,7 +221,7 @@ const BookDetails = ()=>{
         </div>
 
         {/* Selezione o creazione della categoria */}
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="category" className="form-label">Category</label>
           <select
             id="category"
@@ -247,7 +247,8 @@ const BookDetails = ()=>{
 
         {/* Campo per la creazione di una nuova categoria */}
         {isCreatingCategory && (
-          <div className="mb-3">
+          <div className="mb-2
+">
             <label htmlFor="new-category" className="form-label">New Category</label>
             <input
               id="new-category"
@@ -261,8 +262,8 @@ const BookDetails = ()=>{
         )}
 
         {/* Campo per il progresso di lettura */}
-        <div className="mb-3">
-          <label htmlFor="progress" className="form-label">Progress</label>
+        <div className="mb-2">
+          <label htmlFor="progress" className="form-label">Pages read</label>
           <input
             id="progress"
             type="number"
@@ -273,34 +274,8 @@ const BookDetails = ()=>{
           />
         </div>
 
-        {/* Campo per il codice a barre */}
-        <div className="mb-3">
-          <label htmlFor="barcode" className="form-label">Barcode</label>
-          <input
-            id="barcode"
-            type="text"
-            className="form-control"
-            value={bookData.barcode}
-            onChange={(e) => setBookData({ ...bookData, barcode: e.target.value })}
-            placeholder="Barcode"
-          />
-        </div>
-
-        {/* Campo per l'editore */}
-        <div className="mb-3">
-          <label htmlFor="publisher" className="form-label">Publisher</label>
-          <input
-            id="publisher"
-            type="text"
-            className="form-control"
-            value={bookData.publisher}
-            onChange={(e) => setBookData({ ...bookData, publisher: e.target.value })}
-            placeholder="Publisher"
-          />
-        </div>
-
         {/* Campo per la descrizione */}
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="description" className="form-label">Description</label>
           <textarea
             id="description"
@@ -312,7 +287,7 @@ const BookDetails = ()=>{
         </div>
 
         {/* Campo per lo stato del libro */}
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="status" className="form-label">Status</label>
           <select
             id="status"

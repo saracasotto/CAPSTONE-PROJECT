@@ -28,7 +28,7 @@ router.put('/:id/progress', authentication, updateProgress);
 
 
 //NO AUTENTICAZIONE
-router.get('/getWithoutAuth/:id', upload.single('cover'), getBookByIdWithoutAuth);
+router.get('/getWithoutAuth/:id', getBookByIdWithoutAuth);
 router.post('/addWithoutAuth', addBookWithoutAuth);
 router.get('/getWithoutAuth', getAllBooksWithoutAuth);
 router.put('/updateWithoutAuth/:id', updateBookWithoutAuth);

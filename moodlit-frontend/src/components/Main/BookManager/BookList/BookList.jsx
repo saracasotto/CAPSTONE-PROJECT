@@ -50,10 +50,10 @@ const BookList = () => {
         <Col xs={12} md={4} lg={3} xl={2} className="mb-4">
           <Card
             className="book-card glass-bg"
-            onClick={() => navigate('./books/add-book')}
           >
             <div className="card-img-container position-relative">
               <Card.Img
+                onClick={() => navigate('./books/add-book')}
                 src={AddBook}
                 variant='top'
                 className='card-img add-image'
@@ -72,7 +72,6 @@ const BookList = () => {
             <Col key={book._id} xs={12} md={4} lg={3} xl={2} className="mb-4">
               <BookCard
                 book={book}
-                onClick={() => navigate(`./books/${book._id}`)}
               />
             </Col>
           ))
