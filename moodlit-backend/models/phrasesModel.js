@@ -43,7 +43,14 @@ const PhrasesSchema = new mongoose.Schema({
         text: { type: String, required: true },
         author: { type: String, required: true }
       }
+    ],
+    motivated: [
+      {
+        text: { type: String, required: true },
+        author: { type: String, required: true }
+      }
     ]
+    
   }
 });
 

@@ -5,24 +5,26 @@ export const addCategory = async (req, res) => {
   try {
     const { name } = req.body;
 
+    // Crea una nuova categoria associata all'utente loggato
     const newCategory = new Category({
       name,
-      user: req.loggedUser._id, 
+      user: req.loggedUser.id,  // Associa la categoria all'utente loggato
     });
 
     await newCategory.save();
     res.status(201).json(newCategory);
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'aggiunta" });
+    res.status(500).json({ message: "Errore nell'aggiunta della categoria", error: error.message });
   }
 };
 
 export const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find({ user: req.loggedUser._id }).populate('books');
+    // Recupera solo le categorie associate all'utente loggato
+    const categories = await Category.find({ user: req.loggedUser.id }).populate('books');
     res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ message: "Errore nel recupero delle categorie" });
+    res.status(500).json({ message: "Errore nel recupero delle categorie", error: error.message });
   }
 };
 
@@ -30,35 +32,38 @@ export const updateCategory = async (req, res) => {
   try {
     const { name, books } = req.body;
 
+    // Aggiorna la categoria solo se appartiene all'utente loggato
     const updatedCategory = await Category.findOneAndUpdate(
-      { _id: req.params.id, user: req.loggedUser._id }, 
-      { name, books }, // per aggiornare nome e aggiungere o rimuovere libri
+      { _id: req.params.id, user: req.loggedUser.id },  // Verifica che l'utente sia il proprietario
+      { name, books },  // Aggiorna nome e aggiunge o rimuove libri
       { new: true }
     );
 
     if (!updatedCategory) {
-      return res.status(404).json({ message: "Categoria non trovata" });
+      return res.status(404).json({ message: "Categoria non trovata o non autorizzato" });
     }
 
     res.status(200).json(updatedCategory);
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'aggiornamento" });
+    res.status(500).json({ message: "Errore nell'aggiornamento della categoria", error: error.message });
   }
 };
 
 export const deleteCategory = async (req, res) => {
   try {
-    const deletedCategory = await Category.findOneAndDelete({ _id: req.params.id, user: req.loggedUser._id });
+    // Elimina la categoria solo se appartiene all'utente loggato
+    const deletedCategory = await Category.findOneAndDelete({ _id: req.params.id, user: req.loggedUser.id });
 
     if (!deletedCategory) {
-      return res.status(404).json({ message: "Categoria non trovata" });
+      return res.status(404).json({ message: "Categoria non trovata o non autorizzato" });
     }
 
-    res.status(200).json({ message: "Categoria eliminata" });
+    res.status(200).json({ message: "Categoria eliminata con successo" });
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'eliminazione" });
+    res.status(500).json({ message: "Errore nell'eliminazione della categoria", error: error.message });
   }
 };
+
 
 
 //NO AUTH
@@ -105,7 +110,6 @@ export const updateCategoryWithoutAuth = async (req, res) => {
     res.status(500).json({ message: "Errore nell'aggiornamento della categoria" });
   }
 };
-
 
 export const deleteCategoryWithoutAuth = async (req, res) => {
   try {

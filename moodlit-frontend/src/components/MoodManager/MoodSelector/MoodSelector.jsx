@@ -14,7 +14,7 @@ const MoodSelector = () => {
   };
 
   return (
-    <Container fluid className="mood-selector-container bg-main">
+    <Container fluid className="mood-selector-container bg-d">
       <h1 className='title-font'>Select your mood</h1>
       <div className="moods">
         {['nostalgic', 'cosy', 'focused', 'motivated', 'energetic', 'inspirational', 'relaxed', 'grateful'].map((mood) => (

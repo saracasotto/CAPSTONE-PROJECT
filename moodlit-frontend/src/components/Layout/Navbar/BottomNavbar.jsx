@@ -3,7 +3,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 const BottomNavbar = ()=>{
   return (
     <>
-      <Navbar className="d-md-none fixed-bottom bg-main">
+      <Navbar className="d-md-none fixed-bottom bg-d">
         <Nav className="justify-content-around w-100">
           <Nav.Link href="#"><i class="bi bi-book-half"></i></Nav.Link>
           <Nav.Link href="#"><i class="bi bi-tag-fill"></i></Nav.Link>

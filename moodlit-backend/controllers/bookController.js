@@ -4,84 +4,97 @@ import Book from '../models/bookModel.js';
 
 export const addBook = async (req, res) => {
   try {
-    let coverUrl = '';
+    const { cover, title, author, category, barcode, publisher, description, status, progress } = req.body;
+    const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
 
-    //se c'è immagine, salvo su cloudinary
-    if (req.file) {
-
-      //PATTERN RICHIEDE PROMISE MANUALE
-      const result = await new Promise((resolve, reject) => {
-        const stream = cloudinary.v2.uploader.upload_stream({ folder: 'books' }, (error, result) => {
-          if (error) reject(error);
-          resolve(result);
-        });
-        stream.end(req.file.buffer); // Carica il buffer del file immagine su Cloudinary
-      });
-
-      
-      coverUrl = result.secure_url; // Salva l'URL della copertina caricata
-    }
-
-    const { title, author, category, barcode, publisher, description, status } = req.body;
-    
-    // Crea un nuovo libro, usando l'URL della copertina caricata (se presente) o l'URL di default gestito dallo schema
     const newBook = new Book({
-      cover: coverUrl || undefined,  // Solo se c'è una copertina caricata, altrimenti usa il default dallo schema
+      cover: cover || 'https://res.cloudinary.com/dg3ztnyg9/image/upload/v1727198157/default/aaiyvs5jrwkz4pau30hi.png',
       title,
       author,
       category,
       barcode,
       publisher,
       description,
-      user: req.loggedUser._id, // Recupera l'ID dell'utente loggato
       status,
+      progress,
+      user: userId // Associa il libro all'utente loggato
     });
 
-    await newBook.save(); // Salva il libro nel database
+    await newBook.save();
     res.status(201).json(newBook);
   } catch (error) {
-    res.status(500).json({ message: "Error ", error: error.message });
+    console.error("Errore nell'aggiunta del libro:", error.message);
+    res.status(500).json({ message: "Errore nell'aggiunta del libro", error: error.message });
   }
 };
 
-// Funzione per ottenere i libri dell'utente loggato
 export const getBooks = async (req, res) => {
   try {
-    const books = await Book.find({ user: req.loggedUser._id }).populate("category").lean();
+    const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
+    const books = await Book.find({ user: userId }).populate('category', 'name'); // Recupera solo i libri dell'utente
+
     res.status(200).json(books);
   } catch (error) {
-    res.status(500).json({ message: "Errore nel recupero dei libri" });
+    res.status(500).json({ message: "Errore nel recupero dei libri", error: error.message });
   }
 };
 
-// Funzione per aggiornare un libro esistente
+export const getBookById = async (req, res) => {
+  try {
+    const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
+    const bookId = req.params.id; // Otteniamo l'ID del libro dai parametri della richiesta
+
+    // Trova il libro corrispondente all'ID, solo se appartiene all'utente autenticato
+    const book = await Book.findOne({ _id: bookId, user: userId }).populate('category', 'name');
+
+    if (!book) {
+      return res.status(404).json({ message: 'Libro non trovato o accesso negato' });
+    }
+
+    res.status(200).json(book);
+  } catch (error) {
+    res.status(500).json({ message: "Errore nel recupero del libro", error: error.message });
+  }
+};
+
 export const updateBook = async (req, res) => {
   try {
-    const { title, author, category, progress, barcode, publisher, description, status } = req.body;
+    const { id } = req.params;
+    const { cover, title, author, category, barcode, publisher, description, status } = req.body;
+    const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
+
+    // Trova il libro che appartiene all'utente loggato e aggiornalo
     const updatedBook = await Book.findOneAndUpdate(
-      { _id: req.params.id, user: req.loggedUser._id }, 
-      { title, author, category, progress, barcode, publisher, description, status }, 
+      { _id: id, user: userId }, // Verifica che il libro appartenga all'utente
+      { title, author, category, barcode, publisher, description, status, cover },
       { new: true }
     );
+
     if (!updatedBook) {
-      return res.status(404).json({ message: "Libro non trovato o non autorizzato" });
+      return res.status(404).json({ message: "Libro non trovato" });
     }
+
     res.status(200).json(updatedBook);
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'aggiornamento del libro" });
+    res.status(500).json({ message: "Errore nell'aggiornamento del libro", error: error.message });
   }
 };
-
 
 export const deleteBook = async (req, res) => {
   try {
-    const deletedBook = await Book.findOneAndDelete({ _id: req.params.id, user: req.loggedUser._id });
+    const { id } = req.params;
+    const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
+
+    // Elimina il libro se appartiene all'utente loggato
+    const deletedBook = await Book.findOneAndDelete({ _id: id, user: userId });
+
     if (!deletedBook) {
-      return res.status(404).json({ message: "Libro non trovato o non autorizzato" });
+      return res.status(404).json({ message: "Libro non trovato" });
     }
+
     res.status(200).json({ message: "Libro eliminato con successo" });
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'eliminazione del libro" });
+    res.status(500).json({ message: "Errore nell'eliminazione del libro", error: error.message });
   }
 };
 
@@ -120,7 +133,6 @@ export const getBookByIdWithoutAuth = async (req, res) => {
 };
 
 
-// Aggiungere un libro (POST)
 export const addBookWithoutAuth = async (req, res) => {
   try {
     const { cover, title, author, category, barcode, publisher, description, status, progress } = req.body;
@@ -147,7 +159,6 @@ export const addBookWithoutAuth = async (req, res) => {
 };
 
 
-// Ottenere tutti i libri (GET)
 export const getAllBooksWithoutAuth = async (req, res) => {
   try {
     // Recupera tutti i libri dal database e popola i riferimenti a "User" e "Category"
@@ -161,7 +172,6 @@ export const getAllBooksWithoutAuth = async (req, res) => {
   }
 };
 
-// Aggiornare un libro esistente (PUT)
 export const updateBookWithoutAuth = async (req, res) => {
   try {
     const { id } = req.params;
@@ -185,7 +195,7 @@ export const updateBookWithoutAuth = async (req, res) => {
 };
 
 
-// Eliminare un libro esistente (DELETE)
+
 export const deleteBookWithoutAuth = async (req, res) => {
   try {
     const { id } = req.params;

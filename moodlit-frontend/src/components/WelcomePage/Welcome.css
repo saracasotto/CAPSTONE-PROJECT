@@ -1,8 +1,8 @@
 .welcome-container {
     height: 100%;
-    background-image: url(../../assets/welcome-background.jpg);
-    background-position: center;
-    background-size: cover;
+    background-color: var(--dark-color);
+    color: var(--light-color);
+
 }
 
 .welcome-container .row {
@@ -10,7 +10,7 @@
 }
 
 .welcome-container input {
-    border: 1px solid var(--text-primary);
+    border: 1px solid var(--light-color);
     text-align: center;
 }
 

@@ -1,9 +1,10 @@
 .auth-form-container {
-  background: rgba(51, 51, 51, 0.28);
+  background: rgba(126, 96, 191, 0.37);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(4.5px);
-  -webkit-backdrop-filter: blur(4.5px);
+  backdrop-filter: blur(17.5px);
+  -webkit-backdrop-filter: blur(17.5px);
+  border: 1px solid rgba(126, 96, 191, 1);
   padding: 1em 8vw;
   text-align: center;
 }

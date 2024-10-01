@@ -1,29 +1,24 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const MoodContext = createContext();
 
 const MoodProvider = ({ children }) => {
-  const [selectedMood, setSelectedMood] = useState(null);
-  const [selectedSeason, setSelectedSeason] = useState('Spring');
+  const [selectedMood, setSelectedMood] = useState(() => sessionStorage.getItem('selectedMood') || null);
+  const [selectedSeason, setSelectedSeason] = useState(() => sessionStorage.getItem('selectedSeason') || 'Spring');
 
-  // Recupera il mood e la stagione salvati dalla sessione
-  useEffect(() => {
-    const savedMood = sessionStorage.getItem('selectedMood');
-    const savedSeason = sessionStorage.getItem('selectedSeason');
+  // Ottieni la posizione corrente con React Router
+  const location = useLocation();
 
-    if (savedMood) setSelectedMood(savedMood);
-    if (savedSeason) setSelectedSeason(savedSeason);
-  }, []);
-
-  // Salva il mood e la stagione quando cambiano
+  // Salva il mood quando cambia
   useEffect(() => {
     if (selectedMood) sessionStorage.setItem('selectedMood', selectedMood);
   }, [selectedMood]);
 
-  useEffect(() => {  
+  // Applica il tema quando cambia la stagione o cambia la posizione (cioè viene eseguito il redirect)
+  useEffect(() => {
     if (selectedSeason) sessionStorage.setItem('selectedSeason', selectedSeason);
-    
-    // Seleziona l'elemento con la classe "dashboard-container"
+
     const dashboardElement = document.querySelector('.dashboard-container');
     
     if (dashboardElement) {
@@ -33,7 +28,7 @@ const MoodProvider = ({ children }) => {
       // Aggiungi la nuova classe in base alla stagione selezionata
       dashboardElement.classList.add(`${selectedSeason.toLowerCase()}-theme`);
     }
-  }, [selectedSeason]);
+  }, [selectedSeason, location]); // Rerun when the season or route changes
 
   return (
     <MoodContext.Provider value={{ selectedMood, setSelectedMood, selectedSeason, setSelectedSeason }}>

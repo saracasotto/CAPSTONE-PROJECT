@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema(
   {
     googleId: { type: String, index: true }, // Se l'utente ha usato Google
-    appleId: { type: String, index: true }, // Se l'utente ha usato Apple
     name: { type: String}, // Solo il nome
     email: { type: String, required: true, unique: true },
     password: { type: String }, // Se l'utente si registra via email/password

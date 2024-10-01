@@ -10,7 +10,8 @@ import {
     getAllBooksWithoutAuth, 
     updateBookWithoutAuth, 
     deleteBookWithoutAuth,  
-    uploadBookCover} from '../controllers/bookController.js';
+    uploadBookCover,
+    getBookById} from '../controllers/bookController.js';
     
 import authentication from '../middleware/authentication.js';
 
@@ -22,6 +23,7 @@ const router = express.Router();
 
 router.post('/add', authentication, addBook);
 router.get('/', authentication, getBooks);
+router.get('/:id', authentication, getBookById);
 router.put('/:id', authentication, updateBook);
 router.delete('/:id', authentication, deleteBook);
 router.put('/:id/progress', authentication, updateProgress);

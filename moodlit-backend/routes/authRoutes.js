@@ -18,11 +18,10 @@ router.get(
     // Genera un token JWT
     const token = jwt.sign(
       { id: req.user._id, email: req.user.email }, // payload
-      process.env.JWT_SECRET, // chiave segreta
-      { expiresIn: '1h' } // durata del token
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' } 
     );
 
-    // Reindirizza alla dashboard con il token nel query string
     res.redirect(`/mood-selection?token=${token}`);
   }
 );

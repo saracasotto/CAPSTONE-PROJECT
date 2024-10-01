@@ -29,8 +29,21 @@ const BookDetails = ()=>{
   // Carica i dettagli del libro se esiste (per la modifica)
   useEffect(() => {
     const fetchBookDetails = async () => {
+      const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
+
+      if (!token) {
+        console.error('Autenticazione fallita. Per favore, accedi.');
+        return;
+      }
+
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/books/getWithoutAuth/${id}`);
+        const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, 
+          },
+        });
         if (!response.ok) {
           throw new Error('Errore nel recupero dei dettagli del libro');
         }
@@ -42,13 +55,26 @@ const BookDetails = ()=>{
     };
 
     const fetchCategories = async () => {
+      const token = localStorage.getItem('token'); 
+
+      if (!token) {
+        console.error('Autenticazione fallita. Per favore, accedi.');
+        return;
+      }
+
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/getWithoutAuth`);
+        const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, 
+          },
+        });
         if (!response.ok) {
           throw new Error('Errore nel recupero delle categorie');
         }
         const data = await response.json();
-        setCategories(data);  //salvo dati nel componente
+        setCategories(data);  // Salvo dati nel componente
       } catch (error) {
         console.error('Errore nel recupero delle categorie:', error);
       }
@@ -63,82 +89,98 @@ const BookDetails = ()=>{
   // Funzione per caricare l'immagine del libro
   const uploadCover = async () => {
     if (!selectedFile) return null;
-  
+
+    const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
     const formData = new FormData();
     formData.append('cover', selectedFile);
-  
+
     try {
       const response = await fetch(`${API_HOST}:${API_PORT}/api/books/upload-cover`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`, // Aggiungi il token JWT
+        },
         body: formData,
       });
-  
+
       if (!response.ok) {
         throw new Error('Errore nel caricamento della copertina');
       }
-  
+
       const data = await response.json();
-      console.log('Cover URL from backend:', data.coverUrl);  // Log per debug
       return data.coverUrl;
     } catch (error) {
       console.error('Errore durante il caricamento della copertina:', error);
       return null;
     }
   };
-  
 
   // Funzione per gestire il salvataggio del libro
   const handleSave = async () => {
+    const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
+
+    if (!token) {
+      console.error('Autenticazione fallita. Per favore, accedi.');
+      return;
+    }
+
     try {
       let categoryId = bookData.category;
-  
+
       // Se stiamo creando una nuova categoria, otteniamo il suo ID
       if (isCreatingCategory && newCategory) {
         categoryId = await createCategory(newCategory);
       }
-  
+
       // Carica l'immagine se è stata selezionata
       const coverUrl = await uploadCover();
-  
+
       // Crea i dettagli del libro, inclusa la copertina
       const bookDetails = {
         ...bookData,
         cover: coverUrl || bookData.cover,  // Qui viene usata la copertina caricata o quella esistente
         category: categoryId,
       };
-  
+
       const method = id ? 'PUT' : 'POST';  
       const url = id 
-        ? `${API_HOST}:${API_PORT}/api/books/updateWithoutAuth/${id}` 
-        : `${API_HOST}:${API_PORT}/api/books/addWithoutAuth`;
-  
+        ? `${API_HOST}:${API_PORT}/api/books/${id}` 
+        : `${API_HOST}:${API_PORT}/api/books/add`;
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Aggiungi il token JWT
         },
         body: JSON.stringify(bookDetails),  // Passiamo i dettagli del libro al backend
       });
-  
+
       if (!response.ok) {
         throw new Error('Errore durante il salvataggio del libro');
       }
-  
+
       navigate('/dashboard');  // Reindirizza l'utente al dashboard dopo il salvataggio
     } catch (error) {
       console.error('Errore durante il salvataggio del libro:', error);
     }
   };
-  
-  
 
   // Funzione per creare una nuova categoria
   const createCategory = async (name) => {
+    const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
+
+    if (!token) {
+      console.error('Autenticazione fallita. Per favore, accedi.');
+      return null;
+    }
+
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/addWithoutAuth`, {
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Aggiungi il token JWT
         },
         body: JSON.stringify({ name }),
       });
@@ -155,25 +197,33 @@ const BookDetails = ()=>{
     }
   };
 
-  // Funzione per gestire l'input del file
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);  // Aggiorna lo stato con il file selezionato
     console.log('Selected file:', e.target.files[0]);  // Debug per verificare il file
   };
-  
 
   // Funzione per gestire l'eliminazione del libro
   const handleDelete = async () => {
+    const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
+
+    if (!token) {
+      console.error('Autenticazione fallita. Per favore, accedi.');
+      return;
+    }
+
     try {
       const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`, // Aggiungi il token JWT
+        },
       });
 
       if (!response.ok) {
         throw new Error('Errore durante l\'eliminazione del libro');
       }
 
-      navigate('/books'); 
+      navigate('/dashboard'); 
     } catch (error) {
       console.error('Errore durante l\'eliminazione del libro:', error);
     }

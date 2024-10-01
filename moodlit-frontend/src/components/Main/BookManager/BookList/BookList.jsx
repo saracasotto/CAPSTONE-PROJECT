@@ -3,7 +3,6 @@ import { Col, Row, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import BookCard from '../BookCard.jsx/BookCard';
 import './BookList.css';
-import AddBook from '../../../../assets/add-book.png'
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -16,11 +15,20 @@ const BookList = () => {
 
   useEffect(() => {
     const fetchBooks = async () => {
+      const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
+
+      if (!token) {
+        setError('Autenticazione fallita. Per favore, accedi.');
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/books/getWithoutAuth`, {
+        const response = await fetch(`${API_HOST}:${API_PORT}/api/books/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Aggiungi il token nell'intestazione Authorization
           },
         });
 
@@ -46,23 +54,23 @@ const BookList = () => {
   return (
     <>
       <Row className="book-list mt-5">
-
         <Col xs={12} md={4} lg={3} xl={2} className="mb-4">
-          <Card
-            className="book-card glass-bg"
-          >
+          <Card className="book-card glass-bg add-card">
             <div className="card-img-container position-relative">
-              <Card.Img
-                onClick={() => navigate('./books/add-book')}
-                src={AddBook}
-                variant='top'
-                className='card-img add-image'
-                alt='add-image'
-              />
+              <div
+                onClick={() => navigate(`./books/add-book`)}
+                className="card-img card-img-top 
+                add-image text-d d-flex 
+                justify-content-center 
+                align-items-center"
+                alt="add-image"
+              >
+                <i class="bi bi-plus-circle"></i>
+              </div>
               <div className="overlay"></div>
             </div>
             <Card.Body>
-              <Card.Title className='text-center'>Add a new Book</Card.Title>
+              <Card.Title className="text-center">Add a new Book</Card.Title>
             </Card.Body>
           </Card>
         </Col>
@@ -70,9 +78,7 @@ const BookList = () => {
         {books.length > 0 ? (
           books.map((book) => (
             <Col key={book._id} xs={12} md={4} lg={3} xl={2} className="mb-4">
-              <BookCard
-                book={book}
-              />
+              <BookCard book={book} />
             </Col>
           ))
         ) : (

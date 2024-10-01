@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AuthForm.css';
 import { AuthContext } from '../../../context/AuthContext';
 
@@ -12,6 +13,7 @@ const AuthForm = () => {
   const API_PORT = process.env.REACT_APP_API_PORT;
 
   const { login } = useContext(AuthContext); 
+  const navigate = useNavigate()
 
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
@@ -21,6 +23,7 @@ const AuthForm = () => {
   const handleEmailPasswordLogin = async (event) => {
     event.preventDefault();
     await login(email, password);
+    navigate('/mood-selection');
   };
 
   // Logica per la registrazione con email e password
@@ -43,6 +46,7 @@ const AuthForm = () => {
 
       if (res.ok) {
         await login(email, password); 
+        navigate('/mood-selection')
       } else {
         console.error("Errore durante la registrazione:", data.message);
       }
@@ -98,7 +102,7 @@ const AuthForm = () => {
           </button>
         </form>
 
-        <button onClick={handleGoogleLogin} className="btn btn-google bg-main">
+        <button onClick={handleGoogleLogin} className="btn btn-google bg-d">
           {isSignUp ? 'Sign Up with Google' : 'Sign In with Google'}
         </button>
 

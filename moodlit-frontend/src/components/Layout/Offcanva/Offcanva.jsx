@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Offcanvas, Button, Nav, Col } from 'react-bootstrap';
 import './Offcanva.css'
 import logo from '../../../assets/logo-small.png';
+import { AuthContext } from '../../../context/AuthContext';
 
 
 const SidebarOffcanvas =()=>{
   const [show, setShow] = useState(false);
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleLogout = () => {
+    logout(); 
+    navigate('/'); 
+  }
 
   return (
     <div className='d-none d-md-block fixed'>
@@ -21,7 +30,7 @@ const SidebarOffcanvas =()=>{
       </Col>
 
 
-      <Offcanvas show={show} onHide={handleClose} placement="start" className="bg-main">
+      <Offcanvas show={show} onHide={handleClose} placement="start" className="bg-d">
         <Offcanvas.Header closeButton >
           <Offcanvas.Title>
             {/* Navbar Brand */}
@@ -35,6 +44,7 @@ const SidebarOffcanvas =()=>{
           <div className="mb-4">
             <Nav className="flex-column">
               <Nav.Link href="#">Profile Settings</Nav.Link>
+              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
             </Nav>
           </div>
 

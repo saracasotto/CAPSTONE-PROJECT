@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import passport from 'passport';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
@@ -10,6 +11,7 @@ import noteRoutes from './routes/noteRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import phrasesRoutes from './routes/phrasesRoutes.js';
 import sessionRoutes from './routes/sessionRoutes.js';
+import './config/passportConfig.js'
 
 
 dotenv.config();
@@ -20,6 +22,10 @@ const host = process.env.HOST;
 
 app.use(cors());
 app.use(express.json());
+
+app.use(passport.initialize())
+
+
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);

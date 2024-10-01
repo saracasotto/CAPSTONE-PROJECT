@@ -16,11 +16,14 @@ const BookItem = () => {
 
   useEffect(() => {
     const fetchBook = async () => {
+      const token = localStorage.getItem('token');
+
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/books/getWithoutAuth/${id}`, {
+        const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           },
         });
 

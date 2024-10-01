@@ -10,16 +10,17 @@ const BookCard = ({ book }) => {
 
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
+ // const FRONTEND_URL = process.env.FRONTEND_URL
 
   // Funzione per gestire il click sull'immagine (naviga ai dettagli del libro con BookItem)
   const handleImageClick = () => {
-    navigate(`./books/${book._id}`);
+    navigate(`/dashboard/books/${book._id}`);
   };
 
   // Funzione per modificare il libro (naviga alla pagina di BookDetails per l'update)
   const handleEditClick = (event) => {
     event.stopPropagation(); // Impedisce la propagazione del click alla card
-    navigate(`./books/${book._id}/details`); // Naviga a BookDetails per l'update
+    navigate(`/dashboard/books/${book._id}/details`); // Naviga a BookDetails per l'update
   };
 
   // Funzione per cancellare il libro
@@ -27,7 +28,7 @@ const BookCard = ({ book }) => {
     event.stopPropagation(); // Impedisce la propagazione del click alla card
     try {
       // Effettua la chiamata API per cancellare il libro
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/books/deleteWithoutAuth/${book._id}`, {
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${book._id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -57,13 +58,13 @@ const BookCard = ({ book }) => {
         <Card.Text className='mb-1'>{book.author}</Card.Text>
         <Card.Text className='mt-0 p-0'>
           <Button 
-            className='text-main bg-transparent border-0 float-md-end'
+            className='text-d bg-transparent border-0 float-md-end'
             onClick={handleDeleteClick} // Logica per cancellare il libro
           >
             <i className="bi bi-x-square"></i>
           </Button>
           <Button 
-            className='text-main bg-transparent border-0 float-md-end'
+            className='text-d bg-transparent border-0 float-md-end'
             onClick={handleEditClick} // Naviga a BookDetails per l'update
           >
             <i className="bi bi-pencil-square"></i>

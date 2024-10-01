@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SidebarOffcanvas from "../../Layout/Offcanva/Offcanva";
 import './Dashboard.css'
 import TopNavbar from "../../Layout/Navbar/TopNavbar";
@@ -9,7 +9,7 @@ import BookList from "../BookManager/BookList/BookList";
 import BookReading from "../BookManager/BookReading/BookReading";
 import BookDetails from "../BookManager/BookDetails.jsx/BookDetails";
 
-const Dashboard = ()=>{
+const Dashboard = () => {
   return (
     <Container fluid className="dashboard-container d-block d-md-flex p-0">
       <SidebarOffcanvas />
@@ -22,6 +22,7 @@ const Dashboard = ()=>{
           <Route path="/books/:id" element={<BookReading />} />
           <Route path="/books/:id/details" element={<BookDetails />} />  {/* Modifico libro */}
           <Route path="/books/add-book" element={<BookDetails />} />  {/* Aggiungo libro */}
+          <Route path="*" element={<Navigate to="/" />} /> 
         </Routes>
       </Container>
       <BottomNavbar />

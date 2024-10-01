@@ -1,11 +1,6 @@
 .book-import-container div {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9em !important;
-}
-
-.book-import-container label {
-  width: 40%;
 }
 
 .book-import-container input,
@@ -14,12 +9,11 @@
 .book-import-container textarea:focus,
 .book-import-container select:focus {
   width: 60%;
-  background-color: var(--background) !important;
-  border: 1px solid var(--accent-color) !important;
-  color: var(--text-primary);
-  box-shadow: none;
   margin: 0;
-  font-size: 1em !important;
+}
+
+.book-import-container label {
+  width: 40%;
 }
 
 @media (max-width: 992px) {
