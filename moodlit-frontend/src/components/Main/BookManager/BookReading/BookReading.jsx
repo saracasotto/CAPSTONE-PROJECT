@@ -50,20 +50,20 @@ const BookItem = () => {
   return (
     <Container className="book-item mt-5">
       <Row>
-        
-        <Col xs={12} lg={4} className='left-side mb-3'>
+
+        <Col xs={12} className='left-side mb-3'>
           <BookCard book={book} />
         </Col>
 
 
-        <Col xs={12} lg={8} className='right-side'>
+        <Col xs={12} className='right-side'>
           <Row>
             <Col xs={12} className="mb-3">
-            <Button className='accent-bg start-button mb-3'>Start session</Button>
+              <Button className='accent-bg start-button mb-3'>Start session</Button>
               <Card className='notes-container glass-bg'>
                 <Card.Body>
-                  <Notes />
-                </Card.Body>
+                    <Notes bookId={id} />
+             </Card.Body>
               </Card>
             </Col>
             <Col xs={12}>

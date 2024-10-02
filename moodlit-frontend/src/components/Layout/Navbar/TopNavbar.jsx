@@ -1,6 +1,6 @@
 import { Navbar, Nav } from 'react-bootstrap';
 import './Navbar.css'
-import logo from '../../../assets/logo-small.png';
+// import logo from '../../../assets/logo-small.png';
 
 
 const TopNavbar = ()=>{
@@ -8,7 +8,7 @@ const TopNavbar = ()=>{
     <>
       <Navbar expand="lg" className="d-md-none fixed-top bg-d">
         <Navbar.Brand href="#">
-        <img src={logo} alt="logo" className='logo'/>
+        {/* <img src={logo} alt="logo" className='logo'/> */}
         <span className='title-font'>MoodLit</span></Navbar.Brand>
         <Navbar.Toggle aria-controls="profile-navbar" />
         <Navbar.Collapse id="profile-navbar">

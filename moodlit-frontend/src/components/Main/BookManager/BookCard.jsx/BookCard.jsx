@@ -43,7 +43,7 @@ const BookCard = ({ book }) => {
   };
 
   return (
-    <Card className="book-card glass-bg">
+    <Card className="book-card text-d glass-bg">
       <div className="card-img-container">
         <Card.Img
           variant="top"
@@ -55,10 +55,11 @@ const BookCard = ({ book }) => {
       </div>
       <Card.Body>
         <Card.Title>{book.title}</Card.Title>
-        <Card.Text className='mb-1'>{book.author}</Card.Text>
+        <Card.Subtitle className='mb-1'>{book.author}</Card.Subtitle>
+        <Card.Text className='mb-1 mt-4 book-description'>{book.description}</Card.Text>
         <Card.Text className='mt-0 p-0'>
           <Button 
-            className='text-d bg-transparent border-0 float-md-end'
+            className='text-d bg-transparent border-0 float-md-end px-0'
             onClick={handleDeleteClick} // Logica per cancellare il libro
           >
             <i className="bi bi-x-square"></i>

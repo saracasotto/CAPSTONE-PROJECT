@@ -1,0 +1,13 @@
+.card-subtitle {
+    font-style: italic;
+}
+
+.book-description {
+    height: 3em; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: normal; 
+    line-height: 1.5em; 
+    font-size: 0.9rem !important;
+    text-align: start;
+}

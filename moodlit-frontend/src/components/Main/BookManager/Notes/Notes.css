@@ -1,18 +1,33 @@
 input{
     margin: 1em 0;
-    background-color: transparent !important;
-    color: var(--text-primary) !important;
     text-align: start;
     font-size: 1.2em !important;
 }
 
-input:focus {
-    border: 1px solid var(--accent-color)  !important;
-}
-
 .ql-container.ql-snow {
     margin-bottom: 1em;
+    font-size: 1em;
+    min-height: 200px;
 }
 .ql-toolbar.ql-snow {
     background-color: white;
+}
+
+.note-list {
+    cursor: pointer;
+}
+
+.note-details .card {
+    border: 1px solid var(--accent-color);
+}
+
+.note-details .card-title {
+    font-weight: 700;
+}
+
+.note-details .list-group-item{
+    border: transparent;
+    border-radius: 0;
+    margin-top: 1em;
+    padding: 0.3em;
 }

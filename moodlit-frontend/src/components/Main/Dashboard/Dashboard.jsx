@@ -11,7 +11,7 @@ import BookDetails from "../BookManager/BookDetails.jsx/BookDetails";
 
 const Dashboard = () => {
   return (
-    <Container fluid className="dashboard-container d-block d-md-flex p-0">
+    <Container fluid className="dashboard-container text-d d-block d-md-flex p-0">
       <SidebarOffcanvas />
       <TopNavbar />
       <Container className="content">

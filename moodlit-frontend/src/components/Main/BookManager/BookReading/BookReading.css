@@ -6,7 +6,7 @@
 }
 
 .book-item .book-card {
-  width: 80%;
+  width: 20%;
   border-radius: 20px;
 }
 
@@ -29,10 +29,6 @@
   overflow: hidden;
 }
 
-.book-item .book-card .card-title {
-  font-size: 1.4em !important;
-  font-weight: bold !important;
-}
 
 .book-item .card-text {
   font-size: 1.2em;
@@ -74,14 +70,15 @@
   .book-item .book-card .card-body {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    font-size: 1.3em;
-    text-align: center;
+    align-items: start;
+    font-size: 1em;
+    padding-top: 0;
   }
+
 
   .book-item .card-img-container {
     max-width: 120px;
+    padding-top: 0;
   }
 
   .book-item .card-img {

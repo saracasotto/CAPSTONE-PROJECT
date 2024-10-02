@@ -28,7 +28,7 @@ const MoodPhrases = () => {
     <Container fluid className="phrase-display title-font text-main mt-5 mb-5">
       {phrase ? (
         <>
-          <p><i><b>{phrase.text}</b></i></p>
+          <p><b>{phrase.text}</b></p>
           <p>- {phrase.author}</p>
         </>
       ) : (

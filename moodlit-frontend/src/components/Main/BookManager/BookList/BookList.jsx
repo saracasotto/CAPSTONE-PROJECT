@@ -55,7 +55,7 @@ const BookList = () => {
     <>
       <Row className="book-list mt-5">
         <Col xs={12} md={4} lg={3} xl={2} className="mb-4">
-          <Card className="book-card glass-bg add-card">
+          <Card className="book-card glass-bg add-card text-d">
             <div className="card-img-container position-relative">
               <div
                 onClick={() => navigate(`./books/add-book`)}

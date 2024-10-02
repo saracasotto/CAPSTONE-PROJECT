@@ -5,9 +5,9 @@
 .book-list .book-card {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
+  width: 90%;
   border-radius: 20px;
+  margin: 0 auto;
 }
 
 .book-card .card-body {
@@ -39,7 +39,6 @@
   }
   
 .book-list .card-text {
-    font-size: 0.9em; 
     margin: 0;
   }
 

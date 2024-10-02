@@ -4,11 +4,11 @@ import authentication from '../middleware/authentication.js';
 
 const router = express.Router();
 
-router.post('/', authentication, addNote);
-router.get('/book/:bookId', authentication, getNotesByBook);
+router.post('/:bookId/addnote', authentication, addNote);
+router.get('/:bookId', authentication, getNotesByBook);
 router.put('/:noteId', authentication, updateNote);
 router.delete('/:noteId', authentication, deleteNote);
-router.get('/allnotes', authentication, getAllNotesByUser);
+router.get('/user/allnotes', authentication, getAllNotesByUser);
 
 
 export default router;
