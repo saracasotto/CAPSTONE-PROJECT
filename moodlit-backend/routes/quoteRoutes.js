@@ -5,8 +5,8 @@ import authentication from '../middleware/authentication.js';
 const router = express.Router();
 
 
-router.post('/', authentication, addQuote);
-router.get('/book/:bookId', authentication, getQuotesByBook);
+router.post('/:bookId/addquote', authentication, addQuote);
+router.get('/:bookId', authentication, getQuotesByBook);
 router.put('/:quoteId', authentication, updateQuote);
 router.delete('/:quoteId', authentication, deleteQuote);
 

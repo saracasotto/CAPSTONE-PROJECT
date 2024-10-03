@@ -4,7 +4,8 @@ import Book from "../models/bookModel.js";
 
 export const addQuote = async (req, res) => {
   try {
-    const { content, bookId, shared, sharePlatform } = req.body;
+    const { content, shared, sharePlatform } = req.body;
+    const bookId = req.params;
     const book = await Book.findOne({ _id: bookId, user: req.loggedUser._id });
     if (!book) {
       return res.status(404).json({ message: "Libro non trovato o non autorizzato" });
@@ -27,19 +28,28 @@ export const addQuote = async (req, res) => {
 
 export const getQuotesByBook = async (req, res) => {
   try {
-    const quotes = await Quote.find({ book: req.params.bookId, user: req.loggedUser._id });
+    const quotes = await Quote.find({ book: req.params.bookId, user: req.loggedUser._id })
+      .populate('book', 'title author'); // Popola il titolo e l'autore del libro
     res.status(200).json(quotes);
   } catch (error) {
     res.status(500).json({ message: "Errore nel recupero delle citazioni" });
   }
 };
 
+
 export const updateQuote = async (req, res) => {
   try {
     const { content, shared, sharePlatform } = req.body;
+    const updateData = { content, shared, sharePlatform };
+    
+    // Se la citazione è stata condivisa, aggiungi la data di condivisione
+    if (shared) {
+      updateData.sharedAt = Date.now();
+    }
+    
     const updatedQuote = await Quote.findOneAndUpdate(
       { _id: req.params.quoteId, user: req.loggedUser._id }, 
-      { content, shared, sharePlatform },
+      updateData,
       { new: true }
     );
     if (!updatedQuote) {
@@ -50,6 +60,7 @@ export const updateQuote = async (req, res) => {
     res.status(500).json({ message: "Errore nell'aggiornamento della citazione" });
   }
 };
+
 
 export const deleteQuote = async (req, res) => {
   try {

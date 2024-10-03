@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import BookCard from '../BookCard.jsx/BookCard';
 import './BookReading.css'
 import Notes from '../Notes/Notes';
+import Quotes from '../Quotes/Quotes';
 
 const BookItem = () => {
   const { id } = useParams();
@@ -70,7 +71,7 @@ const BookItem = () => {
               <Card className='quotes-container glass-bg'>
                 <Card.Body>
                   <Card.Title>
-                    QUI CI VADO A METTERE LE CITAZIONI
+                    <Quotes bookId={id} />
                   </Card.Title>
                 </Card.Body>
               </Card>
