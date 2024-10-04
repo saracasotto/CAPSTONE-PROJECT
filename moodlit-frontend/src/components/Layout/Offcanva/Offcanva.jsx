@@ -4,9 +4,10 @@ import { Offcanvas, Button, Nav, Col } from 'react-bootstrap';
 import './Offcanva.css'
 // import logo from '../../../assets/logo-small.png';
 import { AuthContext } from '../../../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 
-const SidebarOffcanvas =()=>{
+const SidebarOffcanvas = () => {
   const [show, setShow] = useState(false);
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -15,8 +16,8 @@ const SidebarOffcanvas =()=>{
   const handleShow = () => setShow(true);
 
   const handleLogout = () => {
-    logout(); 
-    navigate('/'); 
+    logout();
+    navigate('/');
   }
 
   return (
@@ -31,7 +32,7 @@ const SidebarOffcanvas =()=>{
 
 
       <Offcanvas show={show} onHide={handleClose} placement="start"
-      className="bg-d">
+        className="bg-d">
         <Offcanvas.Header closeButton >
           <Offcanvas.Title>
             {/* Navbar Brand */}
@@ -51,9 +52,9 @@ const SidebarOffcanvas =()=>{
 
           <div>
             <Nav className="flex-column">
-              <Nav.Link href="#">Books</Nav.Link>
-              <Nav.Link href="#">Categories</Nav.Link>
-              <Nav.Link href="#">Moods</Nav.Link>
+              <Nav.Link as={Link} to="/dashboard/booklist">Books</Nav.Link>
+              <Nav.Link as={Link} to="/dashboard/categories">Categories</Nav.Link>
+              <Nav.Link as={Link} to="/mood-selection">Moods</Nav.Link>
               <Nav.Link href="#">Analytics</Nav.Link>
             </Nav>
           </div>

@@ -13,19 +13,23 @@ input{
     background-color: white;
 }
 
-.note-list {
+.note-list,
+.quote-list {
     cursor: pointer;
 }
 
-.note-details .card {
+.note-details .card,
+.quote-details .card {
     border: 1px solid var(--accent-color);
 }
 
-.note-details .card-title {
+.note-details .card-title,
+.quote-details .card-title {
     font-weight: 700;
 }
 
-.note-details .list-group-item{
+.note-details .list-group-item,
+.quote-details  .list-group-item{
     border: transparent;
     border-radius: 0;
     margin-top: 1em;

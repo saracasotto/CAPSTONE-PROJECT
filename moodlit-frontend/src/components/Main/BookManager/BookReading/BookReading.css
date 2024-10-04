@@ -6,7 +6,7 @@
 }
 
 .book-item .book-card {
-  width: 20%;
+  width: 60%;
   border-radius: 20px;
 }
 
@@ -34,7 +34,8 @@
   font-size: 1.2em;
 }
 
-.notes-container {
+.notes-container,
+.quotes-container {
   flex-direction: column;
 }
 

@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema(
     }, // Campo opzionale per immagine profilo
     books: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }], // Referenziando i libri
     notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Note" }], // Referenziando le note
+    quotes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Quote" }], // Referenziando le note
     sessions: [{ 
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'Session' 

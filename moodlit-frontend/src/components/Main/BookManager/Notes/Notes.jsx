@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Card, CardBody, CardSubtitle, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Button, Card, CardBody, CardSubtitle, CardTitle, Form, ListGroup, ListGroupItem, Modal } from 'react-bootstrap';
 import './Notes.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -10,19 +10,18 @@ const Notes = ({ bookId }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [noteId, setNoteId] = useState(null);
     const [selectedNote, setSelectedNote] = useState(null);
-
+    const [showModal, setShowModal] = useState(false); // State to control the modal
 
     const API_HOST = process.env.REACT_APP_API_HOST;
     const API_PORT = process.env.REACT_APP_API_PORT;
 
-    // Funzione per recuperare le note relative al libro specificato da bookId
     const fetchNotes = useCallback(async () => {
-        const token = localStorage.getItem('token'); // Recupera il token dal localStorage
+        const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${API_HOST}:${API_PORT}/api/notes/${bookId}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Usa il token direttamente
+                    'Authorization': `Bearer ${token}`,
                 },
             });
 
@@ -31,47 +30,45 @@ const Notes = ({ bookId }) => {
             }
 
             const data = await response.json();
-            setNotes(data); // Imposta le note recuperate
+            setNotes(data);
         } catch (error) {
             console.error(error);
         }
     }, [API_HOST, API_PORT, bookId]);
 
-    // useEffect per chiamare fetchNotes al montaggio del componente
     useEffect(() => {
-        fetchNotes(); // Chiama fetchNotes quando il componente viene montato
+        fetchNotes();
     }, [fetchNotes]);
 
-    // Funzione per creare o modificare una nota
     const handleCreateNote = async () => {
-        const token = localStorage.getItem('token'); // Recupera il token dal localStorage
+        const token = localStorage.getItem('token');
         const method = isEditing ? 'PUT' : 'POST';
         const url = isEditing
-            ? `${API_HOST}:${API_PORT}/api/notes/${noteId}` // PUT per aggiornare una nota esistente
-            : `${API_HOST}:${API_PORT}/api/notes/${bookId}/addnote`; // POST per creare una nuova nota
+            ? `${API_HOST}:${API_PORT}/api/notes/${noteId}`
+            : `${API_HOST}:${API_PORT}/api/notes/${bookId}/addnote`;
 
         try {
             const response = await fetch(url, {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Usa il token direttamente
+                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(currentNote), // Invia la nota come JSON
+                body: JSON.stringify(currentNote),
             });
 
             if (!response.ok) {
                 throw new Error('Errore nel salvataggio della nota');
             }
 
-            fetchNotes(); // Richiama fetchNotes dopo la creazione o modifica
-            resetForm(); // Reset del form dopo l'operazione
+            fetchNotes();
+            resetForm();
+            setShowModal(false); // Close the modal after saving
         } catch (error) {
             console.error(error);
         }
     };
 
-    // Funzione per cancellare una nota
     const handleDeleteNote = async (id) => {
         const token = localStorage.getItem('token'); // Recupera il token dal localStorage
         try {
@@ -87,12 +84,18 @@ const Notes = ({ bookId }) => {
             }
 
             fetchNotes(); // Richiama fetchNotes dopo la cancellazione
+
+            if (selectedNote && selectedNote._id === id) {
+                setSelectedNote(null);
+            }
+            
         } catch (error) {
             console.error(error);
         }
     };
 
-    // Funzione per caricare una nota nel form per la modifica
+    
+
     const handleEditNote = (note) => {
         setCurrentNote({
             title: note.title,
@@ -101,14 +104,9 @@ const Notes = ({ bookId }) => {
         });
         setNoteId(note._id);
         setIsEditing(true);
+        setShowModal(true); // Open the modal for editing
     };
 
-    // Funzione per aggiornare il contenuto del Quill
-    const handleChange = (content) => {
-        setCurrentNote({ ...currentNote, content });
-    };
-
-    // Funzione per resettare il form
     const resetForm = () => {
         setCurrentNote({ title: '', chapter: '', content: '' });
         setIsEditing(false);
@@ -117,7 +115,7 @@ const Notes = ({ bookId }) => {
 
     return (
         <>
-            <h3 className='title-font text-center'>Notes archive</h3>
+            <h3 className='title-font'>Your notes</h3>
             <ListGroup>
                 {notes.length > 0 ? (
                     notes.map((note) => (
@@ -138,42 +136,53 @@ const Notes = ({ bookId }) => {
                 )}
             </ListGroup>
 
-            <h3 className='title-font text-center'>{isEditing ? 'Edit' : 'Write a new note'}</h3>
-            <Form className='mb-3'>
-                <Form.Group controlId="formNoteTitle">
-                    <Form.Control
-                        type="text"
-                        className='note-title'
-                        placeholder="Title"
-                        value={currentNote.title}
-                        onChange={(e) => setCurrentNote({ ...currentNote, title: e.target.value })}
-                    />
-                </Form.Group>
+            <Button className='accent-bg' onClick={() => setShowModal(true)}>
+            <i class="bi bi-plus-circle"></i>
+            </Button>
 
-                <Form.Group controlId="formNoteChapter">
-                    <Form.Control
-                        type="text"
-                        className='note-chapter'
-                        placeholder="Chapter name or number"
-                        value={currentNote.chapter}
-                        onChange={(e) => setCurrentNote({ ...currentNote, chapter: e.target.value })}
-                    />
-                </Form.Group>
+            {/* Modal for Adding/Editing Notes */}
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>{isEditing ? 'Edit Note' : 'Add New Note'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form className='mb-3'>
+                        <Form.Group controlId="formNoteTitle">
+                            <Form.Control
+                                type="text"
+                                className='note-title'
+                                placeholder="Title"
+                                value={currentNote.title}
+                                onChange={(e) => setCurrentNote({ ...currentNote, title: e.target.value })}
+                            />
+                        </Form.Group>
 
-                <Form.Group controlId="formNoteContent">
-                    <ReactQuill
-                        className="note-content"
-                        value={currentNote.content}
-                        onChange={handleChange}
-                        placeholder="Write your thoughts..."
-                    />
-                </Form.Group>
+                        <Form.Group controlId="formNoteChapter">
+                            <Form.Control
+                                type="text"
+                                className='note-chapter'
+                                placeholder="Chapter name or number"
+                                value={currentNote.chapter}
+                                onChange={(e) => setCurrentNote({ ...currentNote, chapter: e.target.value })}
+                            />
+                        </Form.Group>
 
-                <Button className='accent-bg' onClick={handleCreateNote}>
-                    {isEditing ? 'Save' : 'Add'}
-                </Button>
-                {isEditing && <Button className="accent-bg ml-2" onClick={resetForm}>Cancel</Button>}
-            </Form>
+                        <Form.Group controlId="formNoteContent">
+                            <ReactQuill
+                                className="note-content"
+                                value={currentNote.content}
+                                onChange={(content) => setCurrentNote({ ...currentNote, content })}
+                                placeholder="Write your thoughts..."
+                            />
+                        </Form.Group>
+
+                        <Button className='accent-bg' onClick={handleCreateNote}>
+                            {isEditing ? 'Save' : 'Add'}
+                        </Button>
+                        {isEditing && <Button className="accent-bg ml-2" onClick={resetForm}>Cancel</Button>}
+                    </Form>
+                </Modal.Body>
+            </Modal>
 
             {selectedNote && (
                 <div className="note-details mt-5">
@@ -184,7 +193,7 @@ const Notes = ({ bookId }) => {
                             <CardSubtitle>{selectedNote.chapter}</CardSubtitle>
                             <ListGroup>
                                 <ListGroupItem className='bg-l'>
-                                <div dangerouslySetInnerHTML={{ __html: selectedNote.content }} /> {/* Mostra il contenuto HTML */}
+                                    <div dangerouslySetInnerHTML={{ __html: selectedNote.content }} />
                                 </ListGroupItem>
                             </ListGroup>
                         </CardBody>

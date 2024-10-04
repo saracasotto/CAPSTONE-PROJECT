@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Card, CardBody, CardSubtitle, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Button, Card, CardBody, CardSubtitle, Form, ListGroup, ListGroupItem, Modal } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import '../Notes/Notes.css';
+import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
 
 const Quotes = ({ bookId }) => {
     const [quotes, setQuotes] = useState([]);
@@ -9,11 +11,11 @@ const Quotes = ({ bookId }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [quoteId, setQuoteId] = useState(null);
     const [selectedQuote, setSelectedQuote] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
     const API_HOST = process.env.REACT_APP_API_HOST;
     const API_PORT = process.env.REACT_APP_API_PORT;
 
-    // Funzione per recuperare le citazioni relative al libro specificato da bookId
     const fetchQuotes = useCallback(async () => {
         const token = localStorage.getItem('token');
         try {
@@ -35,12 +37,10 @@ const Quotes = ({ bookId }) => {
         }
     }, [API_HOST, API_PORT, bookId]);
 
-    // useEffect per chiamare fetchQuotes al montaggio del componente
     useEffect(() => {
         fetchQuotes();
     }, [fetchQuotes]);
 
-    // Funzione per creare o modificare una citazione
     const handleCreateQuote = async () => {
         const token = localStorage.getItem('token');
         const method = isEditing ? 'PUT' : 'POST';
@@ -64,12 +64,12 @@ const Quotes = ({ bookId }) => {
 
             fetchQuotes();
             resetForm();
+            setShowModal(false);
         } catch (error) {
             console.error(error);
         }
     };
 
-    // Funzione per cancellare una citazione
     const handleDeleteQuote = async (quoteId) => {
         const token = localStorage.getItem('token');
         try {
@@ -85,12 +85,15 @@ const Quotes = ({ bookId }) => {
             }
 
             fetchQuotes();
+
+            if (selectedQuote && selectedQuote._id === quoteId) {
+                setSelectedQuote(null);
+            }
         } catch (error) {
             console.error(error);
         }
     };
 
-    // Funzione per caricare una citazione nel form per la modifica
     const handleEditQuote = (quote) => {
         setCurrentQuote({
             content: quote.content,
@@ -99,18 +102,28 @@ const Quotes = ({ bookId }) => {
         });
         setQuoteId(quote._id);
         setIsEditing(true);
+        setShowModal(true);
     };
 
-    // Funzione per resettare il form
     const resetForm = () => {
         setCurrentQuote({ content: '', shared: false, sharePlatform: 'other' });
         setIsEditing(false);
         setQuoteId(null);
     };
 
+    const handleShareClick = (platform, quote) => {
+        setCurrentQuote({ ...quote, shared: true, sharePlatform: platform });
+    };
+
+    const stripHtmlTags = (html) => {
+        return html.replace(/<\/?[^>]+(>|$)/g, ""); // Rimuove tutti i tag HTML
+    };
+
+
+
     return (
         <>
-            <h3 className='title-font text-center'>Quotes archive</h3>
+            <h3 className='title-font'>Your quotes</h3>
             <ListGroup>
                 {quotes.length > 0 ? (
                     quotes.map((quote) => (
@@ -118,11 +131,36 @@ const Quotes = ({ bookId }) => {
                             onClick={() => setSelectedQuote(quote)}
                             className="quote-list mb-3 d-flex justify-content-between align-items-center">
                             <div>
-                                <b><span className='title-font'>{quote.content}</span></b>
+                                <span className='title-font' dangerouslySetInnerHTML={{ __html: quote.content }}></span>
                             </div>
-                            <div>
-                                <Button className="text-d bg-transparent border-0" onClick={() => handleEditQuote(quote)}><i className="bi bi-pencil-square"></i></Button>
-                                <Button className="text-d bg-transparent border-0 ml-2" onClick={() => handleDeleteQuote(quote._id)}><i className="bi bi-x-square"></i></Button>
+                            <div className="d-flex align-items-center">
+                                {/* Pulsanti di condivisione con il contenuto della quote e riferimento a MoodLit */}
+                                <FacebookShareButton
+                                    url={"http://saracasotto.com"}
+                                    quote={`${stripHtmlTags(quote.content)} - Shared via MoodLit App`}
+                                    className="mr-2"
+                                    onClick={() => handleShareClick('facebook', quote)}  // Imposta Facebook come piattaforma di condivisione
+
+                                >
+                                    <FacebookIcon size={32} round={true} />
+                                </FacebookShareButton>
+
+                                <TwitterShareButton
+                                    url={"http://saracasotto.com"}
+                                    title={`${stripHtmlTags(quote.content)} - Shared via MoodLit App`}
+                                    className="mr-2"
+                                    onClick={() => handleShareClick('twitter', quote)}  // Imposta Facebook come piattaforma di condivisione
+
+                                >
+                                    <TwitterIcon size={32} round={true} />
+                                </TwitterShareButton>
+                                {/* Pulsanti di edit e delete */}
+                                <Button className="text-d bg-transparent border-0" onClick={() => handleEditQuote(quote)}>
+                                    <i className="bi bi-pencil-square"></i>
+                                </Button>
+                                <Button className="text-d bg-transparent border-0 ml-2" onClick={() => handleDeleteQuote(quote._id)}>
+                                    <i className="bi bi-x-square"></i>
+                                </Button>
                             </div>
                         </ListGroup.Item>
                     ))
@@ -131,58 +169,43 @@ const Quotes = ({ bookId }) => {
                 )}
             </ListGroup>
 
-            <h3 className='title-font text-center'>{isEditing ? 'Edit' : 'Write a new quote'}</h3>
-            <Form className='mb-3'>
-                <Form.Group controlId="formQuoteContent">
-                    <ReactQuill
-                        className="quote-content"
-                        value={currentQuote.content}
-                        onChange={(content) => setCurrentQuote({ ...currentQuote, content })}
-                        placeholder="Write your quote..."
-                    />
-                </Form.Group>
+            <Button className='accent-bg' onClick={() => setShowModal(true)}>
+                <i className="bi bi-plus-circle"></i>
+            </Button>
 
-                <Form.Group controlId="formQuoteShared">
-                    <Form.Check
-                        type="checkbox"
-                        label="Share this quote"
-                        checked={currentQuote.shared}
-                        onChange={(e) => setCurrentQuote({ ...currentQuote, shared: e.target.checked })}
-                    />
-                </Form.Group>
+            {/* Modal per l'aggiunta o modifica delle citazioni */}
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>{isEditing ? 'Edit Quote' : 'Add New Quote'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form className='mb-3'>
+                        <Form.Group controlId="formQuoteContent">
+                            <ReactQuill
+                                className="quote-content"
+                                value={currentQuote.content}
+                                onChange={(content) => setCurrentQuote({ ...currentQuote, content })}
+                                placeholder="Write your quote..."
+                            />
+                        </Form.Group>
 
-                {currentQuote.shared && (
-                    <Form.Group controlId="formSharePlatform">
-                        <Form.Label>Select platform</Form.Label>
-                        <Form.Control
-                            as="select"
-                            value={currentQuote.sharePlatform}
-                            onChange={(e) => setCurrentQuote({ ...currentQuote, sharePlatform: e.target.value })}
-                        >
-                            <option value="facebook">Facebook</option>
-                            <option value="twitter">Twitter</option>
-                            <option value="instagram">Instagram</option>
-                            <option value="other">Other</option>
-                        </Form.Control>
-                    </Form.Group>
-                )}
-
-                <Button className='accent-bg' onClick={handleCreateQuote}>
-                    {isEditing ? 'Save' : 'Add'}
-                </Button>
-                {isEditing && <Button className="accent-bg ml-2" onClick={resetForm}>Cancel</Button>}
-            </Form>
+                        <Button className='accent-bg' onClick={handleCreateQuote}>
+                            {isEditing ? 'Save' : 'Add'}
+                        </Button>
+                        {isEditing && <Button className="accent-bg ml-2" onClick={resetForm}>Cancel</Button>}
+                    </Form>
+                </Modal.Body>
+            </Modal>
 
             {selectedQuote && (
                 <div className="quote-details mt-5">
                     <h3 className='title-font text-center'>Read selected quote</h3>
                     <Card>
                         <CardBody>
-                            <CardTitle className='title-font'>{selectedQuote.content}</CardTitle>
                             {selectedQuote.shared && <CardSubtitle>Shared on: {selectedQuote.sharePlatform}</CardSubtitle>}
                             <ListGroup>
                                 <ListGroupItem className='bg-l'>
-                                    <div dangerouslySetInnerHTML={{ __html: selectedQuote.content }} /> {/* Mostra il contenuto HTML */}
+                                    <div dangerouslySetInnerHTML={{ __html: selectedQuote.content }} />
                                 </ListGroupItem>
                             </ListGroup>
                         </CardBody>

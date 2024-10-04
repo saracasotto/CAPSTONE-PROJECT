@@ -3,7 +3,7 @@
 }
 
 .book-description {
-    height: 3em; 
+    height: 1.5em; 
     overflow: hidden; 
     text-overflow: ellipsis; 
     white-space: normal; 

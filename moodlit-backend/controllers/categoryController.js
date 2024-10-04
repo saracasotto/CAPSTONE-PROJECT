@@ -64,6 +64,28 @@ export const deleteCategory = async (req, res) => {
   }
 };
 
+export const getBooksByCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Trova la categoria e popola i libri associati
+    const category = await Category.findOne({ _id: id, user: req.loggedUser.id }).populate('books');
+
+    if (!category) {
+      return res.status(404).json({ message: "Categoria non trovata o non autorizzato" });
+    }
+
+    if (!category.books || category.books.length === 0) {
+      return res.status(200).json([]); // Restituisce un array vuoto se non ci sono libri
+    }
+
+    res.status(200).json(category.books);
+  } catch (error) {
+    res.status(500).json({ message: "Errore nel recupero dei libri", error: error.message });
+  }
+};
+
+
 
 
 //NO AUTH

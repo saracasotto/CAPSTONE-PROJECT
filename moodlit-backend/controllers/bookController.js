@@ -1,17 +1,42 @@
-import { cloudinary, upload } from '../config/cloudinaryConfig.js'; 
 import Book from '../models/bookModel.js';
+import User from '../models/userModel.js';
+import Category from '../models/categoryModel.js';
 
 
 export const addBook = async (req, res) => {
   try {
-    const { cover, title, author, category, barcode, publisher, description, status, progress } = req.body;
+    const { cover, title, author, category, newCategory, barcode, publisher, description, status, progress } = req.body;
     const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
 
+    let categoryId;
+
+    // Caso 1: Se viene fornita una nuova categoria, la creiamo
+    if (newCategory) {
+      const createdCategory = new Category({
+        name: newCategory,
+        user: userId,  // Associamo la nuova categoria all'utente loggato
+      });
+      await createdCategory.save();
+      categoryId = createdCategory._id;  // Utilizziamo l'ID della nuova categoria appena creata
+    } else if (category) {
+      // Caso 2: Se viene fornita una categoria esistente, la utilizziamo
+      const foundCategory = await Category.findOne({ _id: category, user: userId });
+
+      if (!foundCategory) {
+        return res.status(404).json({ message: "Categoria non trovata o non autorizzata" });
+      }
+
+      categoryId = foundCategory._id;  // Utilizziamo l'ID della categoria esistente
+    } else {
+      return res.status(400).json({ message: "Nessuna categoria fornita" });
+    }
+
+    // Creazione del nuovo libro con la categoria associata
     const newBook = new Book({
       cover: cover || 'https://res.cloudinary.com/dg3ztnyg9/image/upload/v1727198157/default/aaiyvs5jrwkz4pau30hi.png',
       title,
       author,
-      category,
+      category: categoryId, // Associa il libro alla categoria (nuova o esistente)
       barcode,
       publisher,
       description,
@@ -21,6 +46,16 @@ export const addBook = async (req, res) => {
     });
 
     await newBook.save();
+
+    const user = await User.findById(userId);
+    user.books.push(newBook._id);  // Aggiungi l'ID del libro appena creato all'array books
+    await user.save();  // Salva l'utente aggiornato
+
+    // Aggiorniamo la categoria aggiungendo l'ID del libro alla categoria
+    const categoryToUpdate = await Category.findById(categoryId);
+    categoryToUpdate.books.push(newBook._id);
+    await categoryToUpdate.save();
+
     res.status(201).json(newBook);
   } catch (error) {
     console.error("Errore nell'aggiunta del libro:", error.message);
@@ -82,21 +117,31 @@ export const updateBook = async (req, res) => {
 
 export const deleteBook = async (req, res) => {
   try {
-    const { id } = req.params;
-    const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
+    const { id } = req.params;  // Ottieni l'ID del libro dai parametri
+    const userId = req.loggedUser.id;
 
-    // Elimina il libro se appartiene all'utente loggato
+    // Trova e cancella il libro
     const deletedBook = await Book.findOneAndDelete({ _id: id, user: userId });
 
     if (!deletedBook) {
       return res.status(404).json({ message: "Libro non trovato" });
     }
 
+    // Aggiorna l'utente rimuovendo l'ID del libro dall'array books
+    const user = await User.findById(userId);
+    user.books = user.books.filter(bookId => bookId.toString() !== id);  // Rimuovi l'ID del libro dall'array
+    await user.save();  // Salva l'utente aggiornato
+
+    // Rimuovi eventuali note e citazioni associate al libro
+    await Note.deleteMany({ book: id });
+    await Quote.deleteMany({ book: id });
+
     res.status(200).json({ message: "Libro eliminato con successo" });
   } catch (error) {
     res.status(500).json({ message: "Errore nell'eliminazione del libro", error: error.message });
   }
 };
+
 
 export const updateProgress = async (req, res) => {
   try {

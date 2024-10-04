@@ -10,30 +10,33 @@ const BookCard = ({ book }) => {
 
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
- // const FRONTEND_URL = process.env.FRONTEND_URL
+
 
   // Funzione per gestire il click sull'immagine (naviga ai dettagli del libro con BookItem)
   const handleImageClick = () => {
     navigate(`/dashboard/books/${book._id}`);
   };
 
-  // Funzione per modificare il libro (naviga alla pagina di BookDetails per l'update)
   const handleEditClick = (event) => {
-    event.stopPropagation(); // Impedisce la propagazione del click alla card
-    navigate(`/dashboard/books/${book._id}/details`); // Naviga a BookDetails per l'update
+    event.stopPropagation(); 
+    navigate(`/dashboard/books/${book._id}/details`);
   };
 
   // Funzione per cancellare il libro
   const handleDeleteClick = async (event) => {
-    event.stopPropagation(); // Impedisce la propagazione del click alla card
+    const token = localStorage.getItem('token');
+
+    event.stopPropagation();
     try {
-      // Effettua la chiamata API per cancellare il libro
+
       const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${book._id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+        },
       });
       if (response.ok) {
         console.log('Libro cancellato con successo');
-        //AGGIUNGERE QUI LOGICA MODIFICA UI CON MODALE
       } else {
         console.error('Errore nella cancellazione del libro');
       }

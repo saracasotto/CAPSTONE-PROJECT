@@ -13,8 +13,8 @@ const bookSchema = new mongoose.Schema({
   barcode: { type: String }, // Codice a barre per aggiungere tramite scanner
   publisher: { type: String }, // Editore (recuperato automaticamente tramite barcode)
   description: { type: String }, // Descrizione del libro (recuperata automaticamente o inserita manualmente)
-  notes: { type: mongoose.Schema.Types.ObjectId, ref: "Note" }, // Note personali
-  quotes: { type: mongoose.Schema.Types.ObjectId, ref: "Quote" }, // Citazioni salvate
+  notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Note" }], 
+  quotes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Quote" }],
   status: { 
     type: String, 
     enum: ['to_read', 'reading', 'completed'], 

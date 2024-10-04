@@ -130,6 +130,11 @@ const BookDetails = ()=>{
       // Se stiamo creando una nuova categoria, otteniamo il suo ID
       if (isCreatingCategory && newCategory) {
         categoryId = await createCategory(newCategory);
+      
+        if (!categoryId) {
+          console.error('Errore nella creazione della categoria.');
+          return;
+        }
       }
 
       // Carica l'immagine se è stata selezionata
@@ -168,27 +173,27 @@ const BookDetails = ()=>{
 
   // Funzione per creare una nuova categoria
   const createCategory = async (name) => {
-    const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
-
+    const token = localStorage.getItem('token');
+  
     if (!token) {
       console.error('Autenticazione fallita. Per favore, accedi.');
       return null;
     }
-
+  
     try {
       const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Aggiungi il token JWT
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ name }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Errore nella creazione della categoria');
       }
-
+  
       const data = await response.json();
       return data._id;  // Restituisce l'ID della nuova categoria
     } catch (error) {
@@ -196,6 +201,7 @@ const BookDetails = ()=>{
       return null;
     }
   };
+  
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);  // Aggiorna lo stato con il file selezionato
@@ -204,7 +210,7 @@ const BookDetails = ()=>{
 
   // Funzione per gestire l'eliminazione del libro
   const handleDelete = async () => {
-    const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
+    const token = localStorage.getItem('token');
 
     if (!token) {
       console.error('Autenticazione fallita. Per favore, accedi.');
@@ -215,7 +221,7 @@ const BookDetails = ()=>{
       const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`, // Aggiungi il token JWT
+          'Authorization': `Bearer ${token}`, 
         },
       });
 

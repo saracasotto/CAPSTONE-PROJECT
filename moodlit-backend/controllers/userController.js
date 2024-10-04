@@ -2,10 +2,14 @@ import User from "../models/userModel.js";
 
 export const getUser = async (req, res) => {
   try {
-    const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
+    const userId = req.loggedUser.id;
 
-    // Trova l'utente loggato con i dati associati (libri, note, sessioni)
-    const user = await User.findById(userId).populate('books').populate('notes').populate('sessions');
+    // Popola i campi associati come 'books', 'notes', 'sessions'
+    const user = await User.findById(userId)
+      .populate({ path: 'books', model: 'Book' }) 
+      .populate({ path: 'notes', model: 'Note' }) 
+      .populate({ path: 'quotes', model: 'Quote'})
+      .populate({ path: 'sessions', model: 'Session' }); 
 
     if (!user) {
       return res.status(404).json({ message: "Utente non trovato" });
@@ -16,6 +20,7 @@ export const getUser = async (req, res) => {
     res.status(500).json({ message: "Errore nel recupero dei dati utente", error: error.message });
   }
 };
+
 
 export const updateUser = async (req, res) => {
   try {
