@@ -67,7 +67,6 @@ const BookList = () => {
               >
                 <i class="bi bi-plus-circle"></i>
               </div>
-              <div className="overlay"></div>
             </div>
             <Card.Body>
               <Card.Title className="text-center">Add a new Book</Card.Title>

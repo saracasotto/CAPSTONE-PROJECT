@@ -148,14 +148,14 @@ const Quotes = ({ bookId }) => {
                                 <TwitterShareButton
                                     url={"http://saracasotto.com"}
                                     title={`${stripHtmlTags(quote.content)} - Shared via MoodLit App`}
-                                    className="mr-2"
+                                    className="mr-2 px-2"
                                     onClick={() => handleShareClick('twitter', quote)}  // Imposta Facebook come piattaforma di condivisione
 
                                 >
                                     <TwitterIcon size={32} round={true} />
                                 </TwitterShareButton>
                                 {/* Pulsanti di edit e delete */}
-                                <Button className="text-d bg-transparent border-0" onClick={() => handleEditQuote(quote)}>
+                                <Button className="text-d bg-transparent border-0 px-0" onClick={() => handleEditQuote(quote)}>
                                     <i className="bi bi-pencil-square"></i>
                                 </Button>
                                 <Button className="text-d bg-transparent border-0 ml-2" onClick={() => handleDeleteQuote(quote._id)}>

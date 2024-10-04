@@ -3,7 +3,7 @@
 
 :root {
   --dark-color: #433878;
-  --light-color: #ffe1ff;
+  --light-color: #ffffff;
   --accent-color: #e4b1f0;
 }
 
@@ -20,14 +20,18 @@
   font-size: 0.8em;
 }
 
-.bg-d {
-  background-color: var(--dark-color);
-  color: var(--light-color);
+.bg-d,
+.bg.d:hover,
+.bg-d:focus {
+  background-color: var(--dark-color) !important;
+  color: var(--light-color) !important;
 }
 
-.bg-l {
-  background-color: var(--light-color);
-  color: var(--dark-color);
+.bg-l,
+.bg-l:hover,
+.bg-l:focus {
+  background-color: var(--light-color) I !important;
+  color: var(--dark-color) !important;
 }
 
 .text-d,
@@ -58,13 +62,16 @@
 }
 
 a {
-  color: var(--accent-color) !important;
-  font-weight: 700 !important;
+  color: var(--light-color) !important;
 }
 
 .glass-bg {
-  background-color: transparent;
-  border: none;
+  background: rgba(255, 255, 255, 0.11);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6.9px);
+  -webkit-backdrop-filter: blur(6.9px);
+  border: transparent;
 }
 
 ::-webkit-scrollbar {
@@ -94,4 +101,32 @@ select:focus {
   color: var(--dark-color) !important;
   box-shadow: none !important;
   border-radius: 20px !important;
+}
+
+.spring-theme {
+  background-image: url(assets/spring.png);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.summer-theme {
+  background-image: url(assets/summer.png);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.autumn-theme {
+  background-image: url(assets/autumn.png);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.winter-theme {
+  background-image: url(assets/winter.png);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }

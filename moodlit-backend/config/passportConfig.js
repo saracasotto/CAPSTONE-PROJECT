@@ -14,19 +14,22 @@ const googleStrategy = new GoogleStrategy(
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
   },
   async function (accessToken, refreshToken, profile, passportNext) {
+    console.log("Inizio strategia Google");
+
     try {
-      const { given_name: name, family_name: surname, email, sub: googleId, picture: avatar } = profile._json;
+      const { given_name: name, email, sub: googleId, picture: avatar } = profile._json;
 
       let user = await User.findOne({ googleId }); 
       if (!user) { 
-        const newUser = new User({ googleId, name, surname, email, avatar });
+        const newUser = new User({ googleId, name, email, avatar });
         user = await newUser.save();
       }
       
       const jwtToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
       
-      passportNext(null, { jwtToken });
+      passportNext(null, { ...user, jwtToken });
     } catch (error) {
+      console.error( error);
       passportNext(error);
     }
   }

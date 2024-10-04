@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   width: 90%;
+  height: 100%;
   border-radius: 20px;
   margin: 0 auto;
 }
@@ -13,26 +14,6 @@
 .book-card .card-body {
   padding: 1em 0.8em 0.3em 0.8em;
 }
-
-.book-list .card-img-container {
-    width: 100%;
-    padding-top: 150%; 
-    position: relative;
-  }
-  
-.book-list .card-img-top {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-  }
-
 
 .book-list .book-card .card-title {
     font-weight: 700 !important;
@@ -56,10 +37,10 @@
       align-items: start;
       font-size: 1.3em;
       text-align: center;
-      padding-top: 0;
+      padding-top: 1em;
     }
 
-    .book-list .add-card .card-body {
+    .book-list .add-card  .card-body{
       justify-content: center;
     }
   

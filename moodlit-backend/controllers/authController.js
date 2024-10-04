@@ -1,6 +1,7 @@
 import User from '../models/userModel.js'
 import bcrypt from 'bcryptjs';
-import { generateToken } from '../utils/jwt.js'
+import { generateToken } from '../utils/jwt.js';
+import passport from 'passport';
 
 
 export const register = async (req, res) => {
@@ -26,7 +27,7 @@ export const register = async (req, res) => {
     //rispondo con stato di creazione e includo token
     res.status(201).json({ token, user: newUser });
   } catch (error) {
-    res.status(500).json({ message: "Error" }); //TOGLIERE IN PRODUZIONE
+    res.status(500).json({ error: error.message }); 
   }
 };
 
@@ -37,19 +38,36 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
     //confronto email
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" }); //TOGLIERE IN PRODUZIONE
+      return res.status(400).json({ error: error.message }); 
     }
 
     //confronto password
     const isPasswordValid = bcrypt.compare(password, user.password);  //check password esistente
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "invalid credentials" }); //TOGLIERE IN PRODUZIONE
+      return res.status(400).json({ error: error.message }); 
     }
 
     //genero token
     const token = generateToken(user);
     res.status(200).json({ token, user });
   } catch (error) {
-    res.status(500).json({ message: "Error during login" }); //TOGLIERE IN PRODUZIONE
+    res.status(500).json({ error: error.message }); 
   }
 };
+
+
+export const googleLogin = (req, res, next) => {
+  passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
+};
+
+export const googleCallback = (req, res) => {
+  if (!req.user || !req.user.jwtToken) {
+    console.log("Errore: token not found.");
+    return res.status(400).json({ message: "Authentication with Google failed" });
+  }
+  console.log("Token JWT reveived:", req.user.jwtToken);
+  setTimeout(() => {
+    res.redirect(`${process.env.FRONTEND_URL}/?token=${req.user.jwtToken}`);
+  }, 1000);
+};
+

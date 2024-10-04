@@ -21,7 +21,6 @@ export const getUser = async (req, res) => {
   }
 };
 
-
 export const updateUser = async (req, res) => {
   try {
     const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
@@ -62,24 +61,12 @@ export const deleteUser = async (req, res) => {
 
 export const uploadUserAvatar = async (req, res) => {
   try {
-    const userId = req.loggedUser.id; // Otteniamo l'ID dell'utente dal token JWT
-
     if (!req.file) {
       return res.status(400).json({ message: 'Nessuna immagine fornita' });
     }
 
-    // Aggiorna l'avatar dell'utente con il percorso del file caricato
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { avatar: req.file.path }, // Aggiorna l'avatar con il percorso del file caricato
-      { new: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Utente non trovato" });
-    }
-
-    res.status(200).json({ avatarUrl: updatedUser.avatar });
+    // Poiché il file è già caricato su Cloudinary, possiamo semplicemente restituire il percorso
+    res.status(200).json({ avatarUrl: req.file.path });
   } catch (error) {
     res.status(500).json({ message: 'Errore nel caricamento dell\'avatar', error: error.message });
   }

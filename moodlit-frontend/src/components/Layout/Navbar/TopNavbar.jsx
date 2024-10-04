@@ -1,5 +1,6 @@
 import { Navbar, Nav } from 'react-bootstrap';
 import './Navbar.css'
+import { Link } from 'react-router-dom';
 // import logo from '../../../assets/logo-small.png';
 
 
@@ -13,7 +14,7 @@ const TopNavbar = ()=>{
         <Navbar.Toggle aria-controls="profile-navbar" />
         <Navbar.Collapse id="profile-navbar">
           <Nav className="ml-auto">
-            <Nav.Link href="#">Profile Settings</Nav.Link>
+          <Nav.Link as={Link} to="/dashboard/profile">Profile Settings</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

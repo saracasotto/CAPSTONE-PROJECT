@@ -45,7 +45,7 @@ const SidebarOffcanvas = () => {
         <Offcanvas.Body >
           <div className="mb-4">
             <Nav className="flex-column">
-              <Nav.Link href="#">Profile Settings</Nav.Link>
+            <Nav.Link as={Link} to="/dashboard/profile">Profile Settings</Nav.Link>
               <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
             </Nav>
           </div>

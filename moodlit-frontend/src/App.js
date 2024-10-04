@@ -4,7 +4,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import Welcome from "./components/WelcomePage/Welcome.jsx";
 import "./App.css";
@@ -39,8 +38,7 @@ function App() {
                 element={<PrivateRoute element={<Dashboard />} />}
               />
 
-              {/* Se l'utente va su una rotta non valida, reindirizza alla dashboard */}
-              <Route path="*" element={<Navigate to="/dashboard" />} />
+  
             </Routes>
           </MoodProvider>
         </AuthProvider>

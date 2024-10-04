@@ -1,6 +1,57 @@
+.book-card {
+    position: relative;
+}
+
+.book-card .card-title:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
 .card-subtitle {
     font-style: italic;
 }
+
+
+.card-img-container {
+    width: 100%;
+    padding-top: 300px; 
+    position: relative;
+  }
+  
+.card-img-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+  }
+
+
+.overlay {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    border-radius: 20px;
+    opacity: 0;
+}
+
+.overlay:hover {
+    opacity: 1;
+}
+
+.btn-wrapper {
+    z-index: 2000;
+    font-size: 1.6em;
+}
+
 
 .book-description {
     height: 1.5em; 
@@ -11,3 +62,5 @@
     font-size: 0.9rem !important;
     text-align: start;
 }
+
+

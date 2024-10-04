@@ -13,9 +13,14 @@ input{
     background-color: white;
 }
 
-.note-list,
-.quote-list {
+.note-list span,
+.quote-list span {
     cursor: pointer;
+    font-size: 1rem !important;
+}
+
+.quote-list p {
+    margin-bottom: 0;
 }
 
 .note-details .card,

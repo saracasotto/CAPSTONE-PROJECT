@@ -126,7 +126,7 @@ const Notes = ({ bookId }) => {
                                 <b><span className='title-font'>{note.title}</span></b> - {note.chapter}
                             </div>
                             <div>
-                                <Button className="text-d bg-transparent border-0 " onClick={() => handleEditNote(note)}><i className="bi bi-pencil-square"></i></Button>
+                                <Button className="text-d bg-transparent border-0 px-0 " onClick={() => handleEditNote(note)}><i className="bi bi-pencil-square"></i></Button>
                                 <Button className="text-d bg-transparent border-0  ml-2" onClick={() => handleDeleteNote(note._id)}><i className="bi bi-x-square"></i></Button>
                             </div>
                         </ListGroup.Item>

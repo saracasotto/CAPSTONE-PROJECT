@@ -57,7 +57,7 @@ const AuthForm = () => {
 
   // Logica per il login con Google
   const handleGoogleLogin = () => {
-    window.location.href = `${API_HOST}:${API_PORT}/api/auth/google`; // Reindirizza alla rotta di autenticazione con Google
+    window.location.href = `${API_HOST}:${API_PORT}/api/auth/login-google`; // Reindirizza alla rotta di autenticazione con Google
   };
 
   return (

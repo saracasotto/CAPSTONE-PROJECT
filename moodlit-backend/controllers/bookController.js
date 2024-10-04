@@ -10,25 +10,26 @@ export const addBook = async (req, res) => {
 
     let categoryId;
 
-    // Caso 1: Se viene fornita una nuova categoria, la creiamo
+    // Caso 1: creo nuova categoria
     if (newCategory) {
       const createdCategory = new Category({
         name: newCategory,
-        user: userId,  // Associamo la nuova categoria all'utente loggato
+        user: userId,  // associo nuova categoria all'utente loggato
       });
       await createdCategory.save();
-      categoryId = createdCategory._id;  // Utilizziamo l'ID della nuova categoria appena creata
+      categoryId = createdCategory._id;  //id categoria
     } else if (category) {
-      // Caso 2: Se viene fornita una categoria esistente, la utilizziamo
+
+      // Caso 2: uso categoria esistente
       const foundCategory = await Category.findOne({ _id: category, user: userId });
 
       if (!foundCategory) {
-        return res.status(404).json({ message: "Categoria non trovata o non autorizzata" });
+        return res.status(404).json({ message: "Category not found" });
       }
 
-      categoryId = foundCategory._id;  // Utilizziamo l'ID della categoria esistente
+      categoryId = foundCategory._id;
     } else {
-      return res.status(400).json({ message: "Nessuna categoria fornita" });
+      return res.status(400).json({ message: "Error getting category" });
     }
 
     // Creazione del nuovo libro con la categoria associata
@@ -36,20 +37,20 @@ export const addBook = async (req, res) => {
       cover: cover || 'https://res.cloudinary.com/dg3ztnyg9/image/upload/v1727198157/default/aaiyvs5jrwkz4pau30hi.png',
       title,
       author,
-      category: categoryId, // Associa il libro alla categoria (nuova o esistente)
+      category: categoryId, 
       barcode,
       publisher,
       description,
       status,
       progress,
-      user: userId // Associa il libro all'utente loggato
+      user: userId
     });
 
     await newBook.save();
 
     const user = await User.findById(userId);
     user.books.push(newBook._id);  // Aggiungi l'ID del libro appena creato all'array books
-    await user.save();  // Salva l'utente aggiornato
+    await user.save();  // aggiorno utente
 
     // Aggiorniamo la categoria aggiungendo l'ID del libro alla categoria
     const categoryToUpdate = await Category.findById(categoryId);
@@ -58,8 +59,7 @@ export const addBook = async (req, res) => {
 
     res.status(201).json(newBook);
   } catch (error) {
-    console.error("Errore nell'aggiunta del libro:", error.message);
-    res.status(500).json({ message: "Errore nell'aggiunta del libro", error: error.message });
+    res.status(500).json({ message: "Error adding book ", error: error.message });
   }
 };
 
@@ -70,7 +70,7 @@ export const getBooks = async (req, res) => {
 
     res.status(200).json(books);
   } catch (error) {
-    res.status(500).json({ message: "Errore nel recupero dei libri", error: error.message });
+    res.status(500).json({ message: "Error getting books", error: error.message });
   }
 };
 
@@ -83,12 +83,12 @@ export const getBookById = async (req, res) => {
     const book = await Book.findOne({ _id: bookId, user: userId }).populate('category', 'name');
 
     if (!book) {
-      return res.status(404).json({ message: 'Libro non trovato o accesso negato' });
+      return res.status(404).json({ message: 'Book not found' });
     }
 
     res.status(200).json(book);
   } catch (error) {
-    res.status(500).json({ message: "Errore nel recupero del libro", error: error.message });
+    res.status(500).json({ message: "Error getting book", error: error.message });
   }
 };
 
@@ -106,12 +106,12 @@ export const updateBook = async (req, res) => {
     );
 
     if (!updatedBook) {
-      return res.status(404).json({ message: "Libro non trovato" });
+      return res.status(404).json({ message: "Not found" });
     }
 
     res.status(200).json(updatedBook);
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'aggiornamento del libro", error: error.message });
+    res.status(500).json({ message: "Error updating", error: error.message });
   }
 };
 
@@ -124,21 +124,21 @@ export const deleteBook = async (req, res) => {
     const deletedBook = await Book.findOneAndDelete({ _id: id, user: userId });
 
     if (!deletedBook) {
-      return res.status(404).json({ message: "Libro non trovato" });
+      return res.status(404).json({ message: "Not found" });
     }
 
     // Aggiorna l'utente rimuovendo l'ID del libro dall'array books
     const user = await User.findById(userId);
-    user.books = user.books.filter(bookId => bookId.toString() !== id);  // Rimuovi l'ID del libro dall'array
+    user.books = user.books.filter(bookId => bookId.toString() !== id);  // toglo l'ID del libro dall'array
     await user.save();  // Salva l'utente aggiornato
 
-    // Rimuovi eventuali note e citazioni associate al libro
+    //tolgo referenze
     await Note.deleteMany({ book: id });
     await Quote.deleteMany({ book: id });
 
-    res.status(200).json({ message: "Libro eliminato con successo" });
+    res.status(200).json({ message: "Book successfully deleted" });
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'eliminazione del libro", error: error.message });
+    res.status(500).json({ message: "Error deleting book", error: error.message });
   }
 };
 
@@ -152,11 +152,11 @@ export const updateProgress = async (req, res) => {
       { new: true }
     );
     if (!updatedBook) {
-      return res.status(404).json({ message: "Libro non trovato o non autorizzato" });
+      return res.status(404).json({ message: "Not found" });
     }
     res.status(200).json(updatedBook);
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'aggiornamento del progresso di lettura" });
+    res.status(500).json({ message: "Error updating" });
   }
 };
 
