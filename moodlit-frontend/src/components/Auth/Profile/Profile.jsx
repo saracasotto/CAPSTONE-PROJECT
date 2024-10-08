@@ -234,7 +234,7 @@ const Profile = () => {
           <Button type="submit" className="accent-bg me-2">
             Save
           </Button>
-          <Button className='bg-d border-white' onClick={handleDeleteAccount}>
+          <Button className='bg-d border-none' onClick={handleDeleteAccount}>
             Detele Account
           </Button>
         </Form>

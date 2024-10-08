@@ -229,6 +229,8 @@ const BookDetails = ()=>{
         throw new Error('Errore durante l\'eliminazione del libro');
       }
 
+      alert('Book successfully deleted!');
+
       navigate('/dashboard'); 
     } catch (error) {
       console.error('Errore durante l\'eliminazione del libro:', error);

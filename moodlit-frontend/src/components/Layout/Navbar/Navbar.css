@@ -6,16 +6,21 @@
 }
 
 .navbar-toggler-icon {
-    color: var(--accent-color);
+    background-image: none;
+}
+
+.bi-list {
+    color: var(--accent-color) !important;
+    font-size: 2rem;
 }
 
 .fixed-top {
-    padding: 0.8em 2em !important;
-    font-size: 1.2em;
+    padding: 0.8em 1em !important;
+    font-size: 1em;
 }
 
 .fixed-bottom {
-    padding: 0.8em 2em;
+    padding: 0.8em 1em;
     font-size: 1.3em;
 }
 

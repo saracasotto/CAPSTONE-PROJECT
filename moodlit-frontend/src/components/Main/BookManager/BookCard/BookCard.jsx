@@ -1,10 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Card, Row, Col } from 'react-bootstrap';
+import { useNavigate} from 'react-router-dom';
+import { useState } from 'react';
+import { Button, Card, Row, Col, Alert } from 'react-bootstrap';
 import "./BookCard.css";
 
 const BookCard = ({ book, isAddCard }) => {
   const navigate = useNavigate();
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertVariant, setAlertVariant] = useState('success');
+  const [alertMessage, setAlertMessage] = useState('');
+
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
 
@@ -32,16 +38,38 @@ const BookCard = ({ book, isAddCard }) => {
         },
       });
       if (response.ok) {
-        console.log('Libro cancellato con successo');
+        setAlertVariant('success');
+        setAlertMessage('Book successfully deleted!');
+        setShowAlert(true);
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2000); // Redirect after 2 seconds
       } else {
-        console.error('Errore nella cancellazione del libro');
+        setAlertVariant('danger');
+        setAlertMessage('Error deleting the book. Please try again.');
+        setShowAlert(true);
       }
     } catch (error) {
-      console.error('Errore nel fare la richiesta di cancellazione', error);
+      console.error('Error making delete request:', error);
+      setAlertVariant('danger');
+      setAlertMessage('An error occurred while deleting the book. Please try again.');
+      setShowAlert(true);
     }
   };
 
   return (
+    <>
+    {showAlert && (
+      <Alert 
+        variant={alertVariant} 
+        onClose={() => setShowAlert(false)} 
+        dismissible
+        className="position-fixed top-0 start-50 translate-middle-x mt-3 z-index-1050"
+      >
+        {alertMessage}
+      </Alert>
+      )}
+      
     <Card className={`book-card text-d glass-bg ${isAddCard ? 'add-card' : ''}`} onClick={handleClick}>
       <Row className="g-0 h-100">
         <Col xs={4} md={12} className="book-image-container">
@@ -60,13 +88,13 @@ const BookCard = ({ book, isAddCard }) => {
             {!isAddCard && (
               <div className="position-absolute top-0 end-0 m-2">
                 <Button
-                  className='bg-l border-0 me-2'
+                  className='border-0 me-2'
                   onClick={handleDeleteClick}
                 >
                   <i className="bi bi-x-square"></i>
                 </Button>
                 <Button
-                  className='bg-l border-0'
+                  className='border-0'
                   onClick={handleEditClick}
                 >
                   <i className="bi bi-pencil-square"></i>
@@ -74,7 +102,7 @@ const BookCard = ({ book, isAddCard }) => {
               </div>
             )}
             <div className="position-absolute bottom-0 start-0 w-100 p-2 text-white book-info">
-              <Card.Title>{isAddCard ? "Add a new Book" : book.title}</Card.Title>
+              <Card.Title>{isAddCard ? "Add a new book" : book.title}</Card.Title>
               {!isAddCard && <Card.Subtitle>{book.author}</Card.Subtitle>}
             </div>
           </div>
@@ -82,8 +110,8 @@ const BookCard = ({ book, isAddCard }) => {
         <Col xs={8} md={12} className="d-md-none">
           <Card.Body>
             <div className="d-flex justify-content-between align-items-start mb-2">
-              <div>
-                <Card.Title>{isAddCard ? "Add a new Book" : book.title}</Card.Title>
+              <div className='pe-2 p-md-0'>
+                <Card.Title>{isAddCard ? "Add a new book" : book.title}</Card.Title>
                 {!isAddCard && <Card.Subtitle>{book.author}</Card.Subtitle>}
               </div>
               {!isAddCard && (
@@ -95,7 +123,7 @@ const BookCard = ({ book, isAddCard }) => {
                     <i className="bi bi-x-square"></i>
                   </Button>
                   <Button
-                    className='bg-l border-0'
+                    className='border-0'
                     onClick={handleEditClick}
                   >
                     <i className="bi bi-pencil-square"></i>
@@ -103,11 +131,12 @@ const BookCard = ({ book, isAddCard }) => {
                 </div>
               )}
             </div>
-            {!isAddCard && <Card.Text>{book.description}</Card.Text>}
+            {!isAddCard && <Card.Text className='book-description'>{book.description}</Card.Text>}
           </Card.Body>
         </Col>
       </Row>
     </Card>
+    </>
   );
 };
 

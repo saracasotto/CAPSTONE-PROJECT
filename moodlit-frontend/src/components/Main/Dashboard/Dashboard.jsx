@@ -15,7 +15,7 @@ import ReadingStats from "../Stats/ReadingStats";
 
 const Dashboard = () => {
   return (
-    <Container className="dashboard-container text-d d-block d-md-flex p-0">
+    <Container fluid className="dashboard-container text-d d-block d-md-flex p-0">
       <SidebarOffcanvas />
       <TopNavbar />
       <Container className="content">

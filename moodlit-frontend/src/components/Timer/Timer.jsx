@@ -81,12 +81,17 @@ const Timer = ({ bookId }) => {
 
   return (
     <>
-      <div className="reading-timer">
+      <div className="reading-timer d-flex justify-content-between align-items-center">
         <div className="timer-display">{formatTime(time)}</div>
         {!isRunning ? (
-          <Button onClick={startSession}>Start Session</Button>
+          <Button 
+          onClick={startSession}
+          className='accent-bg'
+          >Start Session</Button>
         ) : (
-          <Button onClick={stopSession}>Stop Session</Button>
+          <Button 
+          onClick={stopSession}
+          className='bg-d border-0'>Stop Session</Button>
         )}
       </div>
 

@@ -1,0 +1,124 @@
+.library-container {
+    padding: 2rem 0;
+    border: 0.5px solid #4A3B24;
+    border-radius: 10px;
+
+  }
+  
+  .shelves-container {
+    max-width: 1200px;
+    margin: 0 auto;
+
+  }
+  
+  .shelf {
+    margin-bottom: 2rem;
+  }
+  
+  .shelf-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark-color);
+  }
+  
+  .shelf-board {
+    background-color: #cb997e;
+    min-height: 150px;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shelf-board::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+  }
+  
+  .shelf-board .row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 10px; /* Space for the book base */
+    margin-bottom: -10px; /* Compensate for the extra padding */
+  }
+  
+  .shelf-board .row::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .shelf-board .row::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+  
+  .shelf-board .row::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .mini-book-card {
+    width: 80px;
+    height: 120px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px 4px 0 0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+  }
+  
+  .mini-book-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background-color: rgba(0,0,0,0.1);
+    transform: translateY(5px);
+    transition: transform 0.3s ease;
+  }
+  
+  
+ .book-cover {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .book-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 5px;
+    font-size: 0.8rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .mini-book-card:hover .book-title {
+    opacity: 1;
+  }
+  
+  .book-title span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .empty-shelf-message {
+    color: #FFF;
+    font-style: italic;
+    padding: 10px;
+  }

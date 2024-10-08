@@ -13,10 +13,21 @@ input{
     background-color: white;
 }
 
+.note-list, 
+.quote-list,
+.note-details .card {
+    background-color: transparent !important;
+}
+
+.note-list, 
+.quote-list {
+    cursor: pointer;
+}
+
 .note-list span,
 .quote-list span {
-    cursor: pointer;
     font-size: 1rem !important;
+    color: var(--dark-color) !important;
 }
 
 .quote-list p {
@@ -25,12 +36,11 @@ input{
 
 .note-details .card,
 .quote-details .card {
-    border: 1px solid var(--accent-color);
+    border: none !important;
 }
 
-.note-details .card-title,
-.quote-details .card-title {
-    font-weight: 700;
+.quote-details p {
+    margin-bottom: 0;
 }
 
 .note-details .list-group-item,

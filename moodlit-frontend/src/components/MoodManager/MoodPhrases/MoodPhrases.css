@@ -1,7 +1,6 @@
 .phrase-display {
-    padding: 1em;
     font-size: 1.5em;
-    width: 95%;
+    margin: 0 auto;
 }
 
 .phrase-display p{

@@ -37,13 +37,13 @@
 .text-d,
 .text-d:hover,
 .text-d:focus {
-  color: var(--dark-color);
+  color: var(--dark-color) !important;
 }
 
 .text-l,
 .text-l:hover,
 .text-l:focus {
-  color: var(--light-color);
+  color: var(--light-color) !important;
 }
 
 .accent-bg {
@@ -55,6 +55,10 @@
 
 .accent-txt {
   color: var(--accent-color) !important;
+}
+
+.accent-border {
+  border: 0.5px solid var(--accent-color);
 }
 
 .title-font {
@@ -101,18 +105,24 @@ select:focus {
   border-radius: 10px !important;
 }
 
-.spring-theme {
-  background-color: white;
+.spring-theme,
+.spring-theme >* {
+  background-color: #e9edc9;
 }
 
+
+.summer-theme,
+.summer-theme >*,
 .summer-theme {
-  background-color: white;
+  background-color: #fefae0;
 }
 
-.autumn-theme{
-  background-color: white;
+.autumn-theme,
+.autumn-theme >* {
+  background-color: #eed7c5;
 }
 
-.winter-theme {
-  background-color: white;
+.winter-theme,
+.winter-theme >*{
+  background-color: #caf0f8;
 }

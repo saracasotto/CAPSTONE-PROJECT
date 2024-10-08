@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Card, Container } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import "./CategoryList.css"
+import MiniBookCard from './MiniBookCard';
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
@@ -12,11 +14,11 @@ const CategoryList = () => {
   const API_PORT = process.env.REACT_APP_API_PORT;
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchCategoriesWithBooks = async () => {
       const token = localStorage.getItem('token');
 
       if (!token) {
-        setError('Autenticazione fallita. Per favore, accedi.');
+        setError('Authentication failed. Please log in.');
         setLoading(false);
         return;
       }
@@ -31,11 +33,33 @@ const CategoryList = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Errore nel recupero delle categorie');
+          throw new Error('Error fetching categories');
         }
 
-        const data = await response.json();
-        setCategories(data);
+        const categoriesData = await response.json();
+
+        // Fetch books for each category
+        const categoriesWithBooks = await Promise.all(
+          categoriesData.map(async (category) => {
+            const booksResponse = await fetch(`${API_HOST}:${API_PORT}/api/categories/${category._id}/books`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            });
+
+            if (booksResponse.ok) {
+              const books = await booksResponse.json();
+              return { ...category, books };
+            } else {
+              console.error(`Failed to fetch books for category: ${category.name}`);
+              return { ...category, books: [] };
+            }
+          })
+        );
+
+        setCategories(categoriesWithBooks);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -43,29 +67,41 @@ const CategoryList = () => {
       }
     };
 
-    fetchCategories();
+    fetchCategoriesWithBooks();
   }, [API_HOST, API_PORT]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <Container>
-      <Row className="category-list mt-5">
-        {categories.length > 0 ? (
-          categories.map((category) => (
-            <Col key={category._id} xs={12} md={4} lg={3} xl={2} className="mb-4">
-              <Card className="category-card glass-bg text-d" onClick={() => navigate(`./${category._id}`)}>
-                <Card.Body>
-                  <Card.Title className="text-center m-0">{category.name}</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))
-        ) : (
-          <p>No categories available. Please add one!</p>
-        )}
-      </Row>
+    <Container fluid className="library-container mt-5 glass-bg">
+     {categories.length > 0 ? (
+        <div className="shelves-container">
+          {categories.map((category) => (
+            <div key={category._id} className="shelf">
+              <h3 className="shelf-title mx-3">{category.name}</h3>
+              <div className="shelf-board mx-3">
+                <Row className="flex-nowrap overflow-auto pb-0 h-100">
+                  {category.books && category.books.length > 0 ? (
+                    category.books.map((book) => (
+                      <Col key={book._id} xs="auto">
+                        <MiniBookCard 
+                          book={book} 
+                          onClick={() => navigate(`/dashboard/books/${book._id}`)}
+                        />
+                      </Col>
+                    ))
+                  ) : (
+                    <Col><p className="empty-shelf-message">No books in this category</p></Col>
+                  )}
+                </Row>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-center">No categories available. Please add one!</p>
+      )}
     </Container>
   );
 };

@@ -10,7 +10,7 @@ const Notes = ({ bookId }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [noteId, setNoteId] = useState(null);
     const [selectedNote, setSelectedNote] = useState(null);
-    const [showModal, setShowModal] = useState(false); // State to control the modal
+    const [showModal, setShowModal] = useState(false);
 
     const API_HOST = process.env.REACT_APP_API_HOST;
     const API_PORT = process.env.REACT_APP_API_PORT;
@@ -61,21 +61,22 @@ const Notes = ({ bookId }) => {
                 throw new Error('Errore nel salvataggio della nota');
             }
 
-            fetchNotes();
+            await fetchNotes();
             resetForm();
-            setShowModal(false); // Close the modal after saving
+            setShowModal(false);
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleDeleteNote = async (id) => {
-        const token = localStorage.getItem('token'); // Recupera il token dal localStorage
+    const handleDeleteNote = async (id, event) => {
+        event.stopPropagation();
+        const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${API_HOST}:${API_PORT}/api/notes/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Usa il token direttamente
+                    'Authorization': `Bearer ${token}`,
                 },
             });
 
@@ -83,7 +84,7 @@ const Notes = ({ bookId }) => {
                 throw new Error('Errore nella cancellazione della nota');
             }
 
-            fetchNotes(); // Richiama fetchNotes dopo la cancellazione
+            await fetchNotes();
 
             if (selectedNote && selectedNote._id === id) {
                 setSelectedNote(null);
@@ -94,9 +95,8 @@ const Notes = ({ bookId }) => {
         }
     };
 
-    
-
-    const handleEditNote = (note) => {
+    const handleEditNote = (note, event) => {
+        event.stopPropagation();
         setCurrentNote({
             title: note.title,
             chapter: note.chapter,
@@ -104,7 +104,7 @@ const Notes = ({ bookId }) => {
         });
         setNoteId(note._id);
         setIsEditing(true);
-        setShowModal(true); // Open the modal for editing
+        setShowModal(true);
     };
 
     const resetForm = () => {
@@ -115,19 +115,18 @@ const Notes = ({ bookId }) => {
 
     return (
         <>
-            <h3 className='title-font'>Your notes</h3>
-            <ListGroup>
+            <ListGroup className='mb-3'>
                 {notes.length > 0 ? (
                     notes.map((note) => (
                         <ListGroup.Item key={note._id}
                             onClick={() => setSelectedNote(note)}
-                            className="note-list mb-3 d-flex justify-content-between align-items-center">
+                            className="note-list d-flex justify-content-between align-items-center accent-border">
                             <div>
-                                <b><span className='title-font'>{note.title}</span></b> - {note.chapter}
+                                <b><span>{note.title}</span></b> - {note.chapter}
                             </div>
                             <div>
-                                <Button className="text-d bg-transparent border-0 px-0 " onClick={() => handleEditNote(note)}><i className="bi bi-pencil-square"></i></Button>
-                                <Button className="text-d bg-transparent border-0  ml-2" onClick={() => handleDeleteNote(note._id)}><i className="bi bi-x-square"></i></Button>
+                                <Button className="text-d bg-transparent border-0 px-3" onClick={(e) => handleEditNote(note, e)}><i className="bi bi-pencil-square"></i></Button>
+                                <Button className="text-d bg-transparent border-0 px-1 ml-2" onClick={(e) => handleDeleteNote(note._id, e)}><i className="bi bi-x-square"></i></Button>
                             </div>
                         </ListGroup.Item>
                     ))
@@ -140,7 +139,6 @@ const Notes = ({ bookId }) => {
             Add
             </Button>
 
-            {/* Modal for Adding/Editing Notes */}
             <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>{isEditing ? 'Edit Note' : 'Add New Note'}</Modal.Title>
@@ -176,19 +174,19 @@ const Notes = ({ bookId }) => {
                             />
                         </Form.Group>
 
-                        <Button className='accent-bg' onClick={handleCreateNote}>
+                        <Button className='accent-bg me-2' onClick={handleCreateNote}>
                             {isEditing ? 'Save' : 'Add'}
                         </Button>
-                        {isEditing && <Button className="accent-bg ml-2" onClick={resetForm}>Cancel</Button>}
+                        {isEditing && <Button className="bg-d border-0 ml-2" onClick={resetForm}>Cancel</Button>}
                     </Form>
                 </Modal.Body>
             </Modal>
 
             {selectedNote && (
-                <div className="note-details mt-5">
+                <div className="note-details accent-border mt-5">
                     <Card>
                         <CardBody>
-                            <CardTitle className='title-font'>{selectedNote.title}</CardTitle>
+                            <CardTitle>{selectedNote.title}</CardTitle>
                             <CardSubtitle>{selectedNote.chapter}</CardSubtitle>
                             <ListGroup>
                                 <ListGroupItem className='bg-l'>

@@ -55,7 +55,7 @@ const SidebarOffcanvas = () => {
               <Nav.Link as={Link} to="/dashboard/booklist">Books</Nav.Link>
               <Nav.Link as={Link} to="/dashboard/categories">Categories</Nav.Link>
               <Nav.Link as={Link} to="/mood-selection">Moods</Nav.Link>
-              <Nav.Link href="#">Analytics</Nav.Link>
+              <Nav.Link as={Link} to="/dashboard/statistics">Reading Stats</Nav.Link>
             </Nav>
           </div>
         </Offcanvas.Body>

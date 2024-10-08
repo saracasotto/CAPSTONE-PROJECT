@@ -43,7 +43,7 @@ const ReadingStats = () => {
   }
 
   return (
-    <Card className="reading-stats glass-bg">
+    <Card className="reading-stats glass-bg mt-3">
       <Card.Body>
         <Card.Title>Reading Progress Overview</Card.Title>
         <ResponsiveContainer width="100%" height={400}>

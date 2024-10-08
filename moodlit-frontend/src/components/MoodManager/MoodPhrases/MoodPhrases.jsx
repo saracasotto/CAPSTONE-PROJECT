@@ -25,7 +25,7 @@ const MoodPhrases = () => {
   }, [selectedMood, apiHost, apiPort]);
 
   return (
-    <Container fluid className="phrase-display glass-bg title-font text-main mt-3 mb-5">
+    <Container className="phrase-display glass-bg title-font text-main p-4 mt-md-5">
       {phrase ? (
         <>
           <p>{phrase.text}</p>

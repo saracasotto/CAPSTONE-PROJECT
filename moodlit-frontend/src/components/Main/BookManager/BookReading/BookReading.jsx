@@ -40,11 +40,11 @@ const BookReading = () => {
   }, [id, API_HOST, API_PORT]);
 
   if (loading) return <div className="d-flex justify-content-center align-items-center" style={{height: '100vh'}}><div className="spinner-border text-primary" role="status"></div></div>;
-  if (error) return <div className="alert alert-danger" role="alert">{error}</div>;
+  if (error) return <div className="alert alert-danger" role="alert">{"Book not found"}</div>;
   if (!book) return <div className="alert alert-info" role="alert">Book not found</div>;
 
   return (
-    <Container fluid className="book-reading py-4">
+    <Container fluid className="book-reading py-4 px-0">
       <Row>
         <Col xs={12} md={4} lg={3} className="mb-4">
           <div className="book-card-container">
@@ -63,13 +63,13 @@ const BookReading = () => {
                 <Nav variant="tabs" className="mb-3">
                   <Nav.Item>
                     <Nav.Link eventKey="notes" className="d-flex align-items-center">
-                      <i className="bi bi-journal-text me-2"></i>
+                    <i class="bi bi-journal me-2"></i>
                       Notes
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="quotes" className="d-flex align-items-center">
-                      <i className="bi bi-chat-quote me-2"></i>
+                    <i class="bi bi-chat-quote me-2"></i>
                       Quotes
                     </Nav.Link>
                   </Nav.Item>

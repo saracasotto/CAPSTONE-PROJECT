@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
+import { Button, Form, ListGroup, Modal, Card, CardBody } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../Notes/Notes.css';
-import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
+import { TwitterShareButton, TwitterIcon } from 'react-share';
 
 const Quotes = ({ bookId }) => {
     const [quotes, setQuotes] = useState([]);
@@ -62,7 +62,7 @@ const Quotes = ({ bookId }) => {
                 throw new Error('Errore nel salvataggio della citazione');
             }
 
-            fetchQuotes();
+            await fetchQuotes();
             resetForm();
             setShowModal(false);
         } catch (error) {
@@ -70,7 +70,8 @@ const Quotes = ({ bookId }) => {
         }
     };
 
-    const handleDeleteQuote = async (quoteId) => {
+    const handleDeleteQuote = async (quoteId, event) => {
+        event.stopPropagation(); // Previene la selezione della citazione
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${API_HOST}:${API_PORT}/api/quotes/${quoteId}`, {
@@ -84,7 +85,7 @@ const Quotes = ({ bookId }) => {
                 throw new Error('Errore nella cancellazione della citazione');
             }
 
-            fetchQuotes();
+            await fetchQuotes();
 
             if (selectedQuote && selectedQuote._id === quoteId) {
                 setSelectedQuote(null);
@@ -94,7 +95,8 @@ const Quotes = ({ bookId }) => {
         }
     };
 
-    const handleEditQuote = (quote) => {
+    const handleEditQuote = (quote, event) => {
+        event.stopPropagation(); // Previene la selezione della citazione
         setCurrentQuote({
             content: quote.content,
             shared: quote.shared,
@@ -111,54 +113,39 @@ const Quotes = ({ bookId }) => {
         setQuoteId(null);
     };
 
-    const handleShareClick = (platform, quote) => {
+    const handleShareClick = (platform, quote, event) => {
+        event.stopPropagation(); // Previene la selezione della citazione
         setCurrentQuote({ ...quote, shared: true, sharePlatform: platform });
     };
 
     const stripHtmlTags = (html) => {
-        return html.replace(/<\/?[^>]+(>|$)/g, ""); // Rimuove tutti i tag HTML
+        return html.replace(/<\/?[^>]+(>|$)/g, "");
     };
-
-
 
     return (
         <>
-            <h3 className='title-font'>Your quotes</h3>
-            <ListGroup>
+                    <ListGroup className='mb-3'>
                 {quotes.length > 0 ? (
                     quotes.map((quote) => (
                         <ListGroup.Item key={quote._id}
                             onClick={() => setSelectedQuote(quote)}
-                            className="quote-list mb-3 d-flex justify-content-between align-items-center">
+                            className="quote-list  d-flex justify-content-between align-items-center accent-border">
                             <div>
                                 <span className='title-font' dangerouslySetInnerHTML={{ __html: quote.content }}></span>
                             </div>
                             <div className="d-flex align-items-center">
-                                {/* Pulsanti di condivisione con il contenuto della quote e riferimento a MoodLit */}
-                                <FacebookShareButton
-                                    url={"http://saracasotto.com"}
-                                    quote={`${stripHtmlTags(quote.content)} - Shared via MoodLit App`}
-                                    className="mr-2"
-                                    onClick={() => handleShareClick('facebook', quote)}  // Imposta Facebook come piattaforma di condivisione
-
-                                >
-                                    <FacebookIcon size={32} round={true} />
-                                </FacebookShareButton>
-
                                 <TwitterShareButton
                                     url={"http://saracasotto.com"}
                                     title={`${stripHtmlTags(quote.content)} - Shared via MoodLit App`}
                                     className="mr-2 px-2"
-                                    onClick={() => handleShareClick('twitter', quote)}  // Imposta Facebook come piattaforma di condivisione
-
+                                    onClick={(event) => handleShareClick('twitter', quote, event)}
                                 >
                                     <TwitterIcon size={32} round={true} />
                                 </TwitterShareButton>
-                                {/* Pulsanti di edit e delete */}
-                                <Button className="text-d bg-transparent border-0 px-0" onClick={() => handleEditQuote(quote)}>
+                                <Button className="text-d bg-transparent border-0 px-2" onClick={(event) => handleEditQuote(quote, event)}>
                                     <i className="bi bi-pencil-square"></i>
                                 </Button>
-                                <Button className="text-d bg-transparent border-0 ml-2" onClick={() => handleDeleteQuote(quote._id)}>
+                                <Button className="text-d bg-transparent border-0 px-1 ml-2" onClick={(event) => handleDeleteQuote(quote._id, event)}>
                                     <i className="bi bi-x-square"></i>
                                 </Button>
                             </div>
@@ -173,7 +160,6 @@ const Quotes = ({ bookId }) => {
                 Add
             </Button>
 
-            {/* Modal per l'aggiunta o modifica delle citazioni */}
             <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>{isEditing ? 'Edit Quote' : 'Add New Quote'}</Modal.Title>
@@ -189,15 +175,23 @@ const Quotes = ({ bookId }) => {
                             />
                         </Form.Group>
 
-                        <Button className='accent-bg' onClick={handleCreateQuote}>
+                        <Button className='accent-bg me-2' onClick={handleCreateQuote}>
                             {isEditing ? 'Save' : 'Add'}
                         </Button>
-                        {isEditing && <Button className="accent-bg ml-2" onClick={resetForm}>Cancel</Button>}
+                        {isEditing && <Button className="bg-d border-0 ml-2" onClick={resetForm}>Cancel</Button>}
                     </Form>
                 </Modal.Body>
             </Modal>
 
-
+            {selectedQuote && (
+                <div className="quote-details mt-5">
+                    <Card>
+                        <CardBody className='bg-l accent-border'>
+                            <div dangerouslySetInnerHTML={{ __html: selectedQuote.content }} />
+                        </CardBody>
+                    </Card>
+                </div>
+            )}
         </>
     );
 };

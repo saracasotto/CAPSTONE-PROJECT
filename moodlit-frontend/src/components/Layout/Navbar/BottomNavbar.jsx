@@ -9,7 +9,7 @@ const BottomNavbar = () => {
           <Nav.Link as={Link} to="/dashboard/booklist"><i className="bi bi-book-half"></i></Nav.Link>
           <Nav.Link as={Link} to="/dashboard/categories"><i className="bi bi-tag-fill"></i></Nav.Link>
           <Nav.Link as={Link} to="/mood-selection"><i className="bi bi-palette"></i></Nav.Link>
-          <Nav.Link href="#"><i class="bi bi-bar-chart-fill"></i></Nav.Link>
+          <Nav.Link as={Link} to="/dashboard/statistics"><i class="bi bi-bar-chart-fill"></i></Nav.Link>
         </Nav>
       </Navbar>
     </>

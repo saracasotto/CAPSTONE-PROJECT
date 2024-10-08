@@ -25,7 +25,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -35,7 +35,7 @@
 }
 
 .book-info {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .add-image {
@@ -43,16 +43,37 @@
   font-size: 3rem;
 }
 
+.book-card button,
+.book-card button:hover,
+.book-card button:focus {
+  background-color: transparent !important;
+  color: var(--dark-color) !important;
+}
+
+.book-description {
+  line-height: 1.5em;
+  max-height: 3em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 0.8em;
+}
 
 .btn-wrapper {
   display: flex;
 }
 @media (min-width: 768px) {
   .book-card {
-    height: 340px;
+    min-height: 300px;
   }
 
   .book-image-container {
     height: 100%;
+  }
+
+  .book-card button,
+  .book-card button:hover,
+  .book-card button:focus {
+    background-color: transparent !important;
+    color: var(--light-color) !important;
   }
 }
