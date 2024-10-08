@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Card, CardBody, CardSubtitle, Form, ListGroup, ListGroupItem, Modal } from 'react-bootstrap';
+import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../Notes/Notes.css';
@@ -170,7 +170,7 @@ const Quotes = ({ bookId }) => {
             </ListGroup>
 
             <Button className='accent-bg' onClick={() => setShowModal(true)}>
-                <i className="bi bi-plus-circle"></i>
+                Add
             </Button>
 
             {/* Modal per l'aggiunta o modifica delle citazioni */}
@@ -197,21 +197,7 @@ const Quotes = ({ bookId }) => {
                 </Modal.Body>
             </Modal>
 
-            {selectedQuote && (
-                <div className="quote-details mt-5">
-                    <h3 className='title-font text-center'>Read selected quote</h3>
-                    <Card>
-                        <CardBody>
-                            {selectedQuote.shared && <CardSubtitle>Shared on: {selectedQuote.sharePlatform}</CardSubtitle>}
-                            <ListGroup>
-                                <ListGroupItem className='bg-l'>
-                                    <div dangerouslySetInnerHTML={{ __html: selectedQuote.content }} />
-                                </ListGroupItem>
-                            </ListGroup>
-                        </CardBody>
-                    </Card>
-                </div>
-            )}
+
         </>
     );
 };

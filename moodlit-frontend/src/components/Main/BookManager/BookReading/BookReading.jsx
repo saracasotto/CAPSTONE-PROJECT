@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
-import BookCard from '../BookCard.jsx/BookCard';
-import './BookReading.css'
+import { Container, Row, Col, Card, Nav, Tab } from 'react-bootstrap';
 import Notes from '../Notes/Notes';
 import Quotes from '../Quotes/Quotes';
+import Timer from '../../../Timer/Timer';
+import './BookReading.css';
+import BookCard from '../BookCard/BookCard';
 
-const BookItem = () => {
+const BookReading = () => {
   const { id } = useParams();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,7 +19,6 @@ const BookItem = () => {
   useEffect(() => {
     const fetchBook = async () => {
       const token = localStorage.getItem('token');
-
       try {
         const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
           method: 'GET',
@@ -27,11 +27,7 @@ const BookItem = () => {
             'Authorization': `Bearer ${token}`
           },
         });
-
-        if (!response.ok) {
-          throw new Error('Errore nel recupero del libro');
-        }
-
+        if (!response.ok) throw new Error('Error fetching book');
         const data = await response.json();
         setBook(data);
       } catch (err) {
@@ -40,47 +36,59 @@ const BookItem = () => {
         setLoading(false);
       }
     };
-
     fetchBook();
   }, [id, API_HOST, API_PORT]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-  if (!book) return <p>Book not found</p>;
+  if (loading) return <div className="d-flex justify-content-center align-items-center" style={{height: '100vh'}}><div className="spinner-border text-primary" role="status"></div></div>;
+  if (error) return <div className="alert alert-danger" role="alert">{error}</div>;
+  if (!book) return <div className="alert alert-info" role="alert">Book not found</div>;
 
   return (
-    <Container className="book-item mt-5">
+    <Container fluid className="book-reading py-4">
       <Row>
-
-        <Col xs={12} lg={4} className='left-side mb-3'>
-          <BookCard book={book} />
+        <Col xs={12} md={4} lg={3} className="mb-4">
+          <div className="book-card-container">
+            <BookCard book={book} />
+          </div>
+          <Card className="mt-3 glass-bg timer-card">
+            <Card.Body>
+              <Timer bookId={id} />
+            </Card.Body>
+          </Card>
         </Col>
-
-
-        <Col xs={12} lg={8} className='right-side'>
-          <Row>
-            <Col xs={12} className="mb-3">
-              <Button className='accent-bg start-button mb-3'>Start session</Button>
-              <Card className='notes-container glass-bg'>
-                <Card.Body>
+        <Col xs={12} md={8} lg={9}>
+          <Card className="glass-bg">
+            <Card.Body>
+              <Tab.Container defaultActiveKey="notes">
+                <Nav variant="tabs" className="mb-3">
+                  <Nav.Item>
+                    <Nav.Link eventKey="notes" className="d-flex align-items-center">
+                      <i className="bi bi-journal-text me-2"></i>
+                      Notes
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="quotes" className="d-flex align-items-center">
+                      <i className="bi bi-chat-quote me-2"></i>
+                      Quotes
+                    </Nav.Link>
+                  </Nav.Item>
+                </Nav>
+                <Tab.Content>
+                  <Tab.Pane eventKey="notes">
                     <Notes bookId={id} />
-             </Card.Body>
-              </Card>
-            </Col>
-            <Col xs={12}>
-              <Card className='quotes-container glass-bg'>
-                <Card.Body>
-                  <Card.Title>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="quotes">
                     <Quotes bookId={id} />
-                  </Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+                  </Tab.Pane>
+                </Tab.Content>
+              </Tab.Container>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>
   );
 };
 
-export default BookItem;
+export default BookReading;

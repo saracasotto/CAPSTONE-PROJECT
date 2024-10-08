@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import BookCard from '../../BookManager/BookCard.jsx/BookCard';
+import BookCard from '../../BookManager/BookCard/BookCard';
 
 const Category = () => {
   const { id } = useParams(); // Recupera l'id della categoria dalla URL

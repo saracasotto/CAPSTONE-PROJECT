@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Card } from 'react-bootstrap';
+import { Col, Row, Card, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const CategoryList = () => {
@@ -13,7 +13,7 @@ const CategoryList = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const token = localStorage.getItem('token'); 
+      const token = localStorage.getItem('token');
 
       if (!token) {
         setError('Autenticazione fallita. Per favore, accedi.');
@@ -26,7 +26,7 @@ const CategoryList = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, 
+            'Authorization': `Bearer ${token}`,
           },
         });
 
@@ -50,21 +50,23 @@ const CategoryList = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Row className="category-list mt-5">
-      {categories.length > 0 ? (
-        categories.map((category) => (
-          <Col key={category._id} xs={12} md={4} lg={3} xl={2} className="mb-4">
-            <Card className="category-card glass-bg text-d" onClick={() => navigate(`./${category._id}`)}>
-              <Card.Body>
-                <Card.Title className="text-center">{category.name}</Card.Title>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))
-      ) : (
-        <p>No categories available. Please add one!</p>
-      )}
-    </Row>
+    <Container>
+      <Row className="category-list mt-5">
+        {categories.length > 0 ? (
+          categories.map((category) => (
+            <Col key={category._id} xs={12} md={4} lg={3} xl={2} className="mb-4">
+              <Card className="category-card glass-bg text-d" onClick={() => navigate(`./${category._id}`)}>
+                <Card.Body>
+                  <Card.Title className="text-center m-0">{category.name}</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))
+        ) : (
+          <p>No categories available. Please add one!</p>
+        )}
+      </Row>
+    </Container>
   );
 };
 

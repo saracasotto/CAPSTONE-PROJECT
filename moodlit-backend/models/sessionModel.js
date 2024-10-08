@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 
-
 const sessionSchema = new mongoose.Schema({
     user: { 
       type: mongoose.Schema.Types.ObjectId, 
@@ -22,15 +21,18 @@ const sessionSchema = new mongoose.Schema({
     duration: { 
       type: Number, 
       default: 0 
-    },  
+    },
+    pagesRead: {
+      type: Number,
+      default: 0
+    },
     status: { 
       type: String, 
       enum: ['active', 'completed'], 
       default: 'active' 
     },  
   }, { timestamps: true }); 
-  
 
 const Session = mongoose.model('Session', sessionSchema, 'sessions');
 
-export default Session; 
+export default Session;

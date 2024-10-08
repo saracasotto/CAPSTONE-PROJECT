@@ -137,7 +137,7 @@ const Notes = ({ bookId }) => {
             </ListGroup>
 
             <Button className='accent-bg' onClick={() => setShowModal(true)}>
-            <i class="bi bi-plus-circle"></i>
+            Add
             </Button>
 
             {/* Modal for Adding/Editing Notes */}
@@ -186,7 +186,6 @@ const Notes = ({ bookId }) => {
 
             {selectedNote && (
                 <div className="note-details mt-5">
-                    <h3 className='title-font text-center'>Read selected</h3>
                     <Card>
                         <CardBody>
                             <CardTitle className='title-font'>{selectedNote.title}</CardTitle>

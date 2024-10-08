@@ -11,10 +11,11 @@ import BookDetails from "../BookManager/BookDetails.jsx/BookDetails";
 import CategoryList from "../CategoriesManager/CategoryList/CategoryList";
 import Category from "../CategoriesManager/Category/Category";
 import Profile from "../../Auth/Profile/Profile";
+import ReadingStats from "../Stats/ReadingStats";
 
 const Dashboard = () => {
   return (
-    <Container fluid className="dashboard-container text-d d-block d-md-flex p-0">
+    <Container className="dashboard-container text-d d-block d-md-flex p-0">
       <SidebarOffcanvas />
       <TopNavbar />
       <Container className="content">
@@ -28,6 +29,7 @@ const Dashboard = () => {
           <Route path="/categories" element={<CategoryList />} />   
           <Route path="/categories/:id" element={<Category />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/statistics" element={<ReadingStats />} />
           <Route path="*" element={<Navigate to="/" />} /> 
         </Routes>
       </Container>

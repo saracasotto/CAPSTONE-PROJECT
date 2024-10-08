@@ -1,4 +1,19 @@
 .phrase-display {
+    padding: 1em;
     font-size: 1.5em;
-    width: fit-content;
+    width: 95%;
+}
+
+.phrase-display p{
+    margin: 0;
+}
+
+.phrase-display p:first-of-type {
+    font-weight: 600;
+}
+
+@media (max-width: 767px) {
+    .phrase-display {
+        font-size: 1.2em;
+    }
 }
