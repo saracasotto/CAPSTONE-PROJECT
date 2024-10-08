@@ -140,7 +140,9 @@ const Notes = ({ bookId }) => {
             </Button>
 
             <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                <Modal.Header closeButton>
+                <Modal.Header 
+                closeButton
+                className='bg-l'>
                     <Modal.Title>{isEditing ? 'Edit Note' : 'Add New Note'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

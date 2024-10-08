@@ -9,7 +9,6 @@ import BookList from "../BookManager/BookList/BookList";
 import BookReading from "../BookManager/BookReading/BookReading";
 import BookDetails from "../BookManager/BookDetails.jsx/BookDetails";
 import CategoryList from "../CategoriesManager/CategoryList/CategoryList";
-import Category from "../CategoriesManager/Category/Category";
 import Profile from "../../Auth/Profile/Profile";
 import ReadingStats from "../Stats/ReadingStats";
 
@@ -27,7 +26,6 @@ const Dashboard = () => {
           <Route path="/books/:id/details" element={<BookDetails />} />  {/* Modifico libro */}
           <Route path="/books/add-book" element={<BookDetails />} />
           <Route path="/categories" element={<CategoryList />} />   
-          <Route path="/categories/:id" element={<Category />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/statistics" element={<ReadingStats />} />
           <Route path="*" element={<Navigate to="/" />} /> 

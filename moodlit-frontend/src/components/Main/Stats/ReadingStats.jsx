@@ -39,7 +39,7 @@ const ReadingStats = () => {
   }, [user]);
 
   if (!stats.length) {
-    return <Card className="reading-stats glass-bg"><Card.Body>No reading stats available yet.</Card.Body></Card>;
+    return <Card className="reading-stats glass-bg mt-3"><Card.Body>No reading stats available yet.</Card.Body></Card>;
   }
 
   return (

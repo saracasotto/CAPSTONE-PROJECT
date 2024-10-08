@@ -96,7 +96,9 @@ const Timer = ({ bookId }) => {
       </div>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
+        <Modal.Header 
+        className='bg-l'
+        closeButton>
           <Modal.Title>Session Completed</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -104,7 +106,9 @@ const Timer = ({ bookId }) => {
             <Form.Group>
               <Form.Label>Pages Read</Form.Label>
               <Form.Control 
-                type="number" 
+                type="text" 
+                inputMode="numeric" 
+                pattern="[0-9]*"
                 value={pagesRead} 
                 onChange={(e) => setPagesRead(Number(e.target.value))}
               />

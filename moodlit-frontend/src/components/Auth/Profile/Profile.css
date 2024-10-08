@@ -12,3 +12,8 @@ form label {
         max-width: 100%;
     }
 }
+
+.alert {
+    margin: 0 auto;
+    width:fit-content;
+}

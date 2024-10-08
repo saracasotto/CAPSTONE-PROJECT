@@ -9,8 +9,8 @@
     background-image: none;
 }
 
-.bi-list {
-    color: var(--accent-color) !important;
+.fixed-top .bi-list {
+    color: var(--light-color) !important;
     font-size: 2rem;
 }
 

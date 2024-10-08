@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Container, Form, Button, Alert, Image } from 'react-bootstrap';
+import { Container, Form, Button, Alert, Image, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
@@ -15,16 +15,16 @@ const Profile = () => {
     const [previewUrl, setPreviewUrl] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
   
     const API_HOST = process.env.REACT_APP_API_HOST;
     const API_PORT = process.env.REACT_APP_API_PORT;
 
-    // UseEffect per il recupero dell'utente
     const fetchUser = useCallback(async () => {
         const token = localStorage.getItem('token');
     
         if (!token) {
-          setError('Autenticazione fallita. Per favore, accedi.');
+          setError('Authentication failed. Please log in.');
           return;
         }
     
@@ -37,20 +37,19 @@ const Profile = () => {
             },
           });
           if (!response.ok) {
-            throw new Error('Errore nel recupero dei dati utente');
+            throw new Error('Error retrieving user data');
           }
           const data = await response.json();
           setUserData(data);
         } catch (error) {
-          setError('Errore nel recupero dei dati utente: ' + error.message);
+          setError('Error retrieving user data: ' + error.message);
         }
-      }, [API_HOST, API_PORT]); // Dipendenze dell'API
+      }, [API_HOST, API_PORT]);
     
-      useEffect(() => {
-        fetchUser();
-      }, [fetchUser]);
+    useEffect(() => {
+      fetchUser();
+    }, [fetchUser]);
     
-
     useEffect(() => {
       if (selectedFile) {
         const reader = new FileReader();
@@ -89,13 +88,13 @@ const Profile = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Errore nel caricamento dell\'avatar');
+          throw new Error('Error uploading avatar');
         }
 
         const data = await response.json();
         return data.avatarUrl;
       } catch (error) {
-        setError('Errore durante il caricamento dell\'avatar: ' + error.message);
+        setError('Error uploading avatar: ' + error.message);
         return null;
       }
     };
@@ -105,13 +104,13 @@ const Profile = () => {
       const token = localStorage.getItem('token');
 
       if (!token) {
-        setError('Autenticazione fallita. Per favore, accedi.');
+        setError('Authentication failed. Please log in.');
         return;
       }
 
       try {
         const avatarUrl = await uploadAvatar();
-        if (avatarUrl === null && selectedFile) return; // Se c'è stato un errore, interrompi il processo
+        if (avatarUrl === null && selectedFile) return;
 
         const userDetails = {
           ...userData,
@@ -129,53 +128,51 @@ const Profile = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Errore durante l\'aggiornamento del profilo');
+          throw new Error('Error updating profile');
         }
 
-        setSuccess('Profilo aggiornato con successo.');
+        setSuccess('Profile updated successfully.');
         fetchUser();
-        setSelectedFile(null); // Reimposta selectedFile a null dopo il caricamento
+        setSelectedFile(null);
       } catch (error) {
-        setError('Errore durante l\'aggiornamento del profilo: ' + error.message);
+        setError('Error updating profile: ' + error.message);
       }
     };
 
     const handleDeleteAccount = async () => {
-      if (window.confirm('Sei sicuro di voler eliminare il tuo account? Questa azione non può essere annullata.')) {
-        const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token');
 
-        if (!token) {
-          setError('Autenticazione fallita. Per favore, accedi.');
-          return;
+      if (!token) {
+        setError('Authentication failed. Please log in.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_HOST}:${API_PORT}/api/users/profile`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Error deleting account');
         }
 
-        try {
-          const response = await fetch(`${API_HOST}:${API_PORT}/api/users/profile`, {
-            method: 'DELETE',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error('Errore durante l\'eliminazione dell\'account');
-          }
-
-          localStorage.removeItem('token');
-          navigate('/login');
-        } catch (error) {
-          setError('Errore durante l\'eliminazione dell\'account: ' + error.message);
-        }
+        localStorage.removeItem('token');
+        navigate(`${API_HOST}:${API_PORT}/`);
+      } catch (error) {
+        setError('Error deleting account: ' + error.message);
       }
     };
 
     return (
       <Container className="mt-5 profile-container">
         <h2 className="mb-4 text-center">Profile</h2>
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
+        {error && <Alert className='bg-d p-2 text-center'>{error}</Alert>}
+        {success && <Alert className='accent-bg p-2 text-center'>{success}</Alert>}
         <Form onSubmit={handleSave}>
-          <div className="text-center mb-3">
+          <div className="text-center my-3">
             <Image 
               src={previewUrl || 'https://via.placeholder.com/150'} 
               roundedCircle 
@@ -234,10 +231,30 @@ const Profile = () => {
           <Button type="submit" className="accent-bg me-2">
             Save
           </Button>
-          <Button className='bg-d border-none' onClick={handleDeleteAccount}>
-            Detele Account
+          <Button className='bg-d border-none' onClick={() => setShowDeleteModal(true)}>
+            Delete Account
           </Button>
         </Form>
+
+        <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Account Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to delete your account? This action cannot be undone.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className="accent-bg" onClick={() => setShowDeleteModal(false)}>
+              Cancel
+            </Button>
+            <Button className='bg-d' onClick={() => {
+              setShowDeleteModal(false);
+              handleDeleteAccount();
+            }}>
+              Delete Account
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     );
 };

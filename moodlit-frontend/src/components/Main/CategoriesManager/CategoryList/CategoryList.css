@@ -1,7 +1,8 @@
 .library-container {
-    padding: 2rem 0;
+    padding: 1em;
     border: 0.5px solid #4A3B24;
     border-radius: 10px;
+    background-color: #f2e9e4;
 
   }
   
@@ -12,17 +13,18 @@
   }
   
   .shelf {
-    margin-bottom: 2rem;
+    margin-bottom: 2em;
   }
   
   .shelf-title {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
     color: var(--dark-color);
+    font-style: italic;
   }
   
   .shelf-board {
-    background-color: #cb997e;
+    background-color: #9a8c98;
     min-height: 150px;
     padding: 10px;
     border-radius: 5px 5px 0 0;

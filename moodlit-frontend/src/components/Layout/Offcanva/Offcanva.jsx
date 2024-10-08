@@ -25,7 +25,7 @@ const SidebarOffcanvas = () => {
       <Col>
         <Button
           onClick={handleShow}
-          className="btn-offcanva accent-txt">
+          className="btn-offcanva text-d">
           <i className="bi bi-list"></i>
         </Button>
       </Col>
@@ -53,7 +53,7 @@ const SidebarOffcanvas = () => {
           <div>
             <Nav className="flex-column">
               <Nav.Link as={Link} to="/dashboard/booklist">Books</Nav.Link>
-              <Nav.Link as={Link} to="/dashboard/categories">Categories</Nav.Link>
+              <Nav.Link as={Link} to="/dashboard/categories">Shelves</Nav.Link>
               <Nav.Link as={Link} to="/mood-selection">Moods</Nav.Link>
               <Nav.Link as={Link} to="/dashboard/statistics">Reading Stats</Nav.Link>
             </Nav>

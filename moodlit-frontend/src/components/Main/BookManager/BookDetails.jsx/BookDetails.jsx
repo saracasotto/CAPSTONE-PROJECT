@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './BookDetails.css'
+import { Button } from 'react-bootstrap';
 
 const BookDetails = ()=>{
   const { id } = useParams();  
@@ -248,7 +249,7 @@ const BookDetails = ()=>{
             id="cover"
             type="file"
             className="form-control"
-            onChange={handleFileChange}  // Gestione del cambio file
+            onChange={handleFileChange}  
           />
         </div>
 
@@ -291,7 +292,7 @@ const BookDetails = ()=>{
                 setIsCreatingCategory(true);
               } else {
                 setBookData({ ...bookData, category: value });
-                setIsCreatingCategory(false); // Nascondi il campo per la nuova categoria
+                setIsCreatingCategory(false);
               }
             }}
           >
@@ -303,7 +304,7 @@ const BookDetails = ()=>{
           </select>
         </div>
 
-        {/* Campo per la creazione di una nuova categoria */}
+   
         {isCreatingCategory && (
           <div className="mb-2
 ">
@@ -319,7 +320,7 @@ const BookDetails = ()=>{
           </div>
         )}
 
-        {/* Campo per il progresso di lettura */}
+
         <div className="mb-2">
           <label htmlFor="progress" className="form-label">Pages read</label>
           <input
@@ -332,7 +333,6 @@ const BookDetails = ()=>{
           />
         </div>
 
-        {/* Campo per la descrizione */}
         <div className="mb-2">
           <label htmlFor="description" className="form-label">Description</label>
           <textarea
@@ -344,7 +344,7 @@ const BookDetails = ()=>{
           />
         </div>
 
-        {/* Campo per lo stato del libro */}
+ 
         <div className="mb-2">
           <label htmlFor="status" className="form-label">Status</label>
           <select
@@ -360,13 +360,13 @@ const BookDetails = ()=>{
         </div>
 
         {/* Pulsanti per salvare o eliminare il libro */}
-        <button type="button" className="btn btn-primary me-2" onClick={handleSave}>
+        <Button type="button" className="accent-bg me-2" onClick={handleSave}>
           Save
-        </button>
+        </Button>
         {id && (
-          <button type="button" className="btn btn-danger" onClick={handleDelete}>
+          <Button type="button" className="bg-d" onClick={handleDelete}>
             Delete
-          </button>
+          </Button>
         )}
       </form>
     </div>

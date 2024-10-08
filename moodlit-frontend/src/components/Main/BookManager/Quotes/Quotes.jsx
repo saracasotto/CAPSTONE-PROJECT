@@ -131,7 +131,7 @@ const Quotes = ({ bookId }) => {
                             onClick={() => setSelectedQuote(quote)}
                             className="quote-list  d-flex justify-content-between align-items-center accent-border">
                             <div>
-                                <span className='title-font' dangerouslySetInnerHTML={{ __html: quote.content }}></span>
+                                <span  dangerouslySetInnerHTML={{ __html: quote.content }}></span>
                             </div>
                             <div className="d-flex align-items-center">
                                 <TwitterShareButton
@@ -160,8 +160,13 @@ const Quotes = ({ bookId }) => {
                 Add
             </Button>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                <Modal.Header closeButton>
+            <Modal show={showModal} 
+            onHide={() => setShowModal(false)} 
+            centered>
+
+                <Modal.Header 
+                closeButton
+                className='bg-l'>
                     <Modal.Title>{isEditing ? 'Edit Quote' : 'Add New Quote'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

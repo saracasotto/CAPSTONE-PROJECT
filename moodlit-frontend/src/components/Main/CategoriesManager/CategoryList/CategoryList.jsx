@@ -74,12 +74,13 @@ const CategoryList = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Container fluid className="library-container mt-5 glass-bg">
+    <Container fluid className="library-container mt-5">
+      <h3 className='title-font mt-0 mb-4 p-0 text-center'>Your Library</h3>
      {categories.length > 0 ? (
         <div className="shelves-container">
           {categories.map((category) => (
             <div key={category._id} className="shelf">
-              <h3 className="shelf-title mx-3">{category.name}</h3>
+              <h4 className="shelf-title mx-3">{category.name}</h4>
               <div className="shelf-board mx-3">
                 <Row className="flex-nowrap overflow-auto pb-0 h-100">
                   {category.books && category.books.length > 0 ? (
@@ -92,7 +93,7 @@ const CategoryList = () => {
                       </Col>
                     ))
                   ) : (
-                    <Col><p className="empty-shelf-message">No books in this category</p></Col>
+                    <Col><p className="empty-shelf-message">No books in this shelf</p></Col>
                   )}
                 </Row>
               </div>
@@ -100,7 +101,7 @@ const CategoryList = () => {
           ))}
         </div>
       ) : (
-        <p className="text-center">No categories available. Please add one!</p>
+        <p className="text-center">No shelves available. Please add one!</p>
       )}
     </Container>
   );
