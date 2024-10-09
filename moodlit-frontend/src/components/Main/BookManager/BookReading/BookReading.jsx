@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Card, Nav, Tab } from 'react-bootstrap';
 import Notes from '../Notes/Notes';
@@ -16,28 +16,33 @@ const BookReading = () => {
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
 
-  useEffect(() => {
-    const fetchBook = async () => {
-      const token = localStorage.getItem('token');
-      try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-        });
-        if (!response.ok) throw new Error('Error fetching book');
-        const data = await response.json();
-        setBook(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBook();
+  const fetchBook = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      if (!response.ok) throw new Error('Error fetching book');
+      const data = await response.json();
+      setBook(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }, [id, API_HOST, API_PORT]);
+
+  useEffect(() => {
+    fetchBook();
+  }, [fetchBook]);
+
+  const handleSessionComplete = () => {
+    fetchBook();
+  };
 
   if (loading) return <div className="d-flex justify-content-center align-items-center" style={{height: '100vh'}}><div className="spinner-border text-primary" role="status"></div></div>;
   if (error) return <div className="alert alert-danger" role="alert">{"Book not found"}</div>;
@@ -52,7 +57,7 @@ const BookReading = () => {
           </div>
           <Card className="mt-3 glass-bg timer-card">
             <Card.Body>
-              <Timer bookId={id} />
+            <Timer bookId={id} onSessionComplete={handleSessionComplete} />
             </Card.Body>
           </Card>
         </Col>

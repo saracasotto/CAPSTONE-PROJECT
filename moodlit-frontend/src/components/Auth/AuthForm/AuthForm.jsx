@@ -114,13 +114,13 @@ const AuthForm = () => {
           </div>
           <div className="input-field">
             <label htmlFor="password">
-              Password:
+              Password
               {passwordError && (
                 <span 
                   style={{ color: 'red', marginLeft: '5px', cursor: 'pointer' }} 
                   title="Wrong password"
                 >
-                  ❗
+                  invalid
                 </span>
               )}
             </label>

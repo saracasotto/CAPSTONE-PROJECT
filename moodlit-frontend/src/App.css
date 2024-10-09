@@ -4,7 +4,7 @@
 :root {
   --dark-color: #433878;
   --light-color: #ffffff;
-  --accent-color: orange;
+  --accent-color: #ffa500;
 }
 
 .app {
@@ -107,13 +107,12 @@ select:focus {
 
 .spring-theme,
 .spring-theme >* {
-  background-color: #e9edc9;
+  background-color: #ffe5ec;
 }
 
 
 .summer-theme,
-.summer-theme >*,
-.summer-theme {
+.summer-theme >*{
   background-color: #fefae0;
 }
 

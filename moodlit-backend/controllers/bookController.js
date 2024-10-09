@@ -1,5 +1,7 @@
 import Book from '../models/bookModel.js';
 import User from '../models/userModel.js';
+import Note from '../models/noteModel.js';
+import Quote from '../models/quoteModel.js';
 import Category from '../models/categoryModel.js';
 
 
@@ -34,7 +36,7 @@ export const addBook = async (req, res) => {
 
     // Creazione del nuovo libro con la categoria associata
     const newBook = new Book({
-      cover: cover || 'https://res.cloudinary.com/dg3ztnyg9/image/upload/v1727198157/default/aaiyvs5jrwkz4pau30hi.png',
+      cover: cover || 'https://res.cloudinary.com/dg3ztnyg9/image/upload/v1728463747/Moodlit/wfniu4yhpzswmjt2mmmf.png',
       title,
       author,
       category: categoryId, 
@@ -117,27 +119,34 @@ export const updateBook = async (req, res) => {
 
 export const deleteBook = async (req, res) => {
   try {
-    const { id } = req.params;  // Ottieni l'ID del libro dai parametri
+    const { id } = req.params;
     const userId = req.loggedUser.id;
 
-    // Trova e cancella il libro
-    const deletedBook = await Book.findOneAndDelete({ _id: id, user: userId });
+    // Trova il libro
+    const book = await Book.findOne({ _id: id, user: userId });
 
-    if (!deletedBook) {
-      return res.status(404).json({ message: "Not found" });
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
     }
 
-    // Aggiorna l'utente rimuovendo l'ID del libro dall'array books
-    const user = await User.findById(userId);
-    user.books = user.books.filter(bookId => bookId.toString() !== id);  // toglo l'ID del libro dall'array
-    await user.save();  // Salva l'utente aggiornato
+    // Rimuovi il riferimento al libro dall'utente
+    await User.findByIdAndUpdate(userId, { $pull: { books: id } });
 
-    //tolgo referenze
+    // Rimuovi il riferimento al libro dalla categoria
+    if (book.category) {
+      await Category.findByIdAndUpdate(book.category, { $pull: { books: id } });
+    }
+
+    // Elimina note e citazioni associate al libro
     await Note.deleteMany({ book: id });
     await Quote.deleteMany({ book: id });
 
+    // Elimina il libro
+    await Book.findByIdAndDelete(id);
+
     res.status(200).json({ message: "Book successfully deleted" });
   } catch (error) {
+    console.error("Error in deleteBook:", error);
     res.status(500).json({ message: "Error deleting book", error: error.message });
   }
 };
@@ -160,6 +169,31 @@ export const updateProgress = async (req, res) => {
   }
 };
 
+export const updateBookStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, totalPages } = req.body;
+    const userId = req.loggedUser.id;
+
+    const book = await Book.findOne({ _id: id, user: userId });
+
+    if (!book) {
+      return res.status(404).json({ message: "Libro non trovato" });
+    }
+
+    book.status = status;
+
+    if (status === 'completed' && totalPages) {
+      book.progress = totalPages;
+    }
+
+    await book.save();
+
+    res.status(200).json(book);
+  } catch (error) {
+    res.status(500).json({ message: "Errore nell'aggiornamento dello stato del libro", error: error.message });
+  }
+};
 
 //DA BACKEND SENZA AUTORIZZAZIONE
 

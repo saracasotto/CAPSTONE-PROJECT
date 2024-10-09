@@ -36,22 +36,19 @@ export const login = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    //confronto email
     if (!user) {
-      return res.status(400).json({ error: error.message }); 
+      return res.status(400).json({ message: "User not found" });
     }
 
-    //confronto password
-    const isPasswordValid = bcrypt.compare(password, user.password);  //check password esistente
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ error: error.message }); 
+      return res.status(400).json({ message: "Invalid password" });
     }
 
-    //genero token
     const token = generateToken(user);
-    res.status(200).json({ token, user });
+    res.status(200).json({ token, user: { id: user._id, email: user.email } });
   } catch (error) {
-    res.status(500).json({ error: error.message }); 
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 

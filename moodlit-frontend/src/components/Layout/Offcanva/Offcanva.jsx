@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Offcanvas, Button, Nav, Col } from 'react-bootstrap';
 import './Offcanva.css'
-// import logo from '../../../assets/logo-small.png';
+import logo from '../../../assets/logo-small.png';
 import { AuthContext } from '../../../context/AuthContext';
 import { Link } from 'react-router-dom';
 
@@ -37,7 +37,7 @@ const SidebarOffcanvas = () => {
           <Offcanvas.Title>
             {/* Navbar Brand */}
             <a className="navbar-brand" href="http://localhost:3000">
-              {/*<img src={logo} alt="logo" className='logo'/>*/}
+              <img src={logo} alt="logo" className='logo'/>
               <span className='title-font'>MoodLit</span>
             </a>
           </Offcanvas.Title>

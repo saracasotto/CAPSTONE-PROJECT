@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext'
 
-const Timer = ({ bookId }) => {
+const Timer = ({ bookId, onSessionComplete  }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [time, setTime] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -50,7 +50,7 @@ const Timer = ({ bookId }) => {
 
   const handleSubmit = async () => {
     try {
-      await fetch(`${API_HOST}:${API_PORT}/api/sessions/${sessionId}`, {
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/sessions/${sessionId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -63,10 +63,39 @@ const Timer = ({ bookId }) => {
           status: 'completed'
         })
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to update session');
+      }
+
+      const data = await response.json();
+
+      // Aggiorna lo stato del libro
+      const bookResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ 
+          progress: data.book.progress,
+          status: data.book.status
+        })
+      });
+
+      if (!bookResponse.ok) {
+        throw new Error('Failed to update book');
+      }
+
       setShowModal(false);
       setTime(0);
       setPagesRead(0);
       setSessionId(null);
+
+      // Notifica il componente genitore che la sessione è stata completata
+      if (onSessionComplete) {
+        onSessionComplete();
+      }
     } catch (error) {
       console.error('Error updating session:', error);
     }

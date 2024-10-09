@@ -3,7 +3,7 @@ import './Navbar.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../../../context/AuthContext';
-// import logo from '../../../assets/logo-small.png';
+import logo from '../../../assets/logo-small.png';
 
 
 const TopNavbar = ()=>{
@@ -19,7 +19,7 @@ const TopNavbar = ()=>{
     <>
       <Navbar expand="lg" className="d-md-none fixed-top bg-d">
         <Navbar.Brand href="#">
-        {/* <img src={logo} alt="logo" className='logo'/> */}
+        <img src={logo} alt="logo" className='logo'/> 
         <span className='title-font'>MoodLit</span></Navbar.Brand>
         <Navbar.Toggle aria-controls="profile-navbar">
         <i class="bi bi-list"></i>

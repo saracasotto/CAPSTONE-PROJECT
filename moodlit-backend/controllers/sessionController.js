@@ -57,9 +57,20 @@ export const updateSession = async (req, res) => {
     session.status = 'completed';
 
     await session.save();
-    res.status(200).json(session);
+
+    // Aggiorna il libro associato
+    const book = await Book.findById(session.book);
+    if (book) {
+      book.progress += pagesRead;
+      if (book.status === 'to_read') {
+        book.status = 'reading';
+      }
+      await book.save();
+    }
+
+    res.status(200).json({ session, book });
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'aggiornare la sessione" });
+    res.status(500).json({ message: "Errore nell'aggiornare la sessione", error: error.message });
   }
 };
 

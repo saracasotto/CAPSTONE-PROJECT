@@ -3,34 +3,35 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './BookDetails.css'
 import { Button } from 'react-bootstrap';
 
-const BookDetails = ()=>{
-  const { id } = useParams();  
+const BookDetails = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [bookData, setBookData] = useState({
-    cover: '',  
+    cover: '',
     title: '',
     author: '',
     category: '',
     progress: 0,
+    totalPages: 0,
     barcode: '',
     publisher: '',
     description: '',
-    status: 'to_read', 
+    status: 'to_read',
   });
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [categories, setCategories] = useState([]);  
-  const [newCategory, setNewCategory] = useState('');  
+  const [categories, setCategories] = useState([]);
+  const [newCategory, setNewCategory] = useState('');
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
 
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
 
-  // Carica i dettagli del libro se esiste (per la modifica)
+  
   useEffect(() => {
     const fetchBookDetails = async () => {
-      const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
+      const token = localStorage.getItem('token'); 
 
       if (!token) {
         console.error('Autenticazione fallita. Per favore, accedi.');
@@ -42,7 +43,7 @@ const BookDetails = ()=>{
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, 
+            'Authorization': `Bearer ${token}`,
           },
         });
         if (!response.ok) {
@@ -56,7 +57,7 @@ const BookDetails = ()=>{
     };
 
     const fetchCategories = async () => {
-      const token = localStorage.getItem('token'); 
+      const token = localStorage.getItem('token');
 
       if (!token) {
         console.error('Autenticazione fallita. Per favore, accedi.');
@@ -68,14 +69,14 @@ const BookDetails = ()=>{
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, 
+            'Authorization': `Bearer ${token}`,
           },
         });
         if (!response.ok) {
           throw new Error('Errore nel recupero delle categorie');
         }
         const data = await response.json();
-        setCategories(data);  // Salvo dati nel componente
+        setCategories(data);  
       } catch (error) {
         console.error('Errore nel recupero delle categorie:', error);
       }
@@ -87,11 +88,11 @@ const BookDetails = ()=>{
     fetchCategories();
   }, [id, API_HOST, API_PORT]);
 
-  // Funzione per caricare l'immagine del libro
+  
   const uploadCover = async () => {
     if (!selectedFile) return null;
 
-    const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
+    const token = localStorage.getItem('token');
     const formData = new FormData();
     formData.append('cover', selectedFile);
 
@@ -99,7 +100,7 @@ const BookDetails = ()=>{
       const response = await fetch(`${API_HOST}:${API_PORT}/api/books/upload-cover`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`, // Aggiungi il token JWT
+          'Authorization': `Bearer ${token}`, 
         },
         body: formData,
       });
@@ -116,9 +117,9 @@ const BookDetails = ()=>{
     }
   };
 
-  // Funzione per gestire il salvataggio del libro
+  
   const handleSave = async () => {
-    const token = localStorage.getItem('token'); // Recupera il token JWT dal localStorage
+    const token = localStorage.getItem('token'); 
 
     if (!token) {
       console.error('Autenticazione fallita. Per favore, accedi.');
@@ -128,59 +129,59 @@ const BookDetails = ()=>{
     try {
       let categoryId = bookData.category;
 
-      // Se stiamo creando una nuova categoria, otteniamo il suo ID
+      
       if (isCreatingCategory && newCategory) {
         categoryId = await createCategory(newCategory);
-      
+
         if (!categoryId) {
           console.error('Errore nella creazione della categoria.');
           return;
         }
       }
 
-      // Carica l'immagine se è stata selezionata
+      
       const coverUrl = await uploadCover();
 
-      // Crea i dettagli del libro, inclusa la copertina
+      
       const bookDetails = {
         ...bookData,
-        cover: coverUrl || bookData.cover,  // Qui viene usata la copertina caricata o quella esistente
+        cover: coverUrl || bookData.cover,  
         category: categoryId,
       };
 
-      const method = id ? 'PUT' : 'POST';  
-      const url = id 
-        ? `${API_HOST}:${API_PORT}/api/books/${id}` 
+      const method = id ? 'PUT' : 'POST';
+      const url = id
+        ? `${API_HOST}:${API_PORT}/api/books/${id}`
         : `${API_HOST}:${API_PORT}/api/books/add`;
 
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Aggiungi il token JWT
+          'Authorization': `Bearer ${token}`, 
         },
-        body: JSON.stringify(bookDetails),  // Passiamo i dettagli del libro al backend
+        body: JSON.stringify(bookDetails), 
       });
 
       if (!response.ok) {
         throw new Error('Errore durante il salvataggio del libro');
       }
 
-      navigate('/dashboard');  // Reindirizza l'utente al dashboard dopo il salvataggio
+      navigate('/dashboard');  
     } catch (error) {
       console.error('Errore durante il salvataggio del libro:', error);
     }
   };
 
-  // Funzione per creare una nuova categoria
+
   const createCategory = async (name) => {
     const token = localStorage.getItem('token');
-  
+
     if (!token) {
       console.error('Autenticazione fallita. Per favore, accedi.');
       return null;
     }
-  
+
     try {
       const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/`, {
         method: 'POST',
@@ -190,26 +191,25 @@ const BookDetails = ()=>{
         },
         body: JSON.stringify({ name }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Errore nella creazione della categoria');
       }
-  
+
       const data = await response.json();
-      return data._id;  // Restituisce l'ID della nuova categoria
+      return data._id;  
     } catch (error) {
       console.error('Errore nella creazione della categoria:', error);
       return null;
     }
   };
-  
+
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);  // Aggiorna lo stato con il file selezionato
-    console.log('Selected file:', e.target.files[0]);  // Debug per verificare il file
+    setSelectedFile(e.target.files[0]); 
   };
 
-  // Funzione per gestire l'eliminazione del libro
+  
   const handleDelete = async () => {
     const token = localStorage.getItem('token');
 
@@ -222,7 +222,7 @@ const BookDetails = ()=>{
       const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`, 
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -232,7 +232,7 @@ const BookDetails = ()=>{
 
       alert('Book successfully deleted!');
 
-      navigate('/dashboard'); 
+      navigate('/dashboard');
     } catch (error) {
       console.error('Errore durante l\'eliminazione del libro:', error);
     }
@@ -242,18 +242,18 @@ const BookDetails = ()=>{
     <div className="container mt-5 book-import-container">
       <h2>{id ? 'Edit book' : 'Add a new book'}</h2>
       <form>
-        {/* Campo per il caricamento dell'immagine */}
+       
         <div className="mb-2">
           <label htmlFor="cover" className="form-label">Upload Cover Image</label>
           <input
             id="cover"
             type="file"
             className="form-control"
-            onChange={handleFileChange}  
+            onChange={handleFileChange}
           />
         </div>
 
-        {/* Campo per il titolo */}
+        
         <div className="mb-2">
           <label htmlFor="title" className="form-label">Title</label>
           <input
@@ -266,7 +266,7 @@ const BookDetails = ()=>{
           />
         </div>
 
-        {/* Campo per l'autore */}
+       
         <div className="mb-2">
           <label htmlFor="author" className="form-label">Author</label>
           <input
@@ -279,7 +279,7 @@ const BookDetails = ()=>{
           />
         </div>
 
-        {/* Selezione o creazione della categoria */}
+        
         <div className="mb-2">
           <label htmlFor="category" className="form-label">Category</label>
           <select
@@ -304,7 +304,7 @@ const BookDetails = ()=>{
           </select>
         </div>
 
-   
+
         {isCreatingCategory && (
           <div className="mb-2
 ">
@@ -322,14 +322,26 @@ const BookDetails = ()=>{
 
 
         <div className="mb-2">
+          <label htmlFor="totalPages" className="form-label">Total Pages</label>
+          <input
+            id="totalPages"
+            type="number"
+            className="form-control"
+            value={bookData.totalPages}
+            onChange={(e) => setBookData({ ...bookData, totalPages: parseInt(e.target.value) })}
+            placeholder="Total Pages"
+          />
+        </div>
+
+        <div className="mb-2">
           <label htmlFor="progress" className="form-label">Pages read</label>
           <input
             id="progress"
             type="number"
             className="form-control"
             value={bookData.progress}
-            onChange={(e) => setBookData({ ...bookData, progress: e.target.value })}
-            placeholder="Progress (%)"
+            onChange={(e) => setBookData({ ...bookData, progress: parseInt(e.target.value) })}
+            placeholder="Pages read"
           />
         </div>
 
@@ -344,7 +356,7 @@ const BookDetails = ()=>{
           />
         </div>
 
- 
+
         <div className="mb-2">
           <label htmlFor="status" className="form-label">Status</label>
           <select

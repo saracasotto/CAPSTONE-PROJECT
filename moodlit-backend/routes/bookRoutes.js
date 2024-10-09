@@ -11,7 +11,8 @@ import {
     updateBookWithoutAuth, 
     deleteBookWithoutAuth,  
     uploadBookCover,
-    getBookById} from '../controllers/bookController.js';
+    getBookById,
+    updateBookStatus} from '../controllers/bookController.js';
     
 import authentication from '../middleware/authentication.js';
 
@@ -27,6 +28,7 @@ router.get('/:id', authentication, getBookById);
 router.put('/:id', authentication, updateBook);
 router.delete('/:id', authentication, deleteBook);
 router.put('/:id/progress', authentication, updateProgress);
+router.put('/:id/status', authentication, updateBookStatus);
 
 
 //NO AUTENTICAZIONE
