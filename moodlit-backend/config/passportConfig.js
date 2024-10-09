@@ -14,7 +14,6 @@ const googleStrategy = new GoogleStrategy(
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
   },
   async function (accessToken, refreshToken, profile, passportNext) {
-    console.log("Inizio strategia Google");
 
     try {
       const { given_name: name, email, sub: googleId, picture: avatar } = profile._json;
@@ -29,7 +28,6 @@ const googleStrategy = new GoogleStrategy(
       
       passportNext(null, { ...user, jwtToken });
     } catch (error) {
-      console.error( error);
       passportNext(error);
     }
   }

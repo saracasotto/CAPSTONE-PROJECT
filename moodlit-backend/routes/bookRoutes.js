@@ -31,7 +31,7 @@ router.put('/:id/progress', authentication, updateProgress);
 router.put('/:id/status', authentication, updateBookStatus);
 
 
-//NO AUTENTICAZIONE
+//NO AUTH
 router.get('/getWithoutAuth/:id', getBookByIdWithoutAuth);
 router.post('/addWithoutAuth', addBookWithoutAuth);
 router.get('/getWithoutAuth', getAllBooksWithoutAuth);

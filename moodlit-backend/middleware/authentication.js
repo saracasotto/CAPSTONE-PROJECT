@@ -20,7 +20,7 @@ export default async (req, res, next) => {
   try {
 
     const payload = jwt.verify(token, JWT_SECRET);
-    console.log('Token payload: ', payload); 
+    /*console.log('Token payload: ', payload); per debug */
 
 
     const user = await User.findById(payload.id).select('-password');

@@ -4,33 +4,34 @@ import { generateToken } from '../utils/jwt.js';
 import passport from 'passport';
 
 
+//register new user
 export const register = async (req, res) => {
-  //prendo dati necessari dalla richiesta http
   const { email, password } = req.body;
 
   try {
-    //cerco se esiste
+    // check if user exists
     const existingUser = await User.findOne({ email });
-    //se esiste, do errore
+   
     if (existingUser) {
-      return res.status(400).json({ message: "Email already in use" });  //togliere
+      return res.status(400).json({ message: "Email already in use" }); 
     }
 
-    //inizializzo variabili password e utente
+    // create new user
     const hashedPassword = await bcrypt.hash(password, 12);
     const newUser = new User({ email, password: hashedPassword });
 
-    //salvo utente nel database e lo passo come parametro alla funzione
+
     await newUser.save();
     const token = generateToken(newUser);
 
-    //rispondo con stato di creazione e includo token
+    
     res.status(201).json({ token, user: newUser });
   } catch (error) {
     res.status(500).json({ error: error.message }); 
   }
 };
 
+// user login
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -52,17 +53,16 @@ export const login = async (req, res) => {
   }
 };
 
-
+// google login
 export const googleLogin = (req, res, next) => {
   passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
 };
 
+//google OAuth callback
 export const googleCallback = (req, res) => {
   if (!req.user || !req.user.jwtToken) {
-    console.log("Errore: token not found.");
     return res.status(400).json({ message: "Authentication with Google failed" });
   }
-  console.log("Token JWT reveived:", req.user.jwtToken);
   setTimeout(() => {
     res.redirect(`${process.env.FRONTEND_URL}/?token=${req.user.jwtToken}`);
   }, 1000);

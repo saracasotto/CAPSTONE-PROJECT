@@ -7,11 +7,7 @@ const router = express.Router();
 
 router.post('/register', register);
 router.post('/login', login);
-
-
 router.get('/login-google', googleLogin);
-
-// Route per gestire il callback dopo l'autenticazione con Google
 router.get('/google/callback', passport.authenticate('google', { session: false }), googleCallback);
 
 

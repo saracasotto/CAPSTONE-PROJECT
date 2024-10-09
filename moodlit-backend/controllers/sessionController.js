@@ -8,7 +8,7 @@ export const addSession = async (req, res) => {
 
     const book = await Book.findOne({ _id: bookId, user: req.loggedUser._id });
     if (!book) {
-      return res.status(404).json({ message: "Libro non trovato" });
+      return res.status(404).json({ message: "Book not found" });
     }
 
     const newSession = new Session({
@@ -20,7 +20,7 @@ export const addSession = async (req, res) => {
     await newSession.save();
     res.status(201).json(newSession);
   } catch (error) {
-    res.status(500).json({ message: "Errore nel creare la sessione" });
+    res.status(500).json({ message: "Errore creating session" });
   }
 };
 
@@ -29,7 +29,7 @@ export const getSessionsByUser = async (req, res) => {
     const sessions = await Session.find({ user: req.loggedUser._id }).populate('book').lean();
     res.status(200).json(sessions);
   } catch (error) {
-    res.status(500).json({ message: "Errore nel recuperare le sessioni" });
+    res.status(500).json({ message: "Error fetchung sessions" });
   }
 };
 
@@ -38,7 +38,7 @@ export const getSessionsByBook = async (req, res) => {
     const sessions = await Session.find({ book: req.params.bookId, user: req.loggedUser._id }).lean();
     res.status(200).json(sessions);
   } catch (error) {
-    res.status(500).json({ message: "Errore nel recuperare le sessioni del libro" });
+    res.status(500).json({ message: "Errore fetching sessions" });
   }
 };
 
@@ -48,12 +48,12 @@ export const updateSession = async (req, res) => {
     const session = await Session.findOne({ _id: req.params.sessionId, user: req.loggedUser._id });
     
     if (!session) {
-      return res.status(404).json({ message: "Sessione non trovata" });
+      return res.status(404).json({ message: "Session not gound" });
     }
     
     session.endTime = endTime;
     session.pagesRead = pagesRead;
-    session.duration = (new Date(endTime) - new Date(session.startTime)) / 1000; // durata in secondi
+    session.duration = (new Date(endTime) - new Date(session.startTime)) / 1000; 
     session.status = 'completed';
 
     await session.save();
@@ -70,7 +70,7 @@ export const updateSession = async (req, res) => {
 
     res.status(200).json({ session, book });
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'aggiornare la sessione", error: error.message });
+    res.status(500).json({ message: "Error updating session", error: error.message });
   }
 };
 
@@ -78,11 +78,11 @@ export const deleteSession = async (req, res) => {
   try {
     const deletedSession = await Session.findOneAndDelete({ _id: req.params.sessionId, user: req.loggedUser._id });
     if (!deletedSession) {
-      return res.status(404).json({ message: "Sessione non trovata" });
+      return res.status(404).json({ message: "Session not found" });
     }
-    res.status(200).json({ message: "Sessione eliminata con successo" });
+    res.status(200).json({ message: "Session deleted" });
   } catch (error) {
-    res.status(500).json({ message: "Errore nell'eliminare la sessione" });
+    res.status(500).json({ message: "Error deleting session" });
   }
 };
 
@@ -95,7 +95,7 @@ export const getReadingStats = async (req, res) => {
     const stats = sessions.map(session => ({
       date: session.startTime.toISOString().split('T')[0],
       pagesRead: session.pagesRead,
-      timeRead: Math.round(session.duration / 60) // convert seconds to minutes
+      timeRead: Math.round(session.duration / 60) 
     }));
 
     // Aggregate stats by date
@@ -112,6 +112,6 @@ export const getReadingStats = async (req, res) => {
 
     res.status(200).json(aggregatedStats);
   } catch (error) {
-    res.status(500).json({ message: "Errore nel recuperare le statistiche di lettura" });
+    res.status(500).json({ message: "Errore getting stats" });
   }
 };

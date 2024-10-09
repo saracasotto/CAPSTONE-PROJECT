@@ -21,7 +21,7 @@ router.put('/:id', authentication, updateCategory);
 router.delete('/:id', authentication, deleteCategory);
 router.get('/:id/books', authentication, getBooksByCategory);
 
-
+//NO AUTH
 router.post('/addWithoutAuth', addCategoryWithoutAuth);
 router.get('/getWithoutAuth', getCategoriesWithoutAuth);
 router.put('/updateWithoutAuth/:id', updateCategoryWithoutAuth);

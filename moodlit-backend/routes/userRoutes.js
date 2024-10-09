@@ -11,7 +11,7 @@ router.delete('/profile', authentication, deleteUser);
 router.post('/uploadAvatar', upload.single('avatar'), uploadUserAvatar)
 
 
-// Rotte senza autenticazione
+// NO AUTHs
 router.get('/', getAllUsers);
 router.put('/:id', updateUserById); 
 router.delete('/:id', deleteUserById); 
