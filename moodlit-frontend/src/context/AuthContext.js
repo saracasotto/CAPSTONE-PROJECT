@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export const AuthContext = createContext();
 
@@ -11,16 +11,15 @@ export const AuthProvider = ({ children }) => {
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
 
-  // Funzione per verificare lo stato di autenticazione
+  // Verify authentication status
   const verifyToken = useCallback(() => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setUser(decoded); // Imposta i dettagli dell'utente
+        setUser(decoded); 
         setIsAuthenticated(true);
       } catch (error) {
-        console.error("Token non valido:", error);
         setIsAuthenticated(false);
         setUser(null);
       }
@@ -29,9 +28,9 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
     }
     setLoading(false);
-  }, []); // Nessuna dipendenza perché non usiamo variabili esterne
+  }, []); 
 
-  // Funzione per recuperare il token dalla query parameter e salvarlo in localStorage
+  // Handle Google OAuth callback
   const handleGoogleCallback = useCallback(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
@@ -39,16 +38,16 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       localStorage.setItem('token', token);
       verifyToken();
-      window.history.replaceState({}, document.title, "/"); // Rimuove il token dall'URL
+      window.history.replaceState({}, document.title, "/"); 
     }
-  }, [verifyToken]); // Dipende solo da verifyToken
+  }, [verifyToken]); 
 
   useEffect(() => {
     handleGoogleCallback();
     verifyToken();
   }, [handleGoogleCallback, verifyToken]);
 
-  // Funzione di login
+  // Login function
   const login = async (email, password) => {
     try {
       const res = await fetch(`${API_HOST}:${API_PORT}/api/auth/login`, {
@@ -65,14 +64,14 @@ export const AuthProvider = ({ children }) => {
         setUser(data.user);
         setIsAuthenticated(true);
       } else {
-        console.error("Errore di autenticazione:", data.message);
+        throw new Error(data.message);
       }
     } catch (error) {
-      console.error("Errore durante il login:", error);
+      throw error;
     }
   };
 
-  // Funzione di logout
+  // Logout function
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
@@ -80,7 +79,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   if (loading) {
-    return <div>Caricamento...</div>;
+    return <div>Loading...</div>;
   }
 
   return (

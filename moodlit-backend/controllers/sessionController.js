@@ -112,6 +112,25 @@ export const getReadingStats = async (req, res) => {
 
     res.status(200).json(aggregatedStats);
   } catch (error) {
-    res.status(500).json({ message: "Errore getting stats" });
+    res.status(500).json({ message: "Error getting stats" });
+  }
+};
+
+
+export const resetReadingStats = async (req, res) => {
+  try {
+    // Delete all completed sessions for the user
+    await Session.deleteMany({ user: req.loggedUser._id, status: 'completed' });
+
+    // Reset progress for all books of the user
+    await Book.updateMany(
+      { user: req.loggedUser._id },
+      { $set: { progress: 0, status: 'to_read' } }
+    );
+
+    res.status(200).json({ message: "All reading stats have been reset successfully" });
+  } catch (error) {
+    console.error('Error resetting stats:', error);
+    res.status(500).json({ message: "Error resetting stats", error: error.message });
   }
 };

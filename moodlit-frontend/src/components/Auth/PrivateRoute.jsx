@@ -4,11 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 
 const PrivateRoute = ({ element }) => {
-  const { user } = useContext(AuthContext); // Cambia da isAuthenticated a user
-
-  console.log("user:", user); // Verifica se l'utente è presente
-
-  // Controlla se l'utente è autenticato
+  const { user } = useContext(AuthContext);
   return user ? element : <Navigate to="/" />;
 };
 

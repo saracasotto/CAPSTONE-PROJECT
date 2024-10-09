@@ -7,28 +7,27 @@ const MoodProvider = ({ children }) => {
   const [selectedMood, setSelectedMood] = useState(() => sessionStorage.getItem('selectedMood') || null);
   const [selectedSeason, setSelectedSeason] = useState(() => sessionStorage.getItem('selectedSeason') || 'Spring');
 
-  // Ottieni la posizione corrente con React Router
   const location = useLocation();
 
-  // Salva il mood quando cambia
+  // Save mood when it changes
   useEffect(() => {
     if (selectedMood) sessionStorage.setItem('selectedMood', selectedMood);
   }, [selectedMood]);
 
-  // Applica il tema quando cambia la stagione o cambia la posizione (cioè viene eseguito il redirect)
+  // Apply theme when season changes or location changes
   useEffect(() => {
     if (selectedSeason) sessionStorage.setItem('selectedSeason', selectedSeason);
 
     const dashboardElement = document.querySelector('.dashboard-container');
     
     if (dashboardElement) {
-      // Rimuovi le classi tema precedenti
+      // Remove previous theme classes
       dashboardElement.classList.remove('spring-theme', 'summer-theme', 'autumn-theme', 'winter-theme');
       
-      // Aggiungi la nuova classe in base alla stagione selezionata
+      // Add new class based on selected season
       dashboardElement.classList.add(`${selectedSeason.toLowerCase()}-theme`);
     }
-  }, [selectedSeason, location]); // Rerun when the season or route changes
+  }, [selectedSeason, location]);
 
   return (
     <MoodContext.Provider value={{ selectedMood, setSelectedMood, selectedSeason, setSelectedSeason }}>

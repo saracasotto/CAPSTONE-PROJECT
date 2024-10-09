@@ -124,3 +124,13 @@
     font-style: italic;
     padding: 10px;
   }
+
+  .shelf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .delete-shelf-btn {
+    margin-right: 15px;
+  }

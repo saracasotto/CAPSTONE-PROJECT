@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Card } from 'react-bootstrap';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { Card, Button, Modal, Alert } from 'react-bootstrap';
 import { ComposedChart, Line, Bar, Area, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { AuthContext } from '../../../context/AuthContext';
 
@@ -9,37 +9,39 @@ const API_PORT = process.env.REACT_APP_API_PORT;
 const ReadingStats = () => {
   const [stats, setStats] = useState([]);
   const [aggregateStats, setAggregateStats] = useState({});
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showResetAlert, setShowResetAlert] = useState(false);
   const { user } = useContext(AuthContext);
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/sessions/stats`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        const data = await response.json();
-        
-        let cumulativePages = 0;
-        let cumulativeTime = 0;
-        const processedData = data.map(item => ({
-          ...item,
-          cumulativePages: (cumulativePages += item.pagesRead),
-          cumulativeTime: (cumulativeTime += item.timeRead)
-        }));
-        
-        setStats(processedData);
-        calculateAggregateStats(processedData);
-      } catch (error) {
-        console.error('Error fetching reading stats:', error);
-      }
-    };
+  const fetchStats = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/sessions/stats`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      
+      let cumulativePages = 0;
+      let cumulativeTime = 0;
+      const processedData = data.map(item => ({
+        ...item,
+        cumulativePages: (cumulativePages += item.pagesRead),
+        cumulativeTime: (cumulativeTime += item.timeRead)
+      }));
+      
+      setStats(processedData);
+      calculateAggregateStats(processedData);
+    } catch (error) {
+      console.error('Error fetching reading stats:', error);
+    }
+  }, []);
 
+  useEffect(() => {
     if (user) {
       fetchStats();
     }
-  }, [user]);
+  }, [user, fetchStats]);
 
   const calculateAggregateStats = (data) => {
     const totalPages = data.reduce((sum, item) => sum + item.pagesRead, 0);
@@ -58,13 +60,53 @@ const ReadingStats = () => {
     });
   };
 
+  const handleResetStats = async () => {
+    try {
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/sessions/reset`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (response.ok) {
+        setStats([]);
+        setAggregateStats({});
+        setShowResetModal(false);
+        setShowResetAlert(true);
+        setTimeout(() => setShowResetAlert(false), 2000);
+      } else {
+        throw new Error('Failed to reset stats');
+      }
+    } catch (error) {
+      console.error('Error resetting stats:', error);
+      // Here you might want to show an error message to the user
+    }
+  };
+
   if (!stats.length) {
-    return <Card className="reading-stats glass-bg mt-3"><Card.Body>No reading stats available yet.</Card.Body></Card>;
+    return (
+      <Card className="reading-stats glass-bg mt-3">
+        <Card.Body>
+          {showResetAlert && (
+            <Alert className='accent-bg p-1' onClose={() => setShowResetAlert(false)}>
+              Reading statistics have been successfully reset.
+            </Alert>
+          )}
+          <p>No reading stats available yet.</p>
+        </Card.Body>
+      </Card>
+    );
   }
 
   return (
     <Card className="reading-stats glass-bg mt-3">
       <Card.Body>
+        {showResetAlert && (
+          <Alert variant="success" onClose={() => setShowResetAlert(false)} dismissible>
+            Reading statistics have been successfully reset.
+          </Alert>
+        )}
         <Card.Title>Reading Progress Overview</Card.Title>
         
         <div className="aggregate-stats mb-4">
@@ -90,6 +132,25 @@ const ReadingStats = () => {
             <Area yAxisId="right" type="monotone" dataKey="cumulativeTime" fill="#ffc658" stroke="#ffc658" name="Cumulative Time Read (minutes)" />
           </ComposedChart>
         </ResponsiveContainer>
+
+        <Button className="mt-3 accent-bg" onClick={() => setShowResetModal(true)}>
+          Reset All Stats
+        </Button>
+
+        <Modal show={showResetModal} onHide={() => setShowResetModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Reset</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to reset all reading statistics? This action cannot be undone.</Modal.Body>
+          <Modal.Footer>
+            <Button variant="accent-bg" onClick={() => setShowResetModal(false)}>
+              Cancel
+            </Button>
+            <Button className='bg-d' onClick={handleResetStats}>
+              Reset Stats
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Card.Body>
     </Card>
   );

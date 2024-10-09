@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import "./CategoryList.css"
 import MiniBookCard from './MiniBookCard';
@@ -13,62 +13,90 @@ const CategoryList = () => {
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
 
-  useEffect(() => {
-    const fetchCategoriesWithBooks = async () => {
-      const token = localStorage.getItem('token');
+  const fetchCategoriesWithBooks = useCallback(async () => {
+    const token = localStorage.getItem('token');
 
-      if (!token) {
-        setError('Authentication failed. Please log in.');
-        setLoading(false);
-        return;
+    if (!token) {
+      setError('Authentication failed. Please log in.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching categories');
       }
 
-      try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+      const categoriesData = await response.json();
 
-        if (!response.ok) {
-          throw new Error('Error fetching categories');
-        }
+      // Fetch books for each category
+      const categoriesWithBooks = await Promise.all(
+        categoriesData.map(async (category) => {
+          const booksResponse = await fetch(`${API_HOST}:${API_PORT}/api/categories/${category._id}/books`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          });
 
-        const categoriesData = await response.json();
+          if (booksResponse.ok) {
+            const books = await booksResponse.json();
+            return { ...category, books };
+          } else {
+            console.error(`Failed to fetch books for category: ${category.name}`);
+            return { ...category, books: [] };
+          }
+        })
+      );
 
-        // Fetch books for each category
-        const categoriesWithBooks = await Promise.all(
-          categoriesData.map(async (category) => {
-            const booksResponse = await fetch(`${API_HOST}:${API_PORT}/api/categories/${category._id}/books`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-              },
-            });
-
-            if (booksResponse.ok) {
-              const books = await booksResponse.json();
-              return { ...category, books };
-            } else {
-              console.error(`Failed to fetch books for category: ${category.name}`);
-              return { ...category, books: [] };
-            }
-          })
-        );
-
-        setCategories(categoriesWithBooks);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategoriesWithBooks();
+      setCategories(categoriesWithBooks);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }, [API_HOST, API_PORT]);
+
+  useEffect(() => {
+    fetchCategoriesWithBooks();
+  }, [fetchCategoriesWithBooks]);
+
+  const handleDeleteCategory = async (categoryId) => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      setError('Authentication failed. Please log in.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/${categoryId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error deleting category');
+      }
+
+      // Remove the deleted category from the state
+      setCategories(categories.filter(category => category._id !== categoryId));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -76,11 +104,21 @@ const CategoryList = () => {
   return (
     <Container fluid className="library-container mt-5">
       <h3 className='title-font mt-0 mb-4 p-0 text-center'>Your Library</h3>
-     {categories.length > 0 ? (
+      {categories.length > 0 ? (
         <div className="shelves-container">
           {categories.map((category) => (
             <div key={category._id} className="shelf">
-              <h4 className="shelf-title mx-3">{category.name}</h4>
+              <div className="shelf-header">
+                <h4 className="shelf-title mx-3">{category.name}</h4>
+                <Button 
+                  variant="danger" 
+                  size="sm" 
+                  onClick={() => handleDeleteCategory(category._id)}
+                  className="delete-shelf-btn"
+                >
+                  Delete Shelf
+                </Button>
+              </div>
               <div className="shelf-board mx-3">
                 <Row className="flex-nowrap overflow-auto pb-0 h-100">
                   {category.books && category.books.length > 0 ? (

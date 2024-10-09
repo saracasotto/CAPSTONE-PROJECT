@@ -70,7 +70,7 @@ const Timer = ({ bookId, onSessionComplete  }) => {
 
       const data = await response.json();
 
-      // Aggiorna lo stato del libro
+
       const bookResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
         method: 'PUT',
         headers: {
@@ -92,7 +92,7 @@ const Timer = ({ bookId, onSessionComplete  }) => {
       setPagesRead(0);
       setSessionId(null);
 
-      // Notifica il componente genitore che la sessione è stata completata
+
       if (onSessionComplete) {
         onSessionComplete();
       }
@@ -124,7 +124,7 @@ const Timer = ({ bookId, onSessionComplete  }) => {
         )}
       </div>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header 
         className='bg-l'
         closeButton>
@@ -145,10 +145,10 @@ const Timer = ({ bookId, onSessionComplete  }) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button className='bg-d' onClick={() => setShowModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button className='accent-bg' onClick={handleSubmit}>
             Save
           </Button>
         </Modal.Footer>
