@@ -80,7 +80,6 @@ const ReadingStats = () => {
       }
     } catch (error) {
       console.error('Error resetting stats:', error);
-      // Here you might want to show an error message to the user
     }
   };
 
