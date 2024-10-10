@@ -111,10 +111,9 @@ const CategoryList = () => {
               <div className="shelf-header">
                 <h4 className="shelf-title mx-3">{category.name}</h4>
                 <Button 
-                  variant="danger" 
                   size="sm" 
                   onClick={() => handleDeleteCategory(category._id)}
-                  className="delete-shelf-btn"
+                  className="delete-shelf-btn bg-transparent text-d border-0 my-1"
                 >
                   Delete Shelf
                 </Button>
