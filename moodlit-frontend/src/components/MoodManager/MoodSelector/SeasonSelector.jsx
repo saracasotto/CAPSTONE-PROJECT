@@ -10,7 +10,7 @@ const SeasonSelector = () => {
 
   const handleSeasonClick = (season) => {
     setSelectedSeason(season);
-    navigate('/dashboard'); // Naviga alla dashboard
+    navigate('/dashboard'); 
   };
 
   return (

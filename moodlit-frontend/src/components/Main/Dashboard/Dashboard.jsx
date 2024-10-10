@@ -18,12 +18,12 @@ const Dashboard = () => {
       <SidebarOffcanvas />
       <TopNavbar />
       <Container className="content">
-        <MoodPhrases />  {/* MoodPhrases visibile in ogni pagina */}
+        <MoodPhrases />  {/* MoodPhrases visible on every page */}
         <Routes>
           <Route path="/" element={<BookList />} />
           <Route path="/books" element={<BookList />} />
           <Route path="/books/:id" element={<BookReading />} />
-          <Route path="/books/:id/details" element={<BookDetails />} />  {/* Modifico libro */}
+          <Route path="/books/:id/details" element={<BookDetails />} />  
           <Route path="/books/add-book" element={<BookDetails />} />
           <Route path="/categories" element={<CategoryList />} />   
           <Route path="/profile" element={<Profile />} />

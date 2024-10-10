@@ -20,7 +20,7 @@ const MoodPhrases = () => {
             setPhrase(data); 
           }
         })
-        .catch(error => console.error('Errore nel recupero della frase:', error));
+        .catch(error => console.error('Error fetching phrases:', error));
     }
   }, [selectedMood, apiHost, apiPort]);
 
