@@ -61,6 +61,7 @@ const BookReading = () => {
     }
   
     const percentageCompleted = book.totalPages ? Math.min((book.progress / book.totalPages) * 100, 100) : 0;
+    
 
   return (
     <Container fluid className="book-reading py-4 px-0">

@@ -82,7 +82,7 @@ const BookCard = ({ book, isAddCard, onDeleteSuccess }) => {
             )}
             <div className="book-overlay d-none d-md-flex">
               {!isAddCard && (
-                <div className="position-absolute top-0 end-0 m-2">
+                <div className="btn-wrap1 position-absolute top-0 end-0 m-2">
                   <Button
                     className='border-0 me-2'
                     onClick={handleDeleteClick}

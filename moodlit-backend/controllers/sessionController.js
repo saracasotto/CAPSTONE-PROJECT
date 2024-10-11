@@ -58,18 +58,16 @@ export const updateSession = async (req, res) => {
 
     await session.save();
 
-    // Aggiorna il libro associato
+   
     const book = await Book.findById(session.book);
     if (book) {
-      console.log(`Before updating: Book ID=${book._id}, progress=${book.progress}, pagesRead=${pagesRead}, totalPages=${book.totalPages}`);
       book.progress += pagesRead;
 
       if (book.totalPages) {
         const percentageRead = (book.progress / book.totalPages) * 100;
-        book.percentageCompleted = Math.min(percentageRead, 100); // Assicurati di non superare il 100%
+        book.percentageCompleted = Math.min(percentageRead, 100);
       }
 
-      console.log(`After updating: Book ID=${book._id}, new progress=${book.progress}, percentageCompleted=${book.percentageCompleted}`);
       await book.save();
     }
 
@@ -136,7 +134,6 @@ export const resetReadingStats = async (req, res) => {
 
     res.status(200).json({ message: "All reading stats have been reset successfully" });
   } catch (error) {
-    console.error('Error resetting stats:', error);
     res.status(500).json({ message: "Error resetting stats", error: error.message });
   }
 };

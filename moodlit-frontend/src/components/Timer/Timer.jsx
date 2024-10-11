@@ -49,16 +49,16 @@ const Timer = ({ bookId, onSessionComplete }) => {
   };
 
   const handleSubmit = async () => {
-    setShowModal(false); // Close modal first
+    setShowModal(false); 
 
     try {
-      // Verifica se le pagine lette sono valide
+      
       if (pagesRead <= 0) {
         console.warn('Pages read should be greater than 0');
-        return; // Non procedere se non ci sono pagine valide
+        return; 
       }
 
-      // Recupera il libro per ottenere il progresso attuale
+      
       const bookResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
         method: 'GET',
         headers: {
@@ -66,9 +66,9 @@ const Timer = ({ bookId, onSessionComplete }) => {
         }
       });
       const bookData = await bookResponse.json();
-      const currentProgress = bookData.progress || 0; // Fai in modo che progress sia almeno 0
+      const currentProgress = bookData.progress || 0; 
 
-      // Aggiorna la sessione con il numero di pagine lette
+      
       const sessionResponse = await fetch(`${API_HOST}:${API_PORT}/api/sessions/${sessionId}`, {
         method: 'PUT',
         headers: {
@@ -87,10 +87,10 @@ const Timer = ({ bookId, onSessionComplete }) => {
         throw new Error('Failed to update session');
       }
 
-      // Somma il progresso attuale con le nuove pagine lette
+      //Add new progress to pages already read
       const newProgress = currentProgress + pagesRead;
 
-      // Aggiorna il libro con il nuovo progresso
+      //Update book with new progress
       const bookUpdateResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
         method: 'PUT',
         headers: {
@@ -98,7 +98,7 @@ const Timer = ({ bookId, onSessionComplete }) => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ 
-          progress: newProgress, // Aggiorna con il nuovo progresso totale
+          progress: newProgress, 
           status: 'reading'
         })
       });
@@ -108,9 +108,9 @@ const Timer = ({ bookId, onSessionComplete }) => {
       }
 
       setPagesRead(0); // Resetta le pagine lette dopo l'invio
-      setTime(0); // Resetta il tempo
-      setSessionId(null); // Resetta l'ID della sessione
-      onSessionComplete(); // Notifica il completamento della sessione
+      setTime(0); 
+      setSessionId(null); 
+      onSessionComplete(); 
     } catch (error) {
       console.error('Error updating session and book:', error);
     }
