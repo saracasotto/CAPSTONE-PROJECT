@@ -1,5 +1,4 @@
 # MoodLit - Reading App
-![MoodLit App Screenshot](https://github.com/saracasotto/CAPSTONE-PROJECT/moodlit-frontend/assets/logo-small.png?raw=true)
 
 ## Description
 
