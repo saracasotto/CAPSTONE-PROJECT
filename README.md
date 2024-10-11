@@ -1,6 +1,8 @@
-# MoodLit - Reading App
-![MoodLit App](https://github.com/saracasotto/CAPSTONE-PROJECT/blob/main/moodlit-frontend/src/assets/logo-small.png)
+<h1 align="center">MoodLit - Reading App</h1>
 
+<p align="center">
+  <img src="https://github.com/saracasotto/CAPSTONE-PROJECT/blob/main/moodlit-frontend/src/assets/logo-small.png?raw=true" alt="MoodLit App" width="200"/> 
+</p>
 ## Description
 
 **MoodLit** is a reading app designed to help users keep track of their reading activities. 
