@@ -12,6 +12,7 @@ const BookDetails = () => {
     title: '',
     author: '',
     category: '',
+    totalPages: 0,
     progress: 0,
     barcode: '',
     publisher: '',
@@ -29,7 +30,7 @@ const BookDetails = () => {
 
   useEffect(() => {
     const fetchBookDetails = async () => {
-      const token = localStorage.getItem('token'); 
+      const token = localStorage.getItem('token');
 
       if (!token) {
         console.error('Authentication failed. Please log in.');
@@ -74,7 +75,7 @@ const BookDetails = () => {
           throw new Error('Error retrieving categories');
         }
         const data = await response.json();
-        setCategories(data);  
+        setCategories(data);
       } catch (error) {
         console.error('Error retrieving categories:', error);
       }
@@ -97,7 +98,7 @@ const BookDetails = () => {
       const response = await fetch(`${API_HOST}:${API_PORT}/api/books/upload-cover`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`, 
+          'Authorization': `Bearer ${token}`,
         },
         body: formData,
       });
@@ -115,7 +116,7 @@ const BookDetails = () => {
   };
 
   const handleSave = async () => {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
 
     if (!token) {
       console.error('Authentication failed. Please log in.');
@@ -141,6 +142,7 @@ const BookDetails = () => {
         cover: coverUrl || bookData.cover,
         category: categoryId,
         progress: parseInt(bookData.progress) || 0,
+        totalPages: parseInt(bookData.totalPages) || 0, // Aggiunto totalPages
       };
 
       const method = id ? 'PUT' : 'POST';
@@ -152,16 +154,16 @@ const BookDetails = () => {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, 
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(bookDetails), 
+        body: JSON.stringify(bookDetails),
       });
 
       if (!response.ok) {
         throw new Error('Error saving book');
       }
 
-      navigate('/dashboard');  
+      navigate('/dashboard');
     } catch (error) {
       console.error('Error saving book:', error);
     }
@@ -190,7 +192,7 @@ const BookDetails = () => {
       }
 
       const data = await response.json();
-      return data._id;  
+      return data._id;
     } catch (error) {
       console.error('Error creating category:', error);
       return null;
@@ -198,7 +200,7 @@ const BookDetails = () => {
   };
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]); 
+    setSelectedFile(e.target.files[0]);
   };
 
   const handleDelete = async () => {
@@ -304,6 +306,18 @@ const BookDetails = () => {
             />
           </div>
         )}
+
+        <div className="mb-2">
+          <label htmlFor="totalPages" className="form-label">Total Pages</label>
+          <input
+            id="totalPages"
+            type="number"
+            className="form-control"
+            value={bookData.totalPages}
+            onChange={(e) => setBookData({ ...bookData, totalPages: parseInt(e.target.value) })}
+            placeholder="Total pages"
+          />
+        </div>
 
         <div className="mb-2">
           <label htmlFor="progress" className="form-label">Pages read</label>

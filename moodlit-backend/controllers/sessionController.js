@@ -61,8 +61,15 @@ export const updateSession = async (req, res) => {
     // Aggiorna il libro associato
     const book = await Book.findById(session.book);
     if (book) {
+      console.log(`Before updating: Book ID=${book._id}, progress=${book.progress}, pagesRead=${pagesRead}, totalPages=${book.totalPages}`);
       book.progress += pagesRead;
-      // Non modifichiamo book.totalPages qui
+
+      if (book.totalPages) {
+        const percentageRead = (book.progress / book.totalPages) * 100;
+        book.percentageCompleted = Math.min(percentageRead, 100); // Assicurati di non superare il 100%
+      }
+
+      console.log(`After updating: Book ID=${book._id}, new progress=${book.progress}, percentageCompleted=${book.percentageCompleted}`);
       await book.save();
     }
 
@@ -71,6 +78,7 @@ export const updateSession = async (req, res) => {
     res.status(500).json({ message: "Error updating session", error: error.message });
   }
 };
+
 
 export const deleteSession = async (req, res) => {
   try {

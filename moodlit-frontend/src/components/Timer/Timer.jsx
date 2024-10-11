@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/AuthContext';
 
-const Timer = ({ bookId, onSessionComplete  }) => {
+const Timer = ({ bookId, onSessionComplete }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [time, setTime] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [pagesRead, setPagesRead] = useState(0);
   const [sessionId, setSessionId] = useState(null);
   const { user } = useContext(AuthContext);
-
+  
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
 
@@ -49,7 +49,26 @@ const Timer = ({ bookId, onSessionComplete  }) => {
   };
 
   const handleSubmit = async () => {
+    setShowModal(false); // Close modal first
+
     try {
+      // Verifica se le pagine lette sono valide
+      if (pagesRead <= 0) {
+        console.warn('Pages read should be greater than 0');
+        return; // Non procedere se non ci sono pagine valide
+      }
+
+      // Recupera il libro per ottenere il progresso attuale
+      const bookResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const bookData = await bookResponse.json();
+      const currentProgress = bookData.progress || 0; // Fai in modo che progress sia almeno 0
+
+      // Aggiorna la sessione con il numero di pagine lette
       const sessionResponse = await fetch(`${API_HOST}:${API_PORT}/api/sessions/${sessionId}`, {
         method: 'PUT',
         headers: {
@@ -68,24 +87,10 @@ const Timer = ({ bookId, onSessionComplete  }) => {
         throw new Error('Failed to update session');
       }
 
-      // Retrieve current book data
-      const bookGetResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
+      // Somma il progresso attuale con le nuove pagine lette
+      const newProgress = currentProgress + pagesRead;
 
-      if (!bookGetResponse.ok) {
-        throw new Error('Failed to get book data');
-      }
-
-      const bookData = await bookGetResponse.json();
-
-      // Calculate new progress
-      const newProgress = bookData.progress + pagesRead;
-
-      // Update the book
+      // Aggiorna il libro con il nuovo progresso
       const bookUpdateResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
         method: 'PUT',
         headers: {
@@ -93,8 +98,8 @@ const Timer = ({ bookId, onSessionComplete  }) => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ 
-          progress: newProgress,
-          status: newProgress > 0 ? 'reading' : 'to_read'
+          progress: newProgress, // Aggiorna con il nuovo progresso totale
+          status: 'reading'
         })
       });
 
@@ -102,14 +107,10 @@ const Timer = ({ bookId, onSessionComplete  }) => {
         throw new Error('Failed to update book');
       }
 
-      setShowModal(false);
-      setTime(0);
-      setPagesRead(0);
-      setSessionId(null);
-
-      if (onSessionComplete) {
-        onSessionComplete();
-      }
+      setPagesRead(0); // Resetta le pagine lette dopo l'invio
+      setTime(0); // Resetta il tempo
+      setSessionId(null); // Resetta l'ID della sessione
+      onSessionComplete(); // Notifica il completamento della sessione
     } catch (error) {
       console.error('Error updating session and book:', error);
     }
@@ -164,7 +165,10 @@ const Timer = ({ bookId, onSessionComplete  }) => {
           <Button className='bg-d' onClick={() => setShowModal(false)}>
             Cancel
           </Button>
-          <Button className='accent-bg' onClick={handleSubmit}>
+          <Button 
+            className='accent-bg' 
+            onClick={handleSubmit}
+          >
             Save
           </Button>
         </Modal.Footer>

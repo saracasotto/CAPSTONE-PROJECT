@@ -7,7 +7,7 @@ import Category from '../models/categoryModel.js';
 
 export const addBook = async (req, res) => {
   try {
-    const { cover, title, author, category, newCategory, barcode, publisher, description, status, progress } = req.body;
+    const { cover, title, author, category, newCategory, barcode, publisher, description, status, progress, totalPages } = req.body;
     const userId = req.loggedUser.id; 
 
     let categoryId;
@@ -44,6 +44,7 @@ export const addBook = async (req, res) => {
       description,
       status,
       progress,
+      totalPages,
       user: userId
     });
 
@@ -96,13 +97,13 @@ export const getBookById = async (req, res) => {
 export const updateBook = async (req, res) => {
   try {
     const { id } = req.params;
-    const { cover, title, author, category, barcode, publisher, description, status } = req.body;
+    const { cover, title, author, category, description, progress, totalPages, status } = req.body;
     const userId = req.loggedUser.id; 
 
     // Update the logged user book 
     const updatedBook = await Book.findOneAndUpdate(
       { _id: id, user: userId }, 
-      { title, author, category, barcode, publisher, description, status, cover },
+      { title, author, category, description, status, progress, totalPages, cover },
       { new: true }
     );
 
