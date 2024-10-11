@@ -9,10 +9,7 @@ const bookSchema = new mongoose.Schema({
   author: { type: String, required: true },
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" }, // Collegato alle categorie
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  totalPages: { type: Number, default: 0 },
-  progress: { type: Number, default: 0 }, // Percentuale di lettura o pagine lette
-  barcode: { type: String }, // Codice a barre per aggiungere tramite scanner
-  publisher: { type: String }, // Editore (recuperato automaticamente tramite barcode)
+  progress: { type: Number, min: 0, default: 0 }, // Percentuale di lettura o pagine lette
   description: { type: String }, // Descrizione del libro (recuperata automaticamente o inserita manualmente)
   notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Note" }], 
   quotes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Quote" }],
@@ -26,6 +23,17 @@ const bookSchema = new mongoose.Schema({
     ref: 'Session' 
   }],
 }, { timestamps: true }); // Per tenere traccia di creazione e aggiornamento
+
+bookSchema.pre('save', function(next) {
+  if (this.isModified('progress')) {
+    if (this.progress === 0) {
+      this.status = 'to_read';
+    } else {
+      this.status = 'reading';
+    }
+  }
+  next();
+});
 
 const Book = mongoose.model('Book', bookSchema, 'books');
 

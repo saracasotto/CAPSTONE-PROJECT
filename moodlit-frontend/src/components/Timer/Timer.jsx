@@ -50,7 +50,7 @@ const Timer = ({ bookId, onSessionComplete  }) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/sessions/${sessionId}`, {
+      const sessionResponse = await fetch(`${API_HOST}:${API_PORT}/api/sessions/${sessionId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -64,26 +64,41 @@ const Timer = ({ bookId, onSessionComplete  }) => {
         })
       });
 
-      if (!response.ok) {
+      if (!sessionResponse.ok) {
         throw new Error('Failed to update session');
       }
 
-      const data = await response.json();
+      // Retrieve current book data
+      const bookGetResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
 
+      if (!bookGetResponse.ok) {
+        throw new Error('Failed to get book data');
+      }
 
-      const bookResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
+      const bookData = await bookGetResponse.json();
+
+      // Calculate new progress
+      const newProgress = bookData.progress + pagesRead;
+
+      // Update the book
+      const bookUpdateResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ 
-          progress: data.book.progress,
-          status: data.book.status
+          progress: newProgress,
+          status: newProgress > 0 ? 'reading' : 'to_read'
         })
       });
 
-      if (!bookResponse.ok) {
+      if (!bookUpdateResponse.ok) {
         throw new Error('Failed to update book');
       }
 
@@ -92,12 +107,11 @@ const Timer = ({ bookId, onSessionComplete  }) => {
       setPagesRead(0);
       setSessionId(null);
 
-
       if (onSessionComplete) {
         onSessionComplete();
       }
     } catch (error) {
-      console.error('Error updating session:', error);
+      console.error('Error updating session and book:', error);
     }
   };
 
@@ -116,9 +130,11 @@ const Timer = ({ bookId, onSessionComplete  }) => {
           <Button 
           onClick={startSession}
           className='accent-bg'
+          size='sm'
           >Start Session</Button>
         ) : (
-          <Button 
+          <Button
+          size="sm"
           onClick={stopSession}
           className='bg-d border-0'>Stop Session</Button>
         )}

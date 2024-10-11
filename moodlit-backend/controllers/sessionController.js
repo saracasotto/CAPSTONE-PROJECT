@@ -48,7 +48,7 @@ export const updateSession = async (req, res) => {
     const session = await Session.findOne({ _id: req.params.sessionId, user: req.loggedUser._id });
     
     if (!session) {
-      return res.status(404).json({ message: "Session not gound" });
+      return res.status(404).json({ message: "Session not found" });
     }
     
     session.endTime = endTime;
@@ -62,9 +62,7 @@ export const updateSession = async (req, res) => {
     const book = await Book.findById(session.book);
     if (book) {
       book.progress += pagesRead;
-      if (book.status === 'to_read') {
-        book.status = 'reading';
-      }
+      // Non modifichiamo book.totalPages qui
       await book.save();
     }
 

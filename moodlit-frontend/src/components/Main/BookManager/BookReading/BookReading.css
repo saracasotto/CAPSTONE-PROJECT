@@ -36,3 +36,11 @@
     max-width: 100%;
   }
 }
+
+.progress {
+  background-color: var(--accent-color) !important
+}
+
+.progress .progress-bar {
+  background-color: var(--dark-color) !important;
+}

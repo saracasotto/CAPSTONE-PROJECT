@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Row, Col, Card, Nav, Tab } from 'react-bootstrap';
+import { Container, Row, Col, Card, Nav, Tab, ProgressBar } from 'react-bootstrap';
 import Notes from '../Notes/Notes';
 import Quotes from '../Quotes/Quotes';
 import Timer from '../../../Timer/Timer';
@@ -62,6 +62,15 @@ const BookReading = () => {
           </Card>
         </Col>
         <Col xs={12} md={8} lg={9}>
+        <Card className="glass-bg mb-3">
+            <Card.Body>
+              <h5 className="mb-3">Description</h5>
+              <p>{book.description || "No description available."}</p>
+              <h5 className="mt-4 mb-2">Reading Progress</h5>
+              <ProgressBar now={book.progress} label={`${book.progress} pages read`} className="mb-2" />
+              <small className="text-muted">You've read {book.progress} pages of this book.</small>
+            </Card.Body>
+          </Card>
           <Card className="glass-bg">
             <Card.Body>
               <Tab.Container defaultActiveKey="notes">

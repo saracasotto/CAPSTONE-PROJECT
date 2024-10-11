@@ -1,8 +1,8 @@
 .welcome-container {
     height: 100%;
-    background-color: var(--dark-color);
-    color: var(--light-color);
-
+    background-image: url(../../assets/wallpaper1.png);
+    background-position: center;
+    background-size: cover;
 }
 
 .welcome-container .row {

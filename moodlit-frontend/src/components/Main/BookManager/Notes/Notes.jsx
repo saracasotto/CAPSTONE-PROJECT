@@ -40,6 +40,13 @@ const Notes = ({ bookId }) => {
         fetchNotes();
     }, [fetchNotes]);
 
+    const openModal = () => {
+        setCurrentNote({ title: '', chapter: '', content: '' });
+        setIsEditing(false);
+        setNoteId(null);
+        setShowModal(true);
+    };
+
     const handleCreateNote = async () => {
         const token = localStorage.getItem('token');
         const method = isEditing ? 'PUT' : 'POST';
@@ -135,7 +142,7 @@ const Notes = ({ bookId }) => {
                 )}
             </ListGroup>
 
-            <Button className='accent-bg' onClick={() => setShowModal(true)}>
+            <Button className='accent-bg' onClick={openModal}>
             Add
             </Button>
 

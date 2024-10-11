@@ -13,7 +13,6 @@ const BookDetails = () => {
     author: '',
     category: '',
     progress: 0,
-    totalPages: 0,
     barcode: '',
     publisher: '',
     description: '',
@@ -28,13 +27,12 @@ const BookDetails = () => {
   const API_HOST = process.env.REACT_APP_API_HOST;
   const API_PORT = process.env.REACT_APP_API_PORT;
 
-  
   useEffect(() => {
     const fetchBookDetails = async () => {
       const token = localStorage.getItem('token'); 
 
       if (!token) {
-        console.error('Autenticazione fallita. Per favore, accedi.');
+        console.error('Authentication failed. Please log in.');
         return;
       }
 
@@ -47,12 +45,12 @@ const BookDetails = () => {
           },
         });
         if (!response.ok) {
-          throw new Error('Errore nel recupero dei dettagli del libro');
+          throw new Error('Error retrieving book details');
         }
         const data = await response.json();
         setBookData(data);
       } catch (error) {
-        console.error('Errore nel recupero dei dettagli del libro:', error);
+        console.error('Error retrieving book details:', error);
       }
     };
 
@@ -60,7 +58,7 @@ const BookDetails = () => {
       const token = localStorage.getItem('token');
 
       if (!token) {
-        console.error('Autenticazione fallita. Per favore, accedi.');
+        console.error('Authentication failed. Please log in.');
         return;
       }
 
@@ -73,12 +71,12 @@ const BookDetails = () => {
           },
         });
         if (!response.ok) {
-          throw new Error('Errore nel recupero delle categorie');
+          throw new Error('Error retrieving categories');
         }
         const data = await response.json();
         setCategories(data);  
       } catch (error) {
-        console.error('Errore nel recupero delle categorie:', error);
+        console.error('Error retrieving categories:', error);
       }
     };
 
@@ -88,7 +86,6 @@ const BookDetails = () => {
     fetchCategories();
   }, [id, API_HOST, API_PORT]);
 
-  
   const uploadCover = async () => {
     if (!selectedFile) return null;
 
@@ -106,47 +103,44 @@ const BookDetails = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Errore nel caricamento della copertina');
+        throw new Error('Error uploading cover');
       }
 
       const data = await response.json();
       return data.coverUrl;
     } catch (error) {
-      console.error('Errore durante il caricamento della copertina:', error);
+      console.error('Error uploading cover:', error);
       return null;
     }
   };
 
-  
   const handleSave = async () => {
     const token = localStorage.getItem('token'); 
 
     if (!token) {
-      console.error('Autenticazione fallita. Per favore, accedi.');
+      console.error('Authentication failed. Please log in.');
       return;
     }
 
     try {
       let categoryId = bookData.category;
 
-      
       if (isCreatingCategory && newCategory) {
         categoryId = await createCategory(newCategory);
 
         if (!categoryId) {
-          console.error('Errore nella creazione della categoria.');
+          console.error('Error creating category.');
           return;
         }
       }
 
-      
       const coverUrl = await uploadCover();
 
-      
       const bookDetails = {
         ...bookData,
-        cover: coverUrl || bookData.cover,  
+        cover: coverUrl || bookData.cover,
         category: categoryId,
+        progress: parseInt(bookData.progress) || 0,
       };
 
       const method = id ? 'PUT' : 'POST';
@@ -164,21 +158,20 @@ const BookDetails = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Errore durante il salvataggio del libro');
+        throw new Error('Error saving book');
       }
 
       navigate('/dashboard');  
     } catch (error) {
-      console.error('Errore durante il salvataggio del libro:', error);
+      console.error('Error saving book:', error);
     }
   };
-
 
   const createCategory = async (name) => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      console.error('Autenticazione fallita. Per favore, accedi.');
+      console.error('Authentication failed. Please log in.');
       return null;
     }
 
@@ -193,28 +186,26 @@ const BookDetails = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Errore nella creazione della categoria');
+        throw new Error('Error creating category');
       }
 
       const data = await response.json();
       return data._id;  
     } catch (error) {
-      console.error('Errore nella creazione della categoria:', error);
+      console.error('Error creating category:', error);
       return null;
     }
   };
-
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]); 
   };
 
-  
   const handleDelete = async () => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      console.error('Autenticazione fallita. Per favore, accedi.');
+      console.error('Authentication failed. Please log in.');
       return;
     }
 
@@ -227,14 +218,14 @@ const BookDetails = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Errore durante l\'eliminazione del libro');
+        throw new Error('Error deleting book');
       }
 
       alert('Book successfully deleted!');
 
       navigate('/dashboard');
     } catch (error) {
-      console.error('Errore durante l\'eliminazione del libro:', error);
+      console.error('Error deleting book:', error);
     }
   };
 
@@ -242,7 +233,6 @@ const BookDetails = () => {
     <div className="container mt-5 book-import-container">
       <h2>{id ? 'Edit book' : 'Add a new book'}</h2>
       <form>
-       
         <div className="mb-2">
           <label htmlFor="cover" className="form-label">Upload Cover Image</label>
           <input
@@ -253,7 +243,6 @@ const BookDetails = () => {
           />
         </div>
 
-        
         <div className="mb-2">
           <label htmlFor="title" className="form-label">Title</label>
           <input
@@ -266,7 +255,6 @@ const BookDetails = () => {
           />
         </div>
 
-       
         <div className="mb-2">
           <label htmlFor="author" className="form-label">Author</label>
           <input
@@ -279,7 +267,6 @@ const BookDetails = () => {
           />
         </div>
 
-        
         <div className="mb-2">
           <label htmlFor="category" className="form-label">Category</label>
           <select
@@ -304,10 +291,8 @@ const BookDetails = () => {
           </select>
         </div>
 
-
         {isCreatingCategory && (
-          <div className="mb-2
-">
+          <div className="mb-2">
             <label htmlFor="new-category" className="form-label">New Category</label>
             <input
               id="new-category"
@@ -319,19 +304,6 @@ const BookDetails = () => {
             />
           </div>
         )}
-
-
-        <div className="mb-2">
-          <label htmlFor="totalPages" className="form-label">Total Pages</label>
-          <input
-            id="totalPages"
-            type="number"
-            className="form-control"
-            value={bookData.totalPages}
-            onChange={(e) => setBookData({ ...bookData, totalPages: parseInt(e.target.value) })}
-            placeholder="Total Pages"
-          />
-        </div>
 
         <div className="mb-2">
           <label htmlFor="progress" className="form-label">Pages read</label>
@@ -356,7 +328,6 @@ const BookDetails = () => {
           />
         </div>
 
-
         <div className="mb-2">
           <label htmlFor="status" className="form-label">Status</label>
           <select
@@ -371,7 +342,6 @@ const BookDetails = () => {
           </select>
         </div>
 
-        {/* Pulsanti per salvare o eliminare il libro */}
         <Button type="button" className="accent-bg me-2" onClick={handleSave}>
           Save
         </Button>
