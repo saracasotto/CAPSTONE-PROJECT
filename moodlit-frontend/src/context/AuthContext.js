@@ -8,8 +8,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API_HOST = process.env.REACT_APP_API_HOST;
-  const API_PORT = process.env.REACT_APP_API_PORT;
+
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // Verify authentication status
   const verifyToken = useCallback(() => {
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
   // Login function
   const login = async (email, password) => {
     try {
-      const res = await fetch(`${API_HOST}:${API_PORT}/api/auth/login`, {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

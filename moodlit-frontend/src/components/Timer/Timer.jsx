@@ -10,8 +10,7 @@ const Timer = ({ bookId, onSessionComplete }) => {
   const [sessionId, setSessionId] = useState(null);
   const { user } = useContext(AuthContext);
   
-  const API_HOST = process.env.REACT_APP_API_HOST;
-  const API_PORT = process.env.REACT_APP_API_PORT;
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     let interval;
@@ -27,7 +26,7 @@ const Timer = ({ bookId, onSessionComplete }) => {
 
   const startSession = async () => {
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/sessions`, {
+      const response = await fetch(`${API_URL}/api/sessions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +58,7 @@ const Timer = ({ bookId, onSessionComplete }) => {
       }
 
       
-      const bookResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
+      const bookResponse = await fetch(`${API_URL}/api/books/${bookId}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -69,7 +68,7 @@ const Timer = ({ bookId, onSessionComplete }) => {
       const currentProgress = bookData.progress || 0; 
 
       
-      const sessionResponse = await fetch(`${API_HOST}:${API_PORT}/api/sessions/${sessionId}`, {
+      const sessionResponse = await fetch(`${API_URL}/api/sessions/${sessionId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +90,7 @@ const Timer = ({ bookId, onSessionComplete }) => {
       const newProgress = currentProgress + pagesRead;
 
       //Update book with new progress
-      const bookUpdateResponse = await fetch(`${API_HOST}:${API_PORT}/api/books/${bookId}`, {
+      const bookUpdateResponse = await fetch(`${API_URL}/api/books/${bookId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

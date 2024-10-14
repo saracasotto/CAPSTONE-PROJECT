@@ -3,8 +3,7 @@ import { Card, Button, Modal, Alert } from 'react-bootstrap';
 import { ComposedChart, Line, Bar, Area, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { AuthContext } from '../../../context/AuthContext';
 
-const API_HOST = process.env.REACT_APP_API_HOST;
-const API_PORT = process.env.REACT_APP_API_PORT;
+const API_URL = process.env.REACT_APP_API_URL;
 
 const ReadingStats = () => {
   const [stats, setStats] = useState([]);
@@ -15,7 +14,7 @@ const ReadingStats = () => {
 
   const fetchStats = useCallback(async () => {
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/sessions/stats`, {
+      const response = await fetch(`${API_URL}/api/sessions/stats`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -62,7 +61,7 @@ const ReadingStats = () => {
 
   const handleResetStats = async () => {
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/sessions/reset`, {
+      const response = await fetch(`${API_URL}/api/sessions/reset`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`

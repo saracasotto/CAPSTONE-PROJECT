@@ -25,8 +25,7 @@ const BookDetails = () => {
   const [newCategory, setNewCategory] = useState('');
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
 
-  const API_HOST = process.env.REACT_APP_API_HOST;
-  const API_PORT = process.env.REACT_APP_API_PORT;
+  const API_URL = process.env.REACT_APP_API_URL
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -38,7 +37,7 @@ const BookDetails = () => {
       }
 
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
+        const response = await fetch(`${API_URL}/api/books/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -64,7 +63,7 @@ const BookDetails = () => {
       }
 
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/`, {
+        const response = await fetch(`${API_URL}/api/categories/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -85,7 +84,7 @@ const BookDetails = () => {
       fetchBookDetails();
     }
     fetchCategories();
-  }, [id, API_HOST, API_PORT]);
+  }, [id, API_URL]);
 
   const uploadCover = async () => {
     if (!selectedFile) return null;
@@ -95,7 +94,7 @@ const BookDetails = () => {
     formData.append('cover', selectedFile);
 
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/books/upload-cover`, {
+      const response = await fetch(`${API_URL}/api/books/upload-cover`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -147,8 +146,8 @@ const BookDetails = () => {
 
       const method = id ? 'PUT' : 'POST';
       const url = id
-        ? `${API_HOST}:${API_PORT}/api/books/${id}`
-        : `${API_HOST}:${API_PORT}/api/books/add`;
+        ? `${API_URL}/api/books/${id}`
+        : `${API_URL}/api/books/add`;
 
       const response = await fetch(url, {
         method,
@@ -178,7 +177,7 @@ const BookDetails = () => {
     }
 
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/`, {
+      const response = await fetch(`${API_URL}/api/categories/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -212,7 +211,7 @@ const BookDetails = () => {
     }
 
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
+      const response = await fetch(`${API_URL}/api/books/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

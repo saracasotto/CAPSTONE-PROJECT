@@ -8,8 +8,7 @@ const MoodPhrases = () => {
   const { selectedMood } = useContext(MoodContext);
   const [phrase, setPhrase] = useState(null);
 
-  const apiHost = process.env.REACT_APP_API_HOST;
-  const apiPort = process.env.REACT_APP_API_PORT;
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     if (selectedMood) {
@@ -22,7 +21,7 @@ const MoodPhrases = () => {
         })
         .catch(error => console.error('Error fetching phrases:', error));
     }
-  }, [selectedMood, apiHost, apiPort]);
+  }, [selectedMood, API_URL]);
 
   return (
     <Container className="phrase-display glass-bg title-font text-main p-4 mt-md-5">

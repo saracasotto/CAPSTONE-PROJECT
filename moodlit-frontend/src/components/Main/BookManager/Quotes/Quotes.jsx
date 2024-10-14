@@ -13,13 +13,12 @@ const Quotes = ({ bookId }) => {
     const [selectedQuote, setSelectedQuote] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
-    const API_HOST = process.env.REACT_APP_API_HOST;
-    const API_PORT = process.env.REACT_APP_API_PORT;
+    const API_URL = process.env.REACT_APP_API_URL;
 
     const fetchQuotes = useCallback(async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${API_HOST}:${API_PORT}/api/quotes/${bookId}`, {
+            const response = await fetch(`${API_URL}/api/quotes/${bookId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -35,7 +34,7 @@ const Quotes = ({ bookId }) => {
         } catch (error) {
             console.error(error);
         }
-    }, [API_HOST, API_PORT, bookId]);
+    }, [API_URL, bookId]);
 
     useEffect(() => {
         fetchQuotes();
@@ -45,8 +44,8 @@ const Quotes = ({ bookId }) => {
         const token = localStorage.getItem('token');
         const method = isEditing ? 'PUT' : 'POST';
         const url = isEditing
-            ? `${API_HOST}:${API_PORT}/api/quotes/${quoteId}`
-            : `${API_HOST}:${API_PORT}/api/quotes/${bookId}/addquote`;
+            ? `${API_URL}/api/quotes/${quoteId}`
+            : `${API_URL}/api/quotes/${bookId}/addquote`;
 
         try {
             const response = await fetch(url, {
@@ -74,7 +73,7 @@ const Quotes = ({ bookId }) => {
         event.stopPropagation(); // Previene la selezione della citazione
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${API_HOST}:${API_PORT}/api/quotes/${quoteId}`, {
+            const response = await fetch(`${API_URL}/api/quotes/${quoteId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

@@ -12,13 +12,13 @@ const Notes = ({ bookId }) => {
     const [selectedNote, setSelectedNote] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
-    const API_HOST = process.env.REACT_APP_API_HOST;
-    const API_PORT = process.env.REACT_APP_API_PORT;
+
+    const API_URL = process.env.REACTP_APP_API_URL;
 
     const fetchNotes = useCallback(async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${API_HOST}:${API_PORT}/api/notes/${bookId}`, {
+            const response = await fetch(`${API_URL}/api/notes/${bookId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -34,7 +34,7 @@ const Notes = ({ bookId }) => {
         } catch (error) {
             console.error(error);
         }
-    }, [API_HOST, API_PORT, bookId]);
+    }, [API_URL, bookId]);
 
     useEffect(() => {
         fetchNotes();
@@ -51,8 +51,8 @@ const Notes = ({ bookId }) => {
         const token = localStorage.getItem('token');
         const method = isEditing ? 'PUT' : 'POST';
         const url = isEditing
-            ? `${API_HOST}:${API_PORT}/api/notes/${noteId}`
-            : `${API_HOST}:${API_PORT}/api/notes/${bookId}/addnote`;
+            ? `${API_URL}/api/notes/${noteId}`
+            : `${API_URL}/api/notes/${bookId}/addnote`;
 
         try {
             const response = await fetch(url, {
@@ -80,7 +80,7 @@ const Notes = ({ bookId }) => {
         event.stopPropagation();
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${API_HOST}:${API_PORT}/api/notes/${id}`, {
+            const response = await fetch(`${API_URL}/api/notes/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

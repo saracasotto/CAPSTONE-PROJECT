@@ -9,8 +9,7 @@ const BookCard = ({ book, isAddCard, onDeleteSuccess }) => {
   const [alertVariant, setAlertVariant] = useState('success');
   const [alertMessage, setAlertMessage] = useState('');
 
-  const API_HOST = process.env.REACT_APP_API_HOST;
-  const API_PORT = process.env.REACT_APP_API_PORT;
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleClick = () => {
     if (isAddCard) {
@@ -29,7 +28,7 @@ const BookCard = ({ book, isAddCard, onDeleteSuccess }) => {
     event.stopPropagation();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${book._id}`, {
+      const response = await fetch(`${API_URL}/api/books/${book._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

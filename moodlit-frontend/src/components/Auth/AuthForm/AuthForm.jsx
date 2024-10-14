@@ -12,8 +12,7 @@ const AuthForm = () => {
   const [error, setError] = useState('');
   const [passwordError, setPasswordError] = useState(false);
 
-  const API_HOST = process.env.REACT_APP_API_HOST;
-  const API_PORT = process.env.REACT_APP_API_PORT;
+  const API_URL = process.env.REACT_APP_API_URL
 
   const { login } = useContext(AuthContext); 
   const navigate = useNavigate()
@@ -30,7 +29,7 @@ const AuthForm = () => {
     setPasswordError(false);
     
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/auth/login`, {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +66,7 @@ const AuthForm = () => {
     }
 
     try {
-      const res = await fetch(`${API_HOST}:${API_PORT}/api/auth/register`, {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +92,7 @@ const AuthForm = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = `${API_HOST}:${API_PORT}/api/auth/login-google`;
+    window.location.href = `${API_URL}/api/auth/login-google`;
   };
 
   return (

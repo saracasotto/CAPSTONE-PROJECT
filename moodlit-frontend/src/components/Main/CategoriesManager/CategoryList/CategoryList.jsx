@@ -10,8 +10,7 @@ const CategoryList = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const API_HOST = process.env.REACT_APP_API_HOST;
-  const API_PORT = process.env.REACT_APP_API_PORT;
+  const API_URL = process.env.REACT_APP_API_URL
 
   const fetchCategoriesWithBooks = useCallback(async () => {
     const token = localStorage.getItem('token');
@@ -23,7 +22,7 @@ const CategoryList = () => {
     }
 
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/`, {
+      const response = await fetch(`${API_URL}/api/categories/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +39,7 @@ const CategoryList = () => {
       // Fetch books for each category
       const categoriesWithBooks = await Promise.all(
         categoriesData.map(async (category) => {
-          const booksResponse = await fetch(`${API_HOST}:${API_PORT}/api/categories/${category._id}/books`, {
+          const booksResponse = await fetch(`${API_URL}/api/categories/${category._id}/books`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -64,7 +63,7 @@ const CategoryList = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_HOST, API_PORT]);
+  }, [API_URL]);
 
   useEffect(() => {
     fetchCategoriesWithBooks();
@@ -79,7 +78,7 @@ const CategoryList = () => {
     }
 
     try {
-      const response = await fetch(`${API_HOST}:${API_PORT}/api/categories/${categoryId}`, {
+      const response = await fetch(`${API_URL}/api/categories/${categoryId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

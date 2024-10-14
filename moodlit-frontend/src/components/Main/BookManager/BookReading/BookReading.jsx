@@ -13,13 +13,13 @@ const BookReading = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
   
-    const API_HOST = process.env.REACT_APP_API_HOST;
-    const API_PORT = process.env.REACT_APP_API_PORT;
+  
+    const API_URL = process.env.REACT_APP_API_URL;
   
     const fetchBook = useCallback(async () => {
       const token = localStorage.getItem('token');
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/books/${id}`, {
+        const response = await fetch(`${API_URL}/api/books/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const BookReading = () => {
       } finally {
         setLoading(false);
       }
-    }, [id, API_HOST, API_PORT]);
+    }, [id, API_URL]);
   
     useEffect(() => {
       fetchBook();

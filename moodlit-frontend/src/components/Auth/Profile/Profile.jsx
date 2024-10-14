@@ -17,8 +17,7 @@ const Profile = () => {
     const [success, setSuccess] = useState('');
     const [showDeleteModal, setShowDeleteModal] = useState(false);
   
-    const API_HOST = process.env.REACT_APP_API_HOST;
-    const API_PORT = process.env.REACT_APP_API_PORT;
+    const API_URL = process.env.REACT_APP_API_URL
 
     const fetchUser = useCallback(async () => {
         const token = localStorage.getItem('token');
@@ -29,7 +28,7 @@ const Profile = () => {
         }
     
         try {
-          const response = await fetch(`${API_HOST}:${API_PORT}/api/users/profile`, {
+          const response = await fetch(`${API_URL}/api/users/profile`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -44,7 +43,7 @@ const Profile = () => {
         } catch (error) {
           setError('Error retrieving user data: ' + error.message);
         }
-      }, [API_HOST, API_PORT]);
+      }, [API_URL]);
     
     useEffect(() => {
       fetchUser();
@@ -79,7 +78,7 @@ const Profile = () => {
       formData.append('avatar', selectedFile);
 
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/users/uploadAvatar`, {
+        const response = await fetch(`${API_URL}/api/users/uploadAvatar`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -118,7 +117,7 @@ const Profile = () => {
           password: password || undefined,
         };
 
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/users/profile`, {
+        const response = await fetch(`${API_URL}/api/users/profile`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -148,7 +147,7 @@ const Profile = () => {
       }
 
       try {
-        const response = await fetch(`${API_HOST}:${API_PORT}/api/users/profile`, {
+        const response = await fetch(`${API_URL}/api/users/profile`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -160,7 +159,7 @@ const Profile = () => {
         }
 
         localStorage.removeItem('token');
-        navigate(`${API_HOST}:${API_PORT}/`);
+        navigate(`${API_URL}/`);
       } catch (error) {
         setError('Error deleting account: ' + error.message);
       }
