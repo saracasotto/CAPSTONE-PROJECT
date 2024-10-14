@@ -134,7 +134,7 @@ const Quotes = ({ bookId }) => {
                             </div>
                             <div className="d-flex align-items-center">
                                 <TwitterShareButton
-                                    url={"http://saracasotto.com"}
+                                    url={"https://moodlit-rho.vercel.app"}
                                     title={`${stripHtmlTags(quote.content)} - Shared via MoodLit App`}
                                     className="mr-2 px-2"
                                     onClick={(event) => handleShareClick('twitter', quote, event)}

@@ -36,7 +36,7 @@ const SidebarOffcanvas = () => {
         <Offcanvas.Header closeButton >
           <Offcanvas.Title>
             {/* Navbar Brand */}
-            <a className="navbar-brand" href="http://localhost:3000">
+            <a className="navbar-brand" href="https://moodlit-rho.vercel.app">
               <img src={logo} alt="logo" className='logo'/>
               <span className='title-font'>MoodLit</span>
             </a>
