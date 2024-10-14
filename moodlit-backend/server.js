@@ -17,8 +17,9 @@ import './config/passportConfig.js'
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3001;
-const host = process.env.HOST;
+// const port = process.env.PORT || 3001;
+// const host = process.env.HOST;
+const apiUrl =  process.env.REACT_APP_API_URL
 
 app.use(cors());
 app.use(express.json());
@@ -54,5 +55,5 @@ mongoose
 
 
 app.listen(port, () => {
-    console.log(`Server in execution on ${host}:${port}`);
+    console.log(`Server in execution on ${apiUrl}`);
   });
