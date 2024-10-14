@@ -17,7 +17,7 @@ import './config/passportConfig.js'
 dotenv.config();
 
 const app = express();
-// const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3001;
 // const host = process.env.HOST;
 const apiUrl =  process.env.REACT_APP_API_URL
 
