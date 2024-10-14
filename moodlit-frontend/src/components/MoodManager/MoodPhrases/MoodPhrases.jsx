@@ -12,7 +12,7 @@ const MoodPhrases = () => {
 
   useEffect(() => {
     if (selectedMood) {
-      fetch(`${apiHost}:${apiPort}/api/phrases?mood=${selectedMood}`)
+      fetch(`${API_URL}/api/phrases?mood=${selectedMood}`)
         .then(response => response.json())
         .then(data => {
           if (data) {
