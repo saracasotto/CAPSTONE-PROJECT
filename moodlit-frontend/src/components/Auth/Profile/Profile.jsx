@@ -159,7 +159,10 @@ const Profile = () => {
         }
     
         localStorage.removeItem('token');
-        navigate(`https://moodlit-rho.vercel.app/`);
+    
+        setTimeout(() => {
+          navigate(`/`); 
+        }, 1000);
       } catch (error) {
         setError('Error deleting account: ' + error.message);
       }
