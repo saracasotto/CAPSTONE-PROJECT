@@ -13,6 +13,7 @@ const Welcome = () => {
     const [formDisplay, setFormDisplay] = useState('none'); 
     const navigate = useNavigate(); 
     const location = useLocation();
+    
   
     useEffect(() => {
       if (user && location.pathname === '/') {

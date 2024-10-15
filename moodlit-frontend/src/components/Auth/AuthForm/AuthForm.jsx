@@ -11,6 +11,8 @@ const AuthForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [passwordError, setPasswordError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
 
   const API_URL = process.env.REACT_APP_API_URL
 
@@ -27,6 +29,8 @@ const AuthForm = () => {
     event.preventDefault();
     setError('');
     setPasswordError(false);
+    setIsLoading(true);
+    setLoadingMessage('Logging in...');
     
     try {
       const response = await fetch(`${API_URL}/api/auth/login`, {
@@ -53,15 +57,20 @@ const AuthForm = () => {
       }
     } catch (error) {
       setError("Invalid credentials. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleEmailPasswordSignUp = async (event) => {
     event.preventDefault();
     setError('');
+    setIsLoading(true);
+    setLoadingMessage('Signing up...');
     
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
+      setIsLoading(false);
       return;
     }
 
@@ -88,12 +97,26 @@ const AuthForm = () => {
       }
     } catch (error) {
       setError("Error during registration. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleGoogleLogin = () => {
+    setIsLoading(true);
+    setLoadingMessage('Logging in with Google...');
     window.location.href = `${API_URL}/api/auth/login-google`;
   };
+
+  if (isLoading) {
+    return (
+      <div className="auth-form-container">
+        <div className="form-wrapper">
+          <h2 className='title-font'>{loadingMessage}</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="auth-form-container">
