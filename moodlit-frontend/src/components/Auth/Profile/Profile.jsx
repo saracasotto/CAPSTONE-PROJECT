@@ -140,12 +140,13 @@ const Profile = () => {
 
     const handleDeleteAccount = async () => {
       const token = localStorage.getItem('token');
-
+      console.log('Token:', token); // Debugging line
+    
       if (!token) {
         setError('Authentication failed. Please log in.');
         return;
       }
-
+    
       try {
         const response = await fetch(`${API_URL}/api/users/profile`, {
           method: 'DELETE',
@@ -153,17 +154,18 @@ const Profile = () => {
             'Authorization': `Bearer ${token}`,
           },
         });
-
+    
         if (!response.ok) {
           throw new Error('Error deleting account');
         }
-
+    
         localStorage.removeItem('token');
         navigate(`/`);
       } catch (error) {
         setError('Error deleting account: ' + error.message);
       }
     };
+    
 
     return (
       <Container className="mt-5 profile-container">
