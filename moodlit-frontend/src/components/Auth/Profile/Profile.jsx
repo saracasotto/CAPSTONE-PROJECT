@@ -159,9 +159,13 @@ const Profile = () => {
         if (!response.ok) {
           throw new Error('Error deleting account');
         }
-            await logout();
     
-        navigate('/');
+        await logout();
+    
+        localStorage.removeItem('token');
+    
+        // Naviga alla home page
+        navigate('/', { replace: true });
       } catch (error) {
         setError('Error deleting account: ' + error.message);
       }
