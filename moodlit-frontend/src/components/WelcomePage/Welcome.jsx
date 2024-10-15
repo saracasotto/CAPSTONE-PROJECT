@@ -16,10 +16,11 @@ const Welcome = () => {
     
   
     useEffect(() => {
-      if (user && location.pathname === '/') {
+      const token = localStorage.getItem('token');
+      
+      if (token && user && location.pathname === '/') {
         navigate('/mood-selection');
       } else {
-     
         const timer = setTimeout(() => {
           setShowForm(true);
           setFormDisplay('flex'); 
@@ -27,7 +28,8 @@ const Welcome = () => {
         
         return () => clearTimeout(timer); 
       }
-    }, [user, navigate, location.pathname]); 
+    }, [user, navigate, location.pathname]);
+    
   
     return (
       <Container fluid className='welcome-container text-l'>
