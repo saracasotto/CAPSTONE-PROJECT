@@ -112,7 +112,7 @@ const AuthForm = () => {
     return (
       <div className="auth-form-container">
         <div className="form-wrapper">
-          <h2 className='title-font'>{loadingMessage}</h2>
+          <h5 className='title-font'>{loadingMessage}</h5>
         </div>
       </div>
     );

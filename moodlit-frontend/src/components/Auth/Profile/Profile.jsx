@@ -2,9 +2,11 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Container, Form, Button, Alert, Image, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
+import { AuthContext } from '../../../context/AuthContext';
 
 const Profile = () => {
     const navigate = useNavigate();
+    const { logout } = useContext(AuthContext);
     const [userData, setUserData] = useState({
       name: '',
       email: '',
@@ -157,12 +159,9 @@ const Profile = () => {
         if (!response.ok) {
           throw new Error('Error deleting account');
         }
+            await logout();
     
-        localStorage.removeItem('token');
-    
-        setTimeout(() => {
-          navigate(`/`); 
-        }, 1000);
+        navigate('/');
       } catch (error) {
         setError('Error deleting account: ' + error.message);
       }
