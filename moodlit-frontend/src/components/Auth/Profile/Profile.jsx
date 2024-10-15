@@ -140,7 +140,6 @@ const Profile = () => {
 
     const handleDeleteAccount = async () => {
       const token = localStorage.getItem('token');
-      console.log('Token:', token); // Debugging line
     
       if (!token) {
         setError('Authentication failed. Please log in.');

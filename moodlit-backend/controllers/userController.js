@@ -41,7 +41,7 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const userId = req.loggedUser.id; T
+    const userId = req.loggedUser.id; 
     const deletedUser = await User.findByIdAndDelete(userId);
 
     if (!deletedUser) {
