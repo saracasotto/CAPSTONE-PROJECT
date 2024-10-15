@@ -159,7 +159,7 @@ const Profile = () => {
         }
 
         localStorage.removeItem('token');
-        navigate(`${API_URL}/`);
+        navigate(`/`);
       } catch (error) {
         setError('Error deleting account: ' + error.message);
       }

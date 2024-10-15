@@ -13,7 +13,7 @@ const Notes = ({ bookId }) => {
     const [showModal, setShowModal] = useState(false);
 
 
-    const API_URL = process.env.REACTP_APP_API_URL;
+    const API_URL = process.env.REACT_APP_API_URL;
 
     const fetchNotes = useCallback(async () => {
         const token = localStorage.getItem('token');
