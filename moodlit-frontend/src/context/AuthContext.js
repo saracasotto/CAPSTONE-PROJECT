@@ -76,11 +76,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
+  
+   
+    navigate('/', { replace: true });
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
