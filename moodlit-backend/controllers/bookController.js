@@ -98,24 +98,45 @@ export const updateBook = async (req, res) => {
   try {
     const { id } = req.params;
     const { cover, title, author, category, description, progress, totalPages, status } = req.body;
-    const userId = req.loggedUser.id; 
+    const userId = req.loggedUser.id;
 
-    // Update the logged user book 
+
+    const existingBook = await Book.findOne({ _id: id, user: userId });
+
+    if (!existingBook) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    
+    if (existingBook.category.toString() !== category) {
+      await Category.updateOne(
+        { _id: existingBook.category, user: userId },
+        { $pull: { books: existingBook._id } }
+      );
+    
+      await Category.updateOne(
+        { _id: category, user: userId },
+        { $addToSet: { books: existingBook._id } }
+      );
+    }
+
+    
     const updatedBook = await Book.findOneAndUpdate(
-      { _id: id, user: userId }, 
+      { _id: id, user: userId },
       { title, author, category, description, status, progress, totalPages, cover },
       { new: true }
     );
 
     if (!updatedBook) {
-      return res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Book not found" });
     }
 
     res.status(200).json(updatedBook);
   } catch (error) {
-    res.status(500).json({ message: "Error updating", error: error.message });
+    res.status(500).json({ message: "Error updating book", error: error.message });
   }
 };
+
 
 export const deleteBook = async (req, res) => {
   try {
